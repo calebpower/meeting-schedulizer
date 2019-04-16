@@ -1,5 +1,4 @@
 """personalsite URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.2/topics/http/urls/
 Examples:
@@ -16,6 +15,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from .Views import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     # Admin Panel
@@ -23,4 +24,4 @@ urlpatterns = [
     
     # Home Page
     path('', views.index, name='index'),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
