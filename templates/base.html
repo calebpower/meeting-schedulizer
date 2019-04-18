@@ -18,14 +18,37 @@
   <!-- CSS –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
   <link rel="stylesheet" href="{% static 'css/skeleton.css' %}">
+  <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
 
   <!-- JS –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <script type="text/javascript" src="{% static 'js/test.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/navbar.js' %}"></script>
 
 </head>
 
 <body>
 
+  <!-- Navbar ---------------------------------------------- -->
+    <div class="nav">
+        <input type="checkbox" id="nav-check">
+        <div class="nav-header">
+          <div class="nav-title">
+            Jacob Cole Waldrip
+          </div>
+        </div>
+        <div class="nav-btn">
+          <label for="nav-check">
+            <span></span>
+            <span></span>
+            <span></span>
+          </label>
+        </div>
+        
+        <div class="nav-links">
+          <a href="//github.com/jakesboy2" target="_blank">Github</a>
+        </div>
+      </div>
+
+  <!-- Content that child html files supply-->
   {% block content %}
   {% endblock %}
 
