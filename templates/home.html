@@ -5,10 +5,77 @@
   <div class="container">
     <div class="row">
       <div class="one-half column" style="margin-top: 25%">
-        <h4>Home Page</h4>
-        <p>This is a basic home page. It is pretty cool honestly. I'm typing this much so you can actually see the text wrapping within the one-half column class.</p>
+        <button class="trigger" href="javascript:;">Create New Item</button>
       </div>
     </div>
   </div>
+
+  <!-- Modal -->
+  <div class="modal-wrapper">
+    <div class="modal">
+        <a class="btn-close trigger" href="javascript:;"></a>
+      <div class="model_content">
+        <div class="row">
+          <h4>Create To-Do Item</h4>
+        </div>
+        <!-- Create New Item Form-->
+        <form>
+          <!-- Title and priority level -->
+            <div class="row">
+              <div class="six columns">
+                <label for="todoTitle">Title</label>
+                <input class="u-full-width" type="text" maxlength="42" placeholder="Enter title..." id="todoTitle" required>
+              </div>
+              <div class="six columns">
+                <label for="todoPriorityLevel">Priority Level</label>
+                <select class="u-full-width" id="todoPriorityLevel">
+                  <option value="Option 0">Very High</option>
+                  <option value="Option 1">High</option>
+                  <option value="Option 2">Medium</option>
+                  <option value="Option 3">Low</option>
+                  <option value="Option 4">Very Low</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Date due and date doing-->
+            <div class="row">
+                <div class="six columns">
+                  <label for="todoDateDue">Due Date</label>
+                  <input class="u-full-width" type="date" id="todoDateDue" required>
+                </div>
+                <div class="six columns">
+                    <label for="todoDateDoing">Date Doing</label>
+                    <input class="u-full-width" type="date" id="todoDateDoing">
+                </div>
+              </div>
+
+            <!-- Catagory-->
+            <div class="row">
+                <div class="six columns">
+                  <label for="todoCatagory">Priority Level</label>
+                  <select class="u-full-width" id="todoCatagory" required>
+                    <option value="Option 0">School</option>
+                    <option value="Option 1">Work</option>
+                    <option value="Option 2">Appointment</option>
+                    <option value="Option 3">Social/Family</option>
+                    <option value="Option 4">Errands</option>
+                  </select>
+                </div>
+              </div>
+
+            <!-- Description-->
+            <label for="todoMessage">Description</label>
+            <textarea class="u-full-width" maxlength="280" placeholder="Additional details..." id="todoMessage"></textarea>
+            <label class="example-send-yourself-copy">
+              <input type="checkbox">
+              <span class="label-body">Always Show?</span>
+            </label>
+            <input class="button-primary" type="submit" value="Create">
+          </form>
+
+      </div>
+    </div>
+
 </section>
 {% endblock %}
