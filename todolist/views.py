@@ -38,3 +38,16 @@ class CreateTodoItem(View):
         )
         todo_item.save()
         return redirect('index')
+
+# Handle getting all the todo items based on the time period we 
+class GetTodoItemDay(View):
+    def post(self, request, *args, **kwargs):
+        return redirect('index')
+
+class GetTodoItemWeek(View):
+    def post(self, request, *args, **kwargs):
+        return redirect('index')
+
+class GetTodoItemMonth(View):
+    def post(self, request, *args, **kwargs):
+        return redirect('index')
