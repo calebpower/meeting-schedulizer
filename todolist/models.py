@@ -1,11 +1,30 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth import get_user_model
 
-# Create your models here.
 
+# Extend built in user model
+class CustomUser(AbstractUser):
+    class Meta:
+        app_label = 'todolist'
+
+    def __str__(self):
+        return self.email
+
+
+# Model for a todo item
 class TodoItem(models.Model):
+    class Meta:
+        app_label = 'todolist'
 
     # The name of the todo item
     title = models.CharField(max_length=42)
+    # the user the todo item is associated with
+    author = models.ForeignKey(
+      get_user_model(),
+      on_delete=models.CASCADE,
+      default=None,
+    )
     # A description of the todo item
     description = models.CharField(max_length=280, null=True)
     # The date the todo item was created (date.now)
@@ -36,4 +55,4 @@ class TodoItem(models.Model):
             'isDone': self.is_done,
             'showAlways': self.show_always,
         }
-    
+
