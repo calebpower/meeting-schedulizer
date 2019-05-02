@@ -22,10 +22,12 @@
   <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
   <link rel="stylesheet" href="{% static 'css/skeleton.css' %}">
   <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
-  <link rel="stylesheet" href="{% static 'css/modal.css' %}">
+  <link rel="stylesheet" href="{% static 'css/create_todo_modal.css' %}">
+  <link rel="stylesheet" href="{% static 'css/login_modal.css' %}">
 
   <!-- JS –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <script type="text/javascript" src="{% static 'js/modal.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/create_todo_modal.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/login_modal.js' %}"></script>
 
 </head>
 
@@ -39,17 +41,42 @@
             Jacob Cole Waldrip
           </div>
         </div>
-        <div class="nav-btn">
-          <label for="nav-check">
-            <span></span>
-            <span></span>
-            <span></span>
-          </label>
-        </div>
         
+        <!-- Navbar links-->
         <div class="nav-links">
           <a href="//github.com/jakesboy2" target="_blank">Github</a>
-        </div>
+          <a href="#" class="openb">Sign In</a>
+      </div>
+
+        
+      <!-- Login Modal -->
+      <div class="login-modal-overlay">
+        <div class="login-modal">
+          <h4>Sign In</h4>
+          <h2>To gain access to exlusive features, please login or make an account below.</h2>
+          <form>
+            {% csrf_token %}
+            <div class="group">
+              <p>user form</p>
+            </div>
+
+            <div class="group">
+              <p>pass form</p>
+            </div>
+            <div class="row">
+                <div class="three columns">
+                  <p>register link</p>
+                </div>
+                <div class="six columns">
+                    <p>forgot password link</p>
+                  </div>
+            </div>
+            <div class="row">
+              <input class="button-primary" type="submit" value="login">
+            </div>
+        </form>
+      </div>
+      
       </div>
 
   <!-- Content that child html files supply-->
