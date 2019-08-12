@@ -46,6 +46,7 @@ class TodoItem(models.Model):
     def to_dict(self):
         return {
             'title': self.title,
+            'author': self.author,
             'description': self.description,
             'dateCreated': self.date_created,
             'dateDue': self.date_due,
