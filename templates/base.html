@@ -45,7 +45,11 @@
         <!-- Navbar links-->
         <div class="nav-links">
           <a href="//github.com/jakesboy2" target="_blank">Github</a>
-          <a href="#" class="openb">Sign In</a>
+          {% if user.is_authenticated %}
+            <a href="{{ app_url }}logout" target="_blank">Logout</a>
+          {% else %}
+            <a href="#" class="openb">Sign In</a>
+          {% endif %}
       </div>
 
         
@@ -54,23 +58,24 @@
         <div class="login-modal">
           <h4>Sign In</h4>
           <h2>To gain access to exclusive features, please login or make an account below.</h2>
-          <form>
+          <form action="{{ app_url }}login" method="post">
             {% csrf_token %}
             <div class="group">
-              <p>user form</p>
+              <input class="u-full-width" type="text" name="username" id="usernameField" placeholder="Username" required>
             </div>
 
             <div class="group">
-              <p>pass form</p>
+              <input class="u-full-width" type="password" name="password" id="passwordField" placeholder="Password" required>
             </div>
             <div class="row">
                 <div class="three columns">
-                  <p>register link</p>
+                  <a href="#">Register</a>
                 </div>
                 <div class="six columns">
-                    <p>forgot password link</p>
+                  <a href="#">Forgot Password</a>
                   </div>
             </div>
+            <br>
             <div class="row">
               <input class="button-primary" type="submit" value="login">
             </div>

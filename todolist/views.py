@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, reverse
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View
 from . import models
@@ -10,6 +11,24 @@ import datetime
 def index(request):
     app_url = request.path
     return render(request, 'home.html', {'app_url': app_url})
+
+# Log the user in
+class LoginUser(View):
+    def post(self, request, *args, **kwargs):
+
+        # collect the user's information to log them in
+        username = request.POST.get('username') if request.POST.get('username') else None
+        password = request.POST.get('password') if request.POST.get('password') else None
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+        return redirect('index')
+
+# Log the user out
+class LogoutUser(View):
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return redirect('index')
 
 # Handle creating a todo item
 class CreateTodoItem(View):
@@ -27,6 +46,7 @@ class CreateTodoItem(View):
         # Save the data from the form into a todo object on the database
         todo_item = models.TodoItem(
             title=post_title,
+            author=request.user,
             description=post_message,
             date_created=datetime.date.today(),
             date_due=post_date_due,
@@ -37,6 +57,7 @@ class CreateTodoItem(View):
             show_always=True if post_always_show == 'on' else False
         )
         todo_item.save()
+        import pdb; pdb.set_trace()
         return redirect('index')
 
 # Handle getting all the todo items based on the time period we 
