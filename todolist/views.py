@@ -57,7 +57,6 @@ class CreateTodoItem(View):
             show_always=True if post_always_show == 'on' else False
         )
         todo_item.save()
-        import pdb; pdb.set_trace()
         return redirect('index')
 
 # Handle getting all the todo items based on the time period we 

@@ -46,7 +46,7 @@
         <div class="nav-links">
           <a href="//github.com/jakesboy2" target="_blank">Github</a>
           {% if user.is_authenticated %}
-            <a href="{{ app_url }}logout" target="_blank">Logout</a>
+            <a href="{{ app_url }}logout">Logout</a>
           {% else %}
             <a href="#" class="openb">Sign In</a>
           {% endif %}
