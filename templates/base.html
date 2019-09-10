@@ -4,8 +4,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Jacob Waldrip</title>
-  <meta name="description" content="Personal Landing Page">
+  <title>Parking</title>
+  <meta name="description" content="Parking Project">
   <meta name="author" content="Jacob Waldrip">
 
   <!-- Mobile Specific Metas
@@ -22,12 +22,8 @@
   <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
   <link rel="stylesheet" href="{% static 'css/skeleton.css' %}">
   <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
-  <link rel="stylesheet" href="{% static 'css/create_todo_modal.css' %}">
-  <link rel="stylesheet" href="{% static 'css/login_modal.css' %}">
 
   <!-- JS –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <script type="text/javascript" src="{% static 'js/create_todo_modal.js' %}"></script>
-  <script type="text/javascript" src="{% static 'js/login_modal.js' %}"></script>
 
 </head>
 
@@ -38,55 +34,18 @@
         <input type="checkbox" id="nav-check">
         <div class="nav-header">
           <div class="nav-title">
-            Jacob Cole Waldrip
+            MemeVille
           </div>
         </div>
         
         <!-- Navbar links-->
         <div class="nav-links">
           <a href="//github.com/jakesboy2" target="_blank">Github</a>
-          {% if user.is_authenticated %}
-            <a href="{{ app_url }}logout">Logout</a>
-          {% else %}
-            <a href="#" class="openb">Sign In</a>
-          {% endif %}
-      </div>
-
-        
-      <!-- Login Modal -->
-      <div class="login-modal-overlay">
-        <div class="login-modal">
-          <h4>Sign In</h4>
-          <h2>To gain access to exclusive features, please login or make an account below.</h2>
-          <form action="{{ app_url }}login" method="post">
-            {% csrf_token %}
-            <div class="group">
-              <input class="u-full-width" type="text" name="username" id="usernameField" placeholder="Username" required>
-            </div>
-
-            <div class="group">
-              <input class="u-full-width" type="password" name="password" id="passwordField" placeholder="Password" required>
-            </div>
-            <div class="row">
-                <div class="three columns">
-                  <a href="#">Register</a>
-                </div>
-                <div class="six columns">
-                  <a href="#">Forgot Password</a>
-                  </div>
-            </div>
-            <br>
-            <div class="row">
-              <input class="button-primary" type="submit" value="login">
-            </div>
-        </form>
-      </div>
-      
-      </div>
-
+        </div>
+    </div>
+    <h1>another test</h1>
   <!-- Content that child html files supply-->
   {% block content %}
   {% endblock %}
-
 </body>
 </html>
