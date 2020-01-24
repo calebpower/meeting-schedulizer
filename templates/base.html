@@ -4,8 +4,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Parking</title>
-  <meta name="description" content="Parking Project">
+  <title>Schedulization</title>
+  <meta name="description" content="Meeting Project">
   <meta name="author" content="Jacob Waldrip">
 
   <!-- Mobile Specific Metas
@@ -15,37 +15,29 @@
   <!-- FONT –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
 
-  <!-- JQuery ------------------------------------------------ -->
+  <!-- JQuery & Bootstrap ------------------------------------------------ -->
   <script type="text/javascript" src="{{ STATIC_URL }} /static/js/jquery-3.4.0.js"></script> 
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
   <!-- CSS –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <link rel="stylesheet" href="{% static 'css/skeleton.css' %}">
   <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
 
   <!-- JS –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script type="text/javascript" src="{{ STATIC_URL }} /static/js/style.js"></script>
 
 </head>
 
-<body style="background-color: #f9fafc;">
+<body>
 
   <!-- Navbar ---------------------------------------------- -->
-    <div class="nav">
-        <input type="checkbox" id="nav-check">
-        <div class="nav-header">
-          <div class="nav-title">
-            MemeVille
-          </div>
-        </div>
-        
-        <!-- Navbar links-->
-        <div class="nav-links">
-          <a href="//github.com/jakesboy2" target="_blank">Github</a>
-        </div>
-    </div>
-    <h1>another test</h1>
+    
+    <h1>This title is supplied by the base, if its orange you're including the CSS sheet</h1>
   <!-- Content that child html files supply-->
   {% block content %}
   {% endblock %}
+
+  
 </body>
 </html>
