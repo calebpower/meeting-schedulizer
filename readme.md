@@ -7,6 +7,7 @@ https://docs.djangoproject.com/en/3.0/howto/windows/
 Use this for Windows
 
 http://hampton.website/linux/django/
+
 Use this for Linux
 
 If at any point during this process you have trouble with 'pip' or 'python' not being recgonized commands, you must add them to your $PATH variable.
