@@ -1,13 +1,26 @@
-https://medium.com/@diwassharma/starting-a-python-django-project-on-mac-os-x-c089165cf010
+# Meeting Schedulizer
 
-Use this to create your virtual env to run the project on MacOS.
+_Meeting your goals, when meetings are your goal._ 
+An application designed for the UCO Fall 2020 Computer Science capstone course.
 
-https://docs.djangoproject.com/en/3.0/howto/windows/
+## Contributors
 
-Use this for Windows
+| Name            | Responsibilities                                  |
+|:----------------|:--------------------------------------------------|
+| Hampton, Justin | Software Engineer                                 |
+| Le, Brian       | Software Engineer                                 |
+| Power, Caleb    | Software Engineer, Git Administrator              |
+| Sakurai, Yosuke | Software Engineer                                 |
+| Sim, Minbo      | Software Engineer                                 |
+| Tull, Courtney  | Software Engineer, Lead Quality Assurance Analyst |
+| Waldrip, Jacob  | Software Engineer, Product Owner, Scrum Master    |
 
-http://hampton.website/linux/django/
+## Installation
 
-Use this for Linux
+Here are some good resources for building and running the project.
 
-If at any point during this process you have trouble with 'pip' or 'python' not being recgonized commands, you must add them to your $PATH variable.
+- (For macOS)[https://medium.com/@diwassharma/starting-a-python-django-project-on-mac-os-x-c089165cf010]
+- (For Windows)[https://docs.djangoproject.com/en/3.0/howto/windows/]
+- (For Linux)[http://hampton.website/linux/django/]
+
+If at any point during this process you have trouble with `pip` or `python` not being recgonized commands, you must add them to your `$PATH` variable. (Or, if you're on Windows, the `%PATH%` variable.)
