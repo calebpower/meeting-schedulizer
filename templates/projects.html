@@ -2,8 +2,38 @@
 
 {% block content %}
   <div id="projects" class="row no-gutters">
-    <div id="project-pane" class="col bg-primary">Projects</div>
-    <div id="active-pane" class="col bg-light">Active Pane</div>
+    <div id="project-pane" class="col bg-primary text-white" style="text-align: center;">
+      <h1>Projects</h1>
+      <div style="padding: 5px;">
+        You don't seem to have any projects.
+      </div>
+      <button type="button" class="btn btn-light">Create a Project</button>
+    </div>
+    <div id="active-pane" class="col bg-light">
+      <div id="active-pane-none" style="text-align: center; padding: 5px; display: none;">
+        Select a project to get started!
+      </div>
+      <div id="active-pane-create">
+        <h2 style="text-align: center;">Create a Project</h2>
+        <form>
+          <div class="form-group">
+            <label for="create-project-title">Project Title</label>
+            <input type="text" class="form-control" id="create-project-title" placeholder="Put your project title here!" />
+          </div>
+          <div class="form-group">
+            <label for="create-project-description">Project Description</label>
+            <textarea class="form-control" id="create-project-description" rows="5" placeholder="Describe your project."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="create-project-invitees">Invitees</label>
+            <input type="text" class="form-control" id="create-project-invitees" placeholder="Enter the email addresses of those you are going to invite, separated by commas." />
+          </div>
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">Create Your Project!</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 
   <script type="text/javascript">
