@@ -1,7 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container"
-    <p style="color: green"> This is the projects page </p>
-</div>
+  <div id="projects" class="row no-gutters">
+    <div id="project-pane" class="col bg-primary">Projects</div>
+    <div id="active-pane" class="col bg-light">Active Pane</div>
+  </div>
+
+  <script type="text/javascript">
+    Split(["#project-pane","#active-pane"], {
+      elementStyle: function (dimension, size, gutterSize) { 
+        $(window).trigger('resize'); // Optional
+        $("#projects").height($(window).height()
+            - $("#titular-nav").height()
+            - parseFloat($("#titular-nav").css('padding-top'))
+            - parseFloat($("#titular-nav").css('padding-bottom')));
+        return { 'flex-basis': 'calc(' + size + '% - ' + gutterSize + 'px)' }
+      },
+      gutterStyle: function (dimension, gutterSize) { return {'flex-basis':  gutterSize + 'px'} },
+      sizes: [20,60,20],
+      minSize: 200,
+      gutterSize: 6,
+      cursor: 'col-resize'
+    });
+  </script>
 {% endblock %}
