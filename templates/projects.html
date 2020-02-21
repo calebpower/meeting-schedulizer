@@ -10,10 +10,14 @@
       <button type="button" class="btn btn-light">Create a Project</button>
     </div>
     <div id="active-pane" class="col bg-light">
+
+      <!-- No project selected -->
       <div id="active-pane-none" style="text-align: center; padding: 5px; display: none;">
         Select a project to get started!
       </div>
-      <div id="active-pane-create">
+
+      <!-- Project creation form -->
+      <div id="active-pane-create" style="display: none;">
         <h2 style="text-align: center;">Create a Project</h2>
         <form>
           <div class="form-group">
@@ -30,6 +34,24 @@
           </div>
           <div style="text-align: center;">
             <button type="submit" class="btn btn-success">Create Your Project!</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Project modification form -->
+      <div id="active-pane-create">
+        <h2 style="text-align: center;">Edit Your Project</h2>
+        <form>
+          <div class="form-group">
+            <label for="create-project-title">Project Title</label>
+            <input type="text" class="form-control" id="create-project-title" placeholder="Put your project title here!" />
+          </div>
+          <div class="form-group">
+            <label for="create-project-description">Project Description</label>
+            <textarea class="form-control" id="create-project-description" rows="5" placeholder="Describe your project."></textarea>
+          </div>
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">Save Project</button>
           </div>
         </form>
       </div>
