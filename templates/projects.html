@@ -7,12 +7,12 @@
       <div style="padding: 5px;">
         You don't seem to have any projects.
       </div>
-      <button type="button" class="btn btn-light">Create a Project</button>
+      <button type="button" id="create-project-btn" class="btn btn-light">Create a Project</button>
     </div>
     <div id="active-pane" class="col bg-light">
 
       <!-- No project selected -->
-      <div id="active-pane-none" style="text-align: center; padding: 5px; display: none;">
+      <div id="active-pane-none" style="text-align: center; padding: 5px">
         Select a project to get started!
       </div>
 
@@ -39,7 +39,7 @@
       </div>
 
       <!-- Project modification form -->
-      <div id="active-pane-create">
+      <div id="active-pane-create" style="display: none;">
         <h2 style="text-align: center;">Edit Your Project</h2>
         <form>
           <div class="form-group">
@@ -57,22 +57,4 @@
       </div>
     </div>
   </div>
-
-  <script type="text/javascript">
-    Split(["#project-pane","#active-pane"], {
-      elementStyle: function (dimension, size, gutterSize) { 
-        $(window).trigger('resize'); // Optional
-        $("#projects").height($(window).height()
-            - $("#titular-nav").height()
-            - parseFloat($("#titular-nav").css('padding-top'))
-            - parseFloat($("#titular-nav").css('padding-bottom')));
-        return { 'flex-basis': 'calc(' + size + '% - ' + gutterSize + 'px)' }
-      },
-      gutterStyle: function (dimension, gutterSize) { return {'flex-basis':  gutterSize + 'px'} },
-      sizes: [20,60,20],
-      minSize: 200,
-      gutterSize: 6,
-      cursor: 'col-resize'
-    });
-  </script>
 {% endblock %}
