@@ -12,7 +12,7 @@
     <div id="active-pane" class="col bg-light">
 
       <!-- No project selected -->
-      <div id="active-pane-none" style="text-align: center; padding: 5px">
+      <div id="active-pane-none" style="text-align: center; padding: 5px; display: none;">
         Select a project to get started!
       </div>
 
@@ -54,6 +54,41 @@
             <button type="submit" class="btn btn-success">Save Project</button>
           </div>
         </form>
+      </div>
+
+      <!-- View project -->
+      <div id="active-pane-view">
+        <h2 style="text-align: center; padding: 0.5em;">[ Project Name ]</h2>
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <div class="card text-white bg-secondary mb-3">
+                <div class="card-header">Description</div>
+                <div class="card-body">
+                  <p class="card-text">[ Insert description here. ]</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <div class="card text-white bg-success mb-3">
+                <div class="card-header">Team Members</div>
+                <div class="card-body">
+                  <p class="card-text">[ Team members go here. ]</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="card text-white bg-warning mb-3">
+                <div class="card-header">Upcoming Meetings</div>
+                <div class="card-body">
+                  <p class="card-text">[ Upcoming meetings go here. ]</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
