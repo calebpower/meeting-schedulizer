@@ -11,3 +11,8 @@ import datetime
 def index(request):
     app_url = request.path
     return render(request, 'home.html', {'app_url': app_url})
+
+# Render the projects page
+def projects(request):
+    app_url = request.path
+    return render(request, 'projects.html', {'app_url': app_url})

@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div id="projects" class="row no-gutters">
+    <div id="project-pane" class="col bg-primary text-white" style="text-align: center;">
+      <h1 style="padding-top: 0.5em; padding-left: 0.5em; padding-right: 0.5em;">Projects</h1>
+      <div style="padding-bottom: 0.5em;">
+        You don't seem to have any projects.
+      </div>
+      <button type="button" id="create-project-btn" class="btn btn-light">Create a Project</button>
+    </div>
+    <div id="active-pane" class="col bg-light">
+
+      <!-- No project selected -->
+      <div id="active-pane-none" style="text-align: center; padding: 0.5em;">
+        Select a project to get started!
+      </div>
+
+      <!-- Project creation form -->
+      <div id="active-pane-create" style="display: none;">
+        <h2 style="text-align: center;">Create a Project</h2>
+        <form>
+          <div class="form-group">
+            <label for="create-project-title">Project Title</label>
+            <input type="text" class="form-control" id="create-project-title" placeholder="Put your project title here!" />
+          </div>
+          <div class="form-group">
+            <label for="create-project-description">Project Description</label>
+            <textarea class="form-control" id="create-project-description" rows="5" placeholder="Describe your project."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="create-project-invitees">Invitees</label>
+            <input type="text" class="form-control" id="create-project-invitees" placeholder="Enter the email addresses of those you are going to invite, separated by commas." />
+          </div>
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">Create Your Project!</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Project modification form -->
+      <div id="active-pane-create" style="display: none;">
+        <h2 style="text-align: center;">Edit Your Project</h2>
+        <form>
+          <div class="form-group">
+            <label for="create-project-title">Project Title</label>
+            <input type="text" class="form-control" id="create-project-title" placeholder="Put your project title here!" />
+          </div>
+          <div class="form-group">
+            <label for="create-project-description">Project Description</label>
+            <textarea class="form-control" id="create-project-description" rows="5" placeholder="Describe your project."></textarea>
+          </div>
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">Save Project</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- View project -->
+      <div id="active-pane-view" style="display: none;">
+        <h2 style="text-align: center; padding: 0.5em;">[ Project Name ]</h2>
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <div class="card text-white bg-secondary mb-3">
+                <div class="card-header">Description</div>
+                <div class="card-body">
+                  <p class="card-text">[ Insert description here. ]</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <div class="card text-white bg-success mb-3">
+                <div class="card-header">Team Members</div>
+                <div class="card-body">
+                  <p class="card-text">[ Team members go here. ]</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="card text-white bg-warning mb-3">
+                <div class="card-header">Upcoming Meetings</div>
+                <div class="card-body">
+                  <p class="card-text">[ Upcoming meetings go here. ]</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
