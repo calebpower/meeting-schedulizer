@@ -21,8 +21,7 @@ $(document).ready(function() {
     });
 
     $('#create-project-btn').on('click', function() {
-      $("#active-pane > div").hide();
-      $("#active-pane-create").show();
+      window.location = '/meeting/projects/create';
     });
 
   }

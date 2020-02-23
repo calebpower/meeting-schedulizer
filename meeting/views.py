@@ -7,15 +7,30 @@ from django.contrib.auth.models import User
 from . import models
 import datetime
 
-# Render the home page
+''' Render the home page '''
 def index(request):
     app_url = request.path
     return render(request, 'home.html', {'app_url': app_url})
 
-# Render the projects page
+''' Render the default projects page '''
 def projects(request):
     app_url = request.path
-    return render(request, 'projects.html', {'app_url': app_url})
+    return render(request, 'projects/active_pane/no_selection.html', {'app_url': app_url})
+
+''' Render the "create project" form '''
+def projects_create(request):
+    app_url = request.path
+    return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url})
+
+''' Render the "edit project" form '''
+def projects_edit(request, project_key):
+    app_url = request.path
+    return render(request, 'projects/active_pane/edit_project.html', {'app_url': app_url})
+
+''' Render the "view project" form '''
+def projects_view(request, project_key):
+    app_url = request.path
+    return render(request, 'projects/active_pane/view_project.html', {'app_url': app_url})
 
 class LoginProcess(View):
     def post(self, request, *args, **kwargs):
