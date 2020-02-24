@@ -7,15 +7,92 @@ from django.contrib.auth.models import User
 from . import models
 import datetime
 
-# Render the home page
+''' Render the home page '''
 def index(request):
     app_url = request.path
     return render(request, 'home.html', {'app_url': app_url})
 
-# Render the projects page
+''' Render the default projects page '''
 def projects(request):
     app_url = request.path
-    return render(request, 'projects.html', {'app_url': app_url})
+    return render(request, 'projects/active_pane/no_selection.html', {'app_url': app_url})
+
+class ProjectCreationProcess(View):
+    def post(self, request, *args, **kwargs):
+        # collect the information about the new project
+        title = request.POST.get('title') if request.POST.get('title') else None
+        description = request.POST.get('description') if request.POST.get('description') else None
+        invitees = request.POST.get('invitees') if request.POST.get('invitees') else None
+        user = request.user if request.user.is_authenticated else None
+        
+        if user is None:
+            return redirect('LoginProcess')
+            
+        profile = models.Profile.objects.get(user=user)
+        invitee_profiles = set()
+        errors = dict()
+        if title is None:
+            errors['title'] = 'Cannot be empty'
+        if description is None:
+            errors['description'] = 'Cannot be empty'
+        if user is None:
+            errors['user'] = 'Cannot be empty'
+        if invitees is None:
+            errors['invited'] = 'Cannot be empty'
+        else:
+            invitee_usernames = filter(lambda username: username, map(lambda username: username.strip(), invitees.split(',')));
+            
+            seen_users = set()
+            for invitee in invitee_usernames:
+                if not invitee and 'invited' not in errors:
+                    errors['invited'] = 'Usernames cannot be blank'
+                elif not invitee and 'blank' not in errors['invited']:
+                    errors['invited'] += '; usernames cannot be blank'
+                elif invitee in seen_users and 'invited' not in errors:
+                    errors['invited'] = 'Cannot have duplicate username'
+                elif invitee in seen_users and 'duplicate' not in errors['invited']:
+                    errors['invited'] += '; cannot have duplicate username'
+                elif invitee not in seen_users:
+                    seen_users.add(invitee)
+                    
+            for user in seen_users:
+                try:
+                    u = User.objects.get(username=user)
+                    p = models.Profile.objects.get(user=u)
+                    invitee_profiles.add(p)
+                except User.DoesNotExist:
+                    if 'invite' not in errors:
+                        errors['invited'] = 'Cannot invite unregistered user'
+                    else:
+                        errors['invited'] += '; cannot invited unregistered user'
+            
+        is_no_errors = not bool(errors)
+        
+        app_url = request.path
+        
+        if is_no_errors:
+            project = models.Project.objects.create(project_name=title, description=description)
+            models.Member.objects.create(project=project, user=profile, role=models.Member.UserProjectRole.OWNER)
+            for invitee in invitee_profiles:
+                models.Member.objects.create(project=project, user=invitee, role=models.Member.UserProjectRole.INVITED)
+            return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'success': 'Successfully created project!'})
+        else:
+            return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'errors': errors})
+    
+    def get(self, request, *args, **kwargs):
+        app_url = request.path
+        return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url})
+            
+
+''' Render the "edit project" form '''
+def projects_edit(request, project_key):
+    app_url = request.path
+    return render(request, 'projects/active_pane/edit_project.html', {'app_url': app_url})
+
+''' Render the "view project" form '''
+def projects_view(request, project_key):
+    app_url = request.path
+    return render(request, 'projects/active_pane/view_project.html', {'app_url': app_url})
 
 class LoginProcess(View):
     def post(self, request, *args, **kwargs):
