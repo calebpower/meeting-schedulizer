@@ -7,6 +7,38 @@ from django.contrib.auth.models import User
 from . import models
 import datetime
 
+''' Pulls a list of the user's projects '''
+def pull_projects(profile):
+    projects = {
+        models.Member.UserProjectRole.OWNER: [],
+        models.Member.UserProjectRole.ACTIVE: [],
+        models.Member.UserProjectRole.INVITED: []
+    };
+    
+    if profile is not None:
+        try:
+            members = models.Member.objects.filter(user=profile);
+            for member in members:
+                print(member.role)
+                print(member.project.project_name)
+                projects[member.role].append(member.project)
+        except:
+            pass
+        
+    return projects
+
+def pull_profile(user):
+    if user.is_authenticated:
+        try:
+            profile = models.Profile.objects.get(user=user)
+            if profile:
+                return profile
+        except:
+            pass
+        
+    return None
+    
+    
 ''' Render the home page '''
 def index(request):
     app_url = request.path
@@ -15,7 +47,8 @@ def index(request):
 ''' Render the default projects page '''
 def projects(request):
     app_url = request.path
-    return render(request, 'projects/active_pane/no_selection.html', {'app_url': app_url})
+    projects = pull_projects(pull_profile(request.user))
+    return render(request, 'projects/active_pane/no_selection.html', {'app_url': app_url, 'projects': projects})
 
 class ProjectCreationProcess(View):
     def post(self, request, *args, **kwargs):
