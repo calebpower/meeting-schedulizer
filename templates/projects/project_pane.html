@@ -3,7 +3,7 @@
   {% if projects %}
     {% for key, value in projects.items %}
       {% for project in value %}
-        <div style="padding-top: 10px; padding-left: 10px; padding-right: 10px;">
+        <div class="project-card" style="padding-top: 10px; padding-left: 10px; padding-right: 10px;" project="{{ project.pk }}">
         {% if key == 2 %}
           <div class="card text-light bg-danger mb-3">
             <div class="card-header">Owner</div>

@@ -23,6 +23,10 @@ $(document).ready(function() {
     $('#create-project-btn').on('click', function() {
       window.location = '/meeting/projects/create';
     });
+    
+    $('.project-card').click(function() {
+      window.location = '/meeting/projects/' + $(this).attr('project');
+    });
 
   }
 
