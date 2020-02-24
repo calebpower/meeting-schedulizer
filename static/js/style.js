@@ -3,7 +3,6 @@ $(document).ready(function() {
   // do this only for the projects page
   if($('#project-pane').length && $('#active-pane').length) {
     
-    // make the columns resizable
     Split(["#project-pane","#active-pane"], {
       elementStyle: function (dimension, size, gutterSize) { 
         $(window).trigger('resize'); // Optional
@@ -16,12 +15,16 @@ $(document).ready(function() {
       gutterStyle: function (dimension, gutterSize) { return {'flex-basis':  gutterSize + 'px'} },
       sizes: [20,60,20],
       minSize: 200,
-      gutterSize: 0,
+      gutterSize: 0, // meh
       cursor: 'col-resize'
     });
 
     $('#create-project-btn').on('click', function() {
       window.location = '/meeting/projects/create';
+    });
+    
+    $('#edit-project-btn').on('click', function() {
+      window.location = window.location + '/edit';
     });
     
     $('.project-card').click(function() {
