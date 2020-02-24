@@ -16,8 +16,8 @@
           {% csrf_token %}
           <div class="form-group">
             <label for="create-project-title">Project Title
-              {% if errors.titleEmpty %}
-                <span class="text-danger">- cannot be blank</span>
+              {% if errors.title %}
+                <span class="text-danger">- {{ errors.title }}</span>
               {% endif %}
             </label>
             <input type="text"
@@ -28,8 +28,8 @@
           </div>
           <div class="form-group">
             <label for="create-project-description">Project Description
-              {% if errors.descriptionEmpty %}
-                <span class="text-danger">- cannot be blank</span>
+              {% if errors.description %}
+                <span class="text-danger">- {{ errors.description }}</span>
               {% endif %}
             </label>
             <textarea class="form-control"
@@ -40,15 +40,15 @@
           </div>
           <div class="form-group">
             <label for="create-project-invitees">Invitees
-              {% if errors.inviteesEmpty %}
-                <span class="text-danger">- cannot be blank</span>
+              {% if errors.invited %}
+                <span class="text-danger">- {{ errors.invited }}</span>
               {% endif %}
             </label>
             <input type="text"
                    class="form-control"
                    id="create-project-invitees"
                    name="invitees"
-                   placeholder="Enter the email addresses of those you are going to invite, separated by commas." />
+                   placeholder="Enter the usernames of those you are going to invite, separated by commas." />
           </div>
           <div style="text-align: center;">
             <button type="submit" class="btn btn-success">Create Your Project!</button>

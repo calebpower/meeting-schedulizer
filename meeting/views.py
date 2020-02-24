@@ -29,16 +29,42 @@ class ProjectCreationProcess(View):
             return redirect('LoginProcess')
             
         profile = models.Profile.objects.get(user=user)
-        
+        invitee_profiles = set()
         errors = dict()
         if title is None:
-            errors['titleEmpty'] = True
+            errors['title'] = 'Cannot be empty'
         if description is None:
-            errors['descriptionEmpty'] = True
-        if invitees is None:
-            errors['inviteesEmpty'] = True
+            errors['description'] = 'Cannot be empty'
         if user is None:
-            errors['userEmpty'] = True
+            errors['user'] = 'Cannot be empty'
+        if invitees is None:
+            errors['invited'] = 'Cannot be empty'
+        else:
+            invitee_usernames = filter(lambda username: username, map(lambda username: username.strip(), invitees.split(',')));
+            
+            seen_users = set()
+            for invitee in invitee_usernames:
+                if not invitee and 'invited' not in errors:
+                    errors['invited'] = 'Usernames cannot be blank'
+                elif not invitee and 'blank' not in errors['invited']:
+                    errors['invited'] += '; usernames cannot be blank'
+                elif invitee in seen_users and 'invited' not in errors:
+                    errors['invited'] = 'Cannot have duplicate username'
+                elif invitee in seen_users and 'duplicate' not in errors['invited']:
+                    errors['invited'] += '; cannot have duplicate username'
+                elif invitee not in seen_users:
+                    seen_users.add(invitee)
+                    
+            for user in seen_users:
+                try:
+                    u = User.objects.get(username=user)
+                    p = models.Profile.objects.get(user=u)
+                    invitee_profiles.add(p)
+                except User.DoesNotExist:
+                    if 'invite' not in errors:
+                        errors['invited'] = 'Cannot invite unregistered user'
+                    else:
+                        errors['invited'] += '; cannot invited unregistered user'
             
         is_no_errors = not bool(errors)
         
@@ -47,6 +73,8 @@ class ProjectCreationProcess(View):
         if is_no_errors:
             project = models.Project.objects.create(project_name=title, description=description)
             models.Member.objects.create(project=project, user=profile, role=models.Member.UserProjectRole.OWNER)
+            for invitee in invitee_profiles:
+                models.Member.objects.create(project=project, user=invitee, role=models.Member.UserProjectRole.INVITED)
             return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'success': 'Successfully created project!'})
         else:
             return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'errors': errors})
