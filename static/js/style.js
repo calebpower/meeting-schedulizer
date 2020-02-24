@@ -2,6 +2,12 @@ $(document).ready(function() {
 
   // do this only for the projects page
   if($('#project-pane').length && $('#active-pane').length) {
+    var hasEdited = false;
+    var canceledURL = '';
+    
+    $('.do-discard').click(function() {
+      window.location = canceledURL;
+    });
     
     Split(["#project-pane","#active-pane"], {
       elementStyle: function (dimension, size, gutterSize) { 
@@ -20,7 +26,10 @@ $(document).ready(function() {
     });
 
     $('#create-project-btn').on('click', function() {
-      window.location = '/meeting/projects/create';
+      if(hasEdited) {
+        canceledURL = '/meeting/projects/create';
+        $("#confirm-discard-modal").modal();
+      } else window.location = '/meeting/projects/create';
     });
     
     $('#edit-project-btn').on('click', function() {
@@ -28,9 +37,18 @@ $(document).ready(function() {
     });
     
     $('.project-card').click(function() {
-      window.location = '/meeting/projects/' + $(this).attr('project');
+      if(hasEdited) {
+        canceledURL = '/meeting/projects/' + $(this).attr('project');
+        $("#confirm-discard-modal").modal();
+      } else window.location = '/meeting/projects/' + $(this).attr('project');
     });
-
+    
+    // do this only for the create or edit panes
+    if($('#active-pane-create').length || $('#active-pane-edit').length) {
+      $('input[type="text"], textarea').on('keypress', function() {
+        hasEdited = true; 
+      });
+    }
   }
 
 });

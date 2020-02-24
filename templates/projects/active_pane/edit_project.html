@@ -2,11 +2,12 @@
 
 {% block content %}
   <div id="projects" class="row no-gutters">
+    {% include "modals.html" %}
     {% include "projects/project_pane.html" %}
     <div id="active-pane" class="col bg-light">
 
       <!-- Project modification form -->
-      <div id="active-pane-create">
+      <div id="active-pane-edit">
         <h2 style="text-align: center;">Edit Your Project</h2>
         <form>
           <div class="form-group">
