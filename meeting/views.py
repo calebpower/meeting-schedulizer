@@ -19,8 +19,6 @@ def pull_projects(profile):
         try:
             members = models.Member.objects.filter(user=profile);
             for member in members:
-                print(member.role)
-                print(member.project.project_name)
                 projects[member.role].append(member.project)
         except:
             pass
@@ -129,7 +127,20 @@ def projects_edit(request, project_key):
 def projects_view(request, project_key):
     app_url = request.path
     projects = pull_projects(pull_profile(request.user))
-    return render(request, 'projects/active_pane/view_project.html', {'app_url': app_url, 'projects': projects})
+    
+    project = None
+    team = []
+    meetings = [] # depends on Courtney
+    
+    try:
+        project = models.Project.objects.get(pk=project_key)
+        members = models.Member.objects.filter(project=project)
+        for member in members:
+            team.append(member)
+    except:
+        pass
+    
+    return render(request, 'projects/active_pane/view_project.html', {'app_url': app_url, 'projects': projects, 'project': project, 'team': team, 'meetings': meetings})
 
 class LoginProcess(View):
     def post(self, request, *args, **kwargs):
