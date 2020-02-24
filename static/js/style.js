@@ -16,7 +16,7 @@ $(document).ready(function() {
       gutterStyle: function (dimension, gutterSize) { return {'flex-basis':  gutterSize + 'px'} },
       sizes: [20,60,20],
       minSize: 200,
-      gutterSize: 6,
+      gutterSize: 0,
       cursor: 'col-resize'
     });
 

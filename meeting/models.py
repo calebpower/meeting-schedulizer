@@ -21,8 +21,9 @@ class Member(models.Model):
         ACTIVE = 1
         OWNER = 2
     
-    user_role = models.IntegerField(choices=UserProjectRole.choices)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    role = models.IntegerField(choices=UserProjectRole.choices)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
