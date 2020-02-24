@@ -102,30 +102,34 @@ class ProjectCreationProcess(View):
         is_no_errors = not bool(errors)
         
         app_url = request.path
+        projects = pull_projects(pull_profile(request.user))
         
         if is_no_errors:
             project = models.Project.objects.create(project_name=title, description=description)
             models.Member.objects.create(project=project, user=profile, role=models.Member.UserProjectRole.OWNER)
             for invitee in invitee_profiles:
                 models.Member.objects.create(project=project, user=invitee, role=models.Member.UserProjectRole.INVITED)
-            return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'success': 'Successfully created project!'})
+            return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'success': 'Successfully created project!', 'projects': projects})
         else:
-            return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'errors': errors})
+            return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'errors': errors, 'projects': projects})
     
     def get(self, request, *args, **kwargs):
         app_url = request.path
-        return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url})
+        projects = pull_projects(pull_profile(request.user))
+        return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'projects': projects})
             
 
 ''' Render the "edit project" form '''
 def projects_edit(request, project_key):
     app_url = request.path
-    return render(request, 'projects/active_pane/edit_project.html', {'app_url': app_url})
+    projects = pull_projects(pull_profile(request.user))
+    return render(request, 'projects/active_pane/edit_project.html', {'app_url': app_url, 'projects': projects})
 
 ''' Render the "view project" form '''
 def projects_view(request, project_key):
     app_url = request.path
-    return render(request, 'projects/active_pane/view_project.html', {'app_url': app_url})
+    projects = pull_projects(pull_profile(request.user))
+    return render(request, 'projects/active_pane/view_project.html', {'app_url': app_url, 'projects': projects})
 
 class LoginProcess(View):
     def post(self, request, *args, **kwargs):
