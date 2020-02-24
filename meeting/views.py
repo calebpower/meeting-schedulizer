@@ -126,21 +126,25 @@ def projects_edit(request, project_key):
 ''' Render the "view project" form '''
 def projects_view(request, project_key):
     app_url = request.path
-    projects = pull_projects(pull_profile(request.user))
+    profile = pull_profile(request.user)
+    projects = pull_projects(profile)
     
     project = None
     team = []
     meetings = [] # depends on Courtney
+    owns = False
     
     try:
         project = models.Project.objects.get(pk=project_key)
         members = models.Member.objects.filter(project=project)
         for member in members:
             team.append(member)
+            if member.role == models.Member.UserProjectRole.OWNER and member.user == profile:
+                owns = True
     except:
         pass
     
-    return render(request, 'projects/active_pane/view_project.html', {'app_url': app_url, 'projects': projects, 'project': project, 'team': team, 'meetings': meetings})
+    return render(request, 'projects/active_pane/view_project.html', {'app_url': app_url, 'projects': projects, 'project': project, 'team': team, 'meetings': meetings, 'owns': owns})
 
 class LoginProcess(View):
     def post(self, request, *args, **kwargs):

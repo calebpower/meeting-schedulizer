@@ -32,11 +32,11 @@
                     <p class="card-text">
                       &bull; {{ member.user.display_name }}
                       {% if member.role == 0 %}
-                        <strong>- invited</strong>
+                        <strong class="project-invited">- invited</strong>
                       {% elif member.role == 1 %}
-                        <strong>- active</strong>
+                        <strong class="project-active">- active</strong>
                       {% elif member.role == 2 %}
-                        <strong>- owner</strong>
+                        <strong class="project-owner">- owner</strong>
                       {% endif %}
                     </p>
                   {% endfor %}
@@ -54,7 +54,9 @@
           </div>
           <div class="row">
             <div class="col">
-              <button type="button" id="edit-project-btn" class="btn btn-warning">Edit Project</button>
+              {% if owns %}
+                <button type="button" id="edit-project-btn" class="btn btn-warning">Edit Project</button>
+              {% endif %}
             </div>
           </div>
         </div>
