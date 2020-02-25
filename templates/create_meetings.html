@@ -10,7 +10,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
 input[type=text], select, textarea {
   width: 100%;
-  padding: 12px;
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
@@ -20,8 +20,8 @@ input[type=text], select, textarea {
 }
 
 input[type=submit] {
-  background-color: #4CAF50;
-  color: white;
+  background-color: rgb(106, 200, 255);
+  color: black;
   padding: 12px 20px;
   border: none;
   border-radius: 4px;
@@ -29,7 +29,7 @@ input[type=submit] {
 }
 
 input[type=submit]:hover {
-  background-color: #45a049;
+  background-color: rgb(106, 180, 255);
 }
 
 .container {
@@ -37,34 +37,39 @@ input[type=submit]:hover {
   background-color: #f2f2f2;
   padding: 20px;
 }
+
+.ui.fluid.dropdown{display:block;width:100%;min-width:0}
+
 </style>
 </head>
 <body>
 
 <h3 align="center">Create a Meeting for "ProjectNameHere" </h3>
 
+<!-- Meeting creation form -->
 <div class="container">
-  <form action="/action_page.php">
+  <form autocomplete="off" action="/action_page.php">
     <label for="fname">Day</label>
-    <input type="text" id="fname" name="firstname" placeholder="xx/xx/xxxx">
+    <input type="text" id="dayOfMeeting" name="date" placeholder="mm/dd/yyyy" required>
 
     <label for="lname">Location</label>
-    <input type="text" id="lname" name="lastname" placeholder="Location..">
+    <input type="text" id="locationOfMeeting" name="Location" placeholder="Where we're meeting..." required>
 
-    <label for="country">Members (Optional)</label>
-    <select id="country" name="country">
+    <label for="optionalMembers">Members (Optional)</label>
+    <select id="optionalMembers" name="optionalMembers" placeholder="Select">
+      <option value="requiredMeeting">N/A</option>
       <option value="member1">Member1</option>
       <option value="member2">Member2</option>
       <option value="member3">Member3</option>
     </select>
 
     <label for="subject">Description</label>
-    <textarea id="subject" name="subject" placeholder="This meeting is for.." style="height:200px"></textarea>
+    <textarea id="subject" name="subject" placeholder="What we'll be doing..." style="height:200px"></textarea>
 
     <input type="submit" value="Submit">
+    <input type="submit" value="Cancel">
   </form>
 </div>
-
 </body>
 </html>
 
