@@ -147,8 +147,7 @@ class RegisterProcess(View):
         app_url = request.path
         return render(request, 'register.html', {'app_url': app_url})
 
-
-''' Render the meetings form '''
+'''Render the meetings form '''
 def createMeetings(request):
     app_url = request.path
-    return render(request, 'create_meetings.html', {'app_url': app_url}) 
+    return render(request, 'create_meetings.html', {'app_url': app_url})    

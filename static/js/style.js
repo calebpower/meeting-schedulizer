@@ -24,6 +24,12 @@ $(document).ready(function() {
       window.location = '/meeting/projects/create';
     });
 
+
+    // $('#create-meeting-btn').on('click', function() {
+    //   $("#actice-pane > div").hide();
+    //   $("#active-pane-create").show();
+    // });
+
   }
 
 });
