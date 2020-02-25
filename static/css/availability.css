@@ -1,0 +1,18 @@
+.avlb-meetings-pane {
+    min-width: 15rem;
+    width: 20%;
+}
+.avlb-meeting-title {
+    font-size: 24px;
+    padding-left: 30px;
+}
+.avlb-meeting-label {
+    color: green;
+    cursor: pointer;
+}
+.availability-input {
+    padding: 15px;
+}
+.availability-input-placeholder {
+    font-size: 24px;
+}

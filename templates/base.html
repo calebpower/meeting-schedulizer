@@ -13,17 +13,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- FONT –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600|Material+Icons" rel="stylesheet" type="text/css">
+ 
   <!-- JQuery & Bootstrap ------------------------------------------------ -->
   <script type="text/javascript" src="{{ STATIC_URL }} /static/js/jquery-3.4.0.js"></script> 
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
   <!-- CSS –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/bootstrap-material-datetimepicker.css' %}">
+  <link rel="stylesheet" href="{% static 'css/availability.css' %}">
 
   <!-- JS –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <script type="text/javascript" src="{{ STATIC_URL }} /static/js/style.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }} /static/js/style.js"></script>  
 
   <!-- Split.js -->
   <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -62,5 +64,10 @@
   <!-- Content that child html files supply-->
   {% block content %}
   {% endblock %}
+
+  <!-- Availability scripts -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }} /static/js/bootstrap-material-datetimepicker.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }} /static/js/availability.js"></script>
 </body>
 </html>

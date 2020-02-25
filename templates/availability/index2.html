@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div id="availability" class="container-fluid">
+    <div class="col bg-primary text-white avlb-meetings-pane">
+        <h1 style="padding-top: 0.5em; padding-left: 0.5em; padding-right: 0.5em;">Time Availability</h1>
+        <div class="avlb-meeting-title">My Meetings</div>
+        {% if meeting_list %}
+            <!-- <ul>
+            {% for meeting in meeting_list %}
+                <li><a href="/meeting/{{ meeting.id }}/">{{ meeting.name }}</a></li>
+            {% endfor %}
+            </ul> -->
+            {% for meeting in meeting_list %}
+                <div class="avlb-meeting-label">{{ meeting.name }}</div>
+            {% endfor %}
+        {% else %}
+            <!-- <p>No meetings are available.</p> -->
+            <div style="padding-bottom: 0.5em;">
+                You haven't been invited to any meetings.
+                <br>
+                <span style="font-size: 12px;">Bring doughnuts next time and maybe you'll get invited.</span>
+            </div>
+        {% endif %}
+    </div>
+    <div id="active-pane" class="col bg-light">
+
+        <!-- No meeting selected -->
+        <div id="active-pane-none" style="text-align: center; padding: 0.5em; display: none;">
+            Select a meeting to get started!
+        </div>
+
+        <!-- Availability Form -->
+        <div id="active-pane-availability" style="">
+            <h2 style="text-align: center;">Add a time period that you are available</h2>
+            <div>
+                Time slot creation goes here
+            </div>
+        </div>
+
+        <!-- View Availabilities -->
+        <div id="active-pane-view" style="display: none;">
+            <h2 style="text-align: center; padding: 0.5em;">[ Project Name ]</h2>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="card text-white bg-secondary mb-3">
+                            <div class="card-header">Description</div>
+                            <div class="card-body">
+                                <p class="card-text">[ Insert description here. ]</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="card text-white bg-success mb-3">
+                            <div class="card-header">Team Members</div>
+                            <div class="card-body">
+                                <p class="card-text">[ Team members go here. ]</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="card text-white bg-warning mb-3">
+                            <div class="card-header">Upcoming Meetings</div>
+                            <div class="card-body">
+                                <p class="card-text">[ Upcoming meetings go here. ]</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

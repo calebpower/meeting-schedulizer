@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View
 from django.contrib.auth.models import User
+from django.template import loader
 
 from . import models
 import datetime
@@ -16,6 +17,23 @@ def index(request):
 def projects(request):
     app_url = request.path
     return render(request, 'projects/active_pane/no_selection.html', {'app_url': app_url})
+
+''' Render the availability page '''
+# def availability(request):
+#     app_url = request.path
+#     return render(request, 'availability/index.html', {'app_url': app_url})
+def availability(request):
+    # meeting_list = Meeting.objects.order_by('-name')
+    meeting_list = [
+        type('obj', (object,), {'name' : 'Meeting ONE'})(),
+        type('obj', (object,), {'name' : 'Meeting TWO'})(),
+        type('obj', (object,), {'name' : 'Meeting THREE'})()
+    ]
+    template = loader.get_template('availability/index.html')
+    context = {
+        'meeting_list': meeting_list,
+    }
+    return HttpResponse(template.render(context, request))
 
 class ProjectCreationProcess(View):
     def post(self, request, *args, **kwargs):

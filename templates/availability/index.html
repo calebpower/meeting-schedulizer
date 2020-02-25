@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Page Content -->
+<div class="container">
+
+    <div class="row">
+
+      <div class="col-lg-3">
+        <h1 class="my-4">My Meetings</h1>
+        <div class="list-group">
+            {% if meeting_list %}
+                <!-- <ul>
+                {% for meeting in meeting_list %}
+                    <li><a href="/meeting/{{ meeting.id }}/">{{ meeting.name }}</a></li>
+                {% endfor %}
+                </ul> -->
+                {% for meeting in meeting_list %}
+                    <div class="avlb-meeting-label" onclick="onMeetingSelect('{{ meeting.name }}')"">
+                        {{ meeting.name }}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <!-- <p>No meetings are available.</p> -->
+                <div style="padding-bottom: 0.5em;">
+                    You haven't been invited to any meetings.
+                    <br>
+                    <span style="font-size: 12px;">Bring doughnuts next time and maybe you'll get invited.</span>
+                </div>
+            {% endif %}
+        </div>
+      </div>
+      <!-- /.col-lg-3 -->
+
+      <div class="col-lg-9">
+
+        {% if meeting_list %}
+            <div class="card mt-4 availability-input">
+                <div id="meeting-selected" style="display: none;">
+                    <div id="selected-meeting"></div>
+                    <h2 style="text-align: center;">Add a time period that you are available</h2>
+
+                    <form id="avlb-form" method="post" action="">
+                        <!-- START -->
+                        <label for="start-time">From</label>
+                        <input id="start-time">
+
+                        <!-- END -->
+                        <label for="end-time">To</label>
+                        <input id="end-time">
+
+                    </form>
+                </div>
+                <div id="meeting-not-selected">
+                    <div class="availability-input-placeholder">
+                        Select a meeting to get started.
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            You will need to be a member of a meeting before you can enter your time availability.
+        {% endif %}
+        <!-- /.card -->
+
+      </div>
+      <!-- /.col-lg-9 -->
+
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  {% endblock %}
