@@ -37,6 +37,12 @@ $(document).ready(function() {
         window.location = window.location
       else window.location += '/edit';
     });
+
+    $('#new-meeting-btn').on('click', function() {
+      if(window.location.href.endsWith('/edit'))
+        window.location = window.location.href.slice(0, -5) + '/meetings/create';
+      else window.location += '/meetings/create';
+    });
     
     $('.project-card').click(function() {
       if(hasEdited) {
