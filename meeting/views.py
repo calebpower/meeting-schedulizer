@@ -254,5 +254,5 @@ def createMeeting(request, project_key):
     except:
         pass
     
-    return render(request, 'create_meetings.html', {'app_url': app_url, 'project': project})
+    return render(request, 'create_meeting.html', {'app_url': app_url, 'project': project})
    
