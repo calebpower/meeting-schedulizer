@@ -1,7 +1,34 @@
-<div id="project-pane" class="col bg-primary text-white" style="text-align: center;">
+<div id="project-pane" class="col bg-secondary text-white" style="text-align: center;">
   <h1 style="padding-top: 0.5em; padding-left: 0.5em; padding-right: 0.5em;">Projects</h1>
-  <div style="padding-bottom: 0.5em;">
-    You don't seem to have any projects.
-  </div>
+  {% if projects %}
+    {% for key, value in projects.items %}
+      {% for project in value %}
+        <div class="project-card" style="padding-top: 10px; padding-left: 10px; padding-right: 10px;" project="{{ project.pk }}">
+        {% if key == 2 %}
+          <div class="card text-light bg-danger mb-3">
+            <div class="card-header">Owner</div>
+        {% elif key == 1 %}
+          <div class="card text-dark bs-warning mb-3">
+            <div class="card-header">Active</div>
+        {% elif key == 0 %}
+          <div class="card text-white bg-info mb-3">
+            <div class="card-header">Invited</div>
+        {% else %}
+          <div class="card text-white bg-secondary mb-3">
+            <div class="card-header">Unknown</div>
+        {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ project.project_name }}</h5>
+              <p class="card-text">{{ project.description }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% endfor %}
+  {% else %}
+	<div style="padding-bottom: 0.5em;">
+	  You don't seem to have any projects.
+	</div>
+  {% endif %}
   <button type="button" id="create-project-btn" class="btn btn-light">Create a Project</button>
 </div>
