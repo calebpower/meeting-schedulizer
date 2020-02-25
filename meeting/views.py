@@ -245,6 +245,14 @@ class RegisterProcess(View):
         return render(request, 'register.html', {'app_url': app_url})
 
 '''Render the meetings form '''
-def createMeetings(request):
+def createMeeting(request, project_key):
     app_url = request.path
-    return render(request, 'create_meetings.html', {'app_url': app_url})    
+    project = None
+        
+    try:
+        project = models.Project.objects.get(pk=project_key)
+    except:
+        pass
+    
+    return render(request, 'create_meetings.html', {'app_url': app_url, 'project': project})
+   
