@@ -10,5 +10,6 @@ urlpatterns = [
     path('projects/<int:project_key>', views.projects_view, name='projects_view'),
     path('projects/<int:project_key>/edit', views.ProjectModificationProcess.as_view(), name="ProjectModificationProcess"),
     path('login', views.LoginProcess.as_view(), name="LoginProcess"),
-    path('register', views.RegisterProcess.as_view(), name="RegisterProcess")
+    path('register', views.RegisterProcess.as_view(), name="RegisterProcess"),
+    path('create_meetings', views.createMeetings, name='meetings')
 ]
