@@ -133,18 +133,40 @@ class ProjectModificationProcess(View):
             
         is_no_errors = not bool(errors)
         
+        project_key = kwargs['project_key']
         app_url = request.path
         projects = pull_projects(pull_profile(user))
+        project = None
         
-        if is_no_errors:
-            return projects_view(request, kwargs['project_key'])
+        try:
+            project = models.Project.objects.get(pk=project_key)
+        except:
+            pass
+        
+        if is_no_errors and project is not None:
+            try:
+                project.project_name = title
+                project.description = description
+                project.save()
+            except:
+                pass
+            
+            return projects_view(request, project_key)
         else:
-            return render(request, 'projects/active_pane/edit_project.html', {'app_url': app_url, 'projects': projects, 'errors': errors})
+            return render(request, 'projects/active_pane/edit_project.html', {'app_url': app_url, 'projects': projects, 'project': project, 'errors': errors})
     
     def get(self, request, *args, **kwargs):
         app_url = request.path
         projects = pull_projects(pull_profile(request.user))
-        return render(request, 'projects/active_pane/edit_project.html', {'app_url': app_url, 'projects': projects})
+        project = None
+        
+        try:
+            project_key = kwargs['project_key']
+            project = models.Project.objects.get(pk=project_key)
+        except:
+            pass
+        
+        return render(request, 'projects/active_pane/edit_project.html', {'app_url': app_url, 'projects': projects, 'project': project})
 
 ''' Render the "view project" form '''
 def projects_view(request, project_key):

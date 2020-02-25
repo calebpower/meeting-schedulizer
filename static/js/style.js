@@ -47,7 +47,7 @@ $(document).ready(function() {
     
     // do this only for the create or edit panes
     if($('#active-pane-create').length || $('#active-pane-edit').length) {
-      $('input[type="text"], textarea').on('keypress', function() {
+      $('input[type="text"], textarea').on('keydown', function() {
         hasEdited = true; 
       });
     }
