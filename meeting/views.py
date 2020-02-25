@@ -99,7 +99,7 @@ class ProjectCreationProcess(View):
         is_no_errors = not bool(errors)
         
         app_url = request.path
-        projects = pull_projects(pull_profile(user))
+        projects = pull_projects(pull_profile(request.user))
         
         if is_no_errors:
             project = models.Project.objects.create(project_name=title, description=description)
@@ -135,7 +135,7 @@ class ProjectModificationProcess(View):
         
         project_key = kwargs['project_key']
         app_url = request.path
-        projects = pull_projects(pull_profile(user))
+        projects = pull_projects(pull_profile(request.user))
         project = None
         
         try:
