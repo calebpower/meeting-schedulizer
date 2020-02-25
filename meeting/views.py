@@ -36,7 +36,6 @@ def pull_profile(user):
         
     return None
     
-    
 ''' Render the home page '''
 def index(request):
     app_url = request.path
@@ -100,7 +99,7 @@ class ProjectCreationProcess(View):
         is_no_errors = not bool(errors)
         
         app_url = request.path
-        projects = pull_projects(pull_profile(request.user))
+        projects = pull_projects(pull_profile(user))
         
         if is_no_errors:
             project = models.Project.objects.create(project_name=title, description=description)
@@ -116,12 +115,36 @@ class ProjectCreationProcess(View):
         projects = pull_projects(pull_profile(request.user))
         return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'projects': projects})
             
-
 ''' Render the "edit project" form '''
-def projects_edit(request, project_key):
-    app_url = request.path
-    projects = pull_projects(pull_profile(request.user))
-    return render(request, 'projects/active_pane/edit_project.html', {'app_url': app_url, 'projects': projects})
+class ProjectModificationProcess(View):
+    def post(self, request, *args, **kwargs):
+        title = request.POST.get('title') if request.POST.get('title') else None
+        description = request.POST.get('description') if request.POST.get('description') else None
+        user = request.user if request.user.is_authenticated else None
+        
+        if user is None:
+            return redirect('LoginProcess')
+        
+        errors = dict()
+        if title is None:
+            errors['title'] = 'Cannot be empty'
+        if description is None:
+            errors['description'] = 'Cannot be empty'
+            
+        is_no_errors = not bool(errors)
+        
+        app_url = request.path
+        projects = pull_projects(pull_profile(user))
+        
+        if is_no_errors:
+            return projects_view(request, kwargs['project_key'])
+        else:
+            return render(request, 'projects/active_pane/edit_project.html', {'app_url': app_url, 'projects': projects, 'errors': errors})
+    
+    def get(self, request, *args, **kwargs):
+        app_url = request.path
+        projects = pull_projects(pull_profile(request.user))
+        return render(request, 'projects/active_pane/edit_project.html', {'app_url': app_url, 'projects': projects})
 
 ''' Render the "view project" form '''
 def projects_view(request, project_key):

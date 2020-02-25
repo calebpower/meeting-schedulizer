@@ -33,7 +33,9 @@ $(document).ready(function() {
     });
     
     $('#edit-project-btn').on('click', function() {
-      window.location = window.location + '/edit';
+      if(window.location.href.endsWith('/edit'))
+        window.location = window.location
+      else window.location += '/edit';
     });
     
     $('.project-card').click(function() {
