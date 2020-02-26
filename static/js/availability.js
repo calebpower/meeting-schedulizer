@@ -36,6 +36,7 @@ function onMeetingSelect(e) {
 }
 
 function onSubmit() {
+    unsavedChanges = false;
     const st = $('#start-time').val();
     const et = $('#end-time').val();
     console.log('st', st, 'et', et);
