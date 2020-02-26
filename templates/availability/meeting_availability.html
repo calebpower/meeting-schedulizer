@@ -14,7 +14,15 @@
             <div class="card mt-4 availability-input">                
                                 
                 <div id="meeting-selected">
-                    <div id="selected-meeting"></div>
+                    <div id="selected-meeting">
+                        Indicate your time availability between
+                        {{ active_meeting.start_date }} and {{ active_meeting.end_date }}
+                        for {{ active_meeting.name }}
+                    </div>
+
+                    
+                    <input type="hidden" id="meeting-start-date" value="{{ active_meeting.start_date }}">
+                    <input type="hidden" id="meeting-end-date" value="{{ active_meeting.end_date }}">
 
                     <!-- existing time-slots -->
                     {% for slot in time_slots %}
@@ -22,8 +30,6 @@
                         <br>
                     {% endfor %}
                     <!-- end existing time-slots -->
-
-                    <h2 style="text-align: center;">Add a time period that you are available</h2>
 
                     <form id="avlb-form" method="post" action="">
                         {% csrf_token %}

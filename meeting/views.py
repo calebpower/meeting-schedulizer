@@ -149,11 +149,16 @@ class RegisterProcess(View):
 
 ''' Availability pages '''
 def availability(request):
-    meeting_list = [
-        type('obj', (object,), {'name' : 'Meeting ONE', 'id' : 1})(),
-        type('obj', (object,), {'name' : 'Meeting TWO', 'id' : 2})(),
-        type('obj', (object,), {'name' : 'Meeting THREE', 'id' : 3})()
-    ]
+    # meeting_list = [
+    #     type('obj', (object,), {'name' : 'Meeting ONE', 'id' : 1})(),
+    #     type('obj', (object,), {'name' : 'Meeting TWO', 'id' : 2})(),
+    #     type('obj', (object,), {'name' : 'Meeting THREE', 'id' : 3})()
+    # ]
+    meeting_list = {
+        1: type('obj', (object,), {'name': 'Meeting ONE', 'id': 1, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59'})(),
+        2: type('obj', (object,), {'name': 'Meeting TWO', 'id': 2, 'start_date': '2020-03-08 05:49:01', 'end_date': '2020-03-14 23:59:59'})(),
+        3: type('obj', (object,), {'name': 'Meeting THREE', 'id': 3, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59'})()
+    }
     context = {
         'meeting_list': meeting_list,
     }
@@ -161,15 +166,22 @@ def availability(request):
 
 class Availability(View):
     def get(self, request, meeting_id):
-        meeting_list = [
-            type('obj', (object,), {'name' : 'Meeting ONE', 'id' : 1})(),
-            type('obj', (object,), {'name' : 'Meeting TWO', 'id' : 2})(),
-            type('obj', (object,), {'name' : 'Meeting THREE', 'id' : 3})()
-        ]
+        # meeting_list = [
+        #     type('obj', (object,), {'name' : 'Meeting ONE', 'id' : 1})(),
+        #     type('obj', (object,), {'name' : 'Meeting TWO', 'id' : 2})(),
+        #     type('obj', (object,), {'name' : 'Meeting THREE', 'id' : 3})()
+        # ]
+        meeting_list = {
+            1: type('obj', (object,), {'name': 'Meeting ONE', 'id': 1, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59'})(),
+            2: type('obj', (object,), {'name': 'Meeting TWO', 'id': 2, 'start_date': '2020-03-08 05:49:01', 'end_date': '2020-03-14 23:59:59'})(),
+            3: type('obj', (object,), {'name': 'Meeting THREE', 'id': 3, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59'})()
+        }
+        active_meeting = meeting_list.get(meeting_id)
         app_url = request.path
         time_slots = models.TimeAvailability.objects.filter(meeting=meeting_id)
         
         context = {
+            'active_meeting': active_meeting,
             'meeting_list': meeting_list,
             'app_url': app_url,
             'time_slots': time_slots
@@ -178,28 +190,35 @@ class Availability(View):
         return render(request, 'availability/meeting_availability.html', context)
 
     def post(self, request, *args, **kwargs):
-        startTime = request.POST.get('start_time')
-        endTime = request.POST.get('end_time')
-        meetingId = kwargs.get('meeting_id')
+        start_time = request.POST.get('start_time')
+        end_time = request.POST.get('end_time')
+        meeting_id = kwargs.get('meeting_id')
         # meetingId = request.POST.get('meeting_id')
         # user = request.user if request.user.is_authenticated else None
         
         # if user is None:
         #     return redirect('LoginProcess')
 
-        models.TimeAvailability.objects.create(start_time=startTime,
-                                               end_time=endTime,
-                                               meeting=meetingId)
-        meeting_list = [
-            type('obj', (object,), {'name' : 'Meeting ONE', 'id' : 1})(),
-            type('obj', (object,), {'name' : 'Meeting TWO', 'id' : 2})(),
-            type('obj', (object,), {'name' : 'Meeting THREE', 'id' : 3})()
-        ]
+        models.TimeAvailability.objects.create(start_time=start_time,
+                                               end_time=end_time,
+                                               meeting=meeting_id)
+        # meeting_list = [
+        #     type('obj', (object,), {'name' : 'Meeting ONE', 'id' : 1})(),
+        #     type('obj', (object,), {'name' : 'Meeting TWO', 'id' : 2})(),
+        #     type('obj', (object,), {'name' : 'Meeting THREE', 'id' : 3})()
+        # ]
+        meeting_list = {
+            1: type('obj', (object,), {'name': 'Meeting ONE', 'id': 1, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59'})(),
+            2: type('obj', (object,), {'name': 'Meeting TWO', 'id': 2, 'start_date': '2020-03-08 05:49:01', 'end_date': '2020-03-14 23:59:59'})(),
+            3: type('obj', (object,), {'name': 'Meeting THREE', 'id': 3, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59'})()
+        }
+        active_meeting = meeting_list.get(meeting_id)
         app_url = request.path
-        time_slots = models.TimeAvailability.objects.filter(meeting=meetingId)
+        time_slots = models.TimeAvailability.objects.filter(meeting=meeting_id)
         
         context = {
             'meeting_list': meeting_list,
+            'active_meeting': active_meeting,
             'app_url': app_url,
             'time_slots': time_slots
         }

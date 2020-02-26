@@ -2,7 +2,7 @@
     <h1 class="my-4">My Meetings</h1>
     <div class="list-group">
         {% if meeting_list %}
-            {% for meeting in meeting_list %}
+            {% for id, meeting in meeting_list.items %}
                 <!-- <div class="avlb-meeting-label" data-id="{{ meeting.name }}" data-name="{{ meeting.name }}" onclick="onMeetingSelect(this)">
                     {{ meeting.name }}
                 </div> -->
