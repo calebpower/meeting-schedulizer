@@ -1,23 +1,35 @@
 $(function () {
-    $('#start-time').bootstrapMaterialDatePicker({
-        date: false,
-        format: 'h:mm a',
+    $('#start-time-picker').bootstrapMaterialDatePicker({
+        date: true,
+        format: 'MMM DD h:mm a',
         switchOnClick: false,
-        shortTime: true
+        shortTime: true,
+        minDate: moment()
+    }).on('change', function(e, date) {
+        $('#end-time-picker').bootstrapMaterialDatePicker('setMinDate', date);
+        $('#start-time').val(date.format('YYYY-MM-DD HH:MM'));
     });
 
-    $('#end-time').bootstrapMaterialDatePicker({
-        date: false,
-        format: 'h:mm a',
+    $('#end-time-picker').bootstrapMaterialDatePicker({
+        date: true,
+        format: 'MMM DD h:mm a',
         switchOnClick: false,
-        shortTime: true
+        shortTime: true,
+        minDate: moment()
+    }).on('change', function(e, date) {
+        $('#start-time-picker').bootstrapMaterialDatePicker('setMaxDate', date);
+        $('#end-time').val(date.format('YYYY-MM-DD HH:MM'));
     });
 });
 
-function onMeetingSelect(mtg) {
-    console.log(mtg);
+function onMeetingSelect(e) {
+    console.log(e);
+}
 
-    $('#selected-meeting').text(mtg);
-    $('#meeting-not-selected').hide();
-    $('#meeting-selected').show();
+function onSubmit() {
+    const st = $('#start-time').val();
+    const et = $('#end-time').val();
+    console.log('st', st, 'et', et);
+    
+    document.getElementById('avlb-form').submit();
 }

@@ -11,5 +11,6 @@ urlpatterns = [
     path('projects/<int:project_key>/edit', views.projects_edit, name='projects_edit'),
     path('login', views.LoginProcess.as_view(), name="LoginProcess"),
     path('register', views.RegisterProcess.as_view(), name="RegisterProcess"),
-    path('availability', views.availability, name='availability'),
+    path('availability', views.availability, name='Availability'),
+    path('availability/<int:meeting_id>', views.Availability.as_view(), name='meeting_availability')
 ]

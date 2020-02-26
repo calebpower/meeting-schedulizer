@@ -3,7 +3,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View
 from django.contrib.auth.models import User
-from django.template import loader
 
 from . import models
 import datetime
@@ -17,23 +16,6 @@ def index(request):
 def projects(request):
     app_url = request.path
     return render(request, 'projects/active_pane/no_selection.html', {'app_url': app_url})
-
-''' Render the availability page '''
-# def availability(request):
-#     app_url = request.path
-#     return render(request, 'availability/index.html', {'app_url': app_url})
-def availability(request):
-    # meeting_list = Meeting.objects.order_by('-name')
-    meeting_list = [
-        type('obj', (object,), {'name' : 'Meeting ONE'})(),
-        type('obj', (object,), {'name' : 'Meeting TWO'})(),
-        type('obj', (object,), {'name' : 'Meeting THREE'})()
-    ]
-    template = loader.get_template('availability/index.html')
-    context = {
-        'meeting_list': meeting_list,
-    }
-    return HttpResponse(template.render(context, request))
 
 class ProjectCreationProcess(View):
     def post(self, request, *args, **kwargs):
@@ -164,3 +146,62 @@ class RegisterProcess(View):
     def get(self, request, *args, **kwargs):
         app_url = request.path
         return render(request, 'register.html', {'app_url': app_url})
+
+''' Availability pages '''
+def availability(request):
+    meeting_list = [
+        type('obj', (object,), {'name' : 'Meeting ONE', 'id' : 1})(),
+        type('obj', (object,), {'name' : 'Meeting TWO', 'id' : 2})(),
+        type('obj', (object,), {'name' : 'Meeting THREE', 'id' : 3})()
+    ]
+    context = {
+        'meeting_list': meeting_list,
+    }
+    return render(request, 'availability/index.html', context)
+
+class Availability(View):
+    def get(self, request, meeting_id):
+        meeting_list = [
+            type('obj', (object,), {'name' : 'Meeting ONE', 'id' : 1})(),
+            type('obj', (object,), {'name' : 'Meeting TWO', 'id' : 2})(),
+            type('obj', (object,), {'name' : 'Meeting THREE', 'id' : 3})()
+        ]
+        app_url = request.path
+        time_slots = models.TimeAvailability.objects.filter(meeting=meeting_id)
+        
+        context = {
+            'meeting_list': meeting_list,
+            'app_url': app_url,
+            'time_slots': time_slots
+        }
+
+        return render(request, 'availability/meeting_availability.html', context)
+
+    def post(self, request, *args, **kwargs):
+        startTime = request.POST.get('start_time')
+        endTime = request.POST.get('end_time')
+        meetingId = kwargs.get('meeting_id')
+        # meetingId = request.POST.get('meeting_id')
+        # user = request.user if request.user.is_authenticated else None
+        
+        # if user is None:
+        #     return redirect('LoginProcess')
+
+        models.TimeAvailability.objects.create(start_time=startTime,
+                                               end_time=endTime,
+                                               meeting=meetingId)
+        meeting_list = [
+            type('obj', (object,), {'name' : 'Meeting ONE', 'id' : 1})(),
+            type('obj', (object,), {'name' : 'Meeting TWO', 'id' : 2})(),
+            type('obj', (object,), {'name' : 'Meeting THREE', 'id' : 3})()
+        ]
+        app_url = request.path
+        time_slots = models.TimeAvailability.objects.filter(meeting=meetingId)
+        
+        context = {
+            'meeting_list': meeting_list,
+            'app_url': app_url,
+            'time_slots': time_slots
+        }
+
+        return render(request, 'availability/meeting_availability.html', context)

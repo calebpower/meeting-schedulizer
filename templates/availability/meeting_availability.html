@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Page Content -->
+<div class="container">
+
+    <div class="row">
+
+        {% include "availability/meeting_pane.html" %}
+
+        <div class="col-lg-9">
+
+            <div class="card mt-4 availability-input">                
+                                
+                <div id="meeting-selected">
+                    <div id="selected-meeting"></div>
+
+                    <!-- existing time-slots -->
+                    {% for slot in time_slots %}
+                        From {{ slot.start_time }} To {{ slot.end_time }}
+                        <br>
+                    {% endfor %}
+                    <!-- end existing time-slots -->
+
+                    <h2 style="text-align: center;">Add a time period that you are available</h2>
+
+                    <form id="avlb-form" method="post" action="">
+                        {% csrf_token %}
+                        <!-- START -->
+                        <label for="start-time-picker">From</label>
+                        <input id="start-time-picker">
+
+                        <!-- END -->
+                        <label for="end-time-picker">To</label>
+                        <input id="end-time-picker">
+
+                        <input type="hidden" id="start-time" name="start_time">
+                        <input type="hidden" id="end-time" name="end_time">
+                    </form>
+
+                    <button class="btn btn-success avlb-save-btn" onclick="onSubmit()">Save</button>
+                </div>
+                <!-- end meeting selected div -->
+            </div>
+            <!-- /.card -->
+
+        </div>
+        <!-- /.col-lg-9 -->
+
+    </div>
+    <!-- /.row -->
+
+</div>
+<!-- /.container -->
+
+{% include "availability/js.html" %}
+{% endblock %}
