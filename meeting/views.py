@@ -166,19 +166,19 @@ def availability(request):
 
 class Availability(View):
     def get(self, request, meeting_id):
-        # meeting_list = [
-        #     type('obj', (object,), {'name' : 'Meeting ONE', 'id' : 1})(),
-        #     type('obj', (object,), {'name' : 'Meeting TWO', 'id' : 2})(),
-        #     type('obj', (object,), {'name' : 'Meeting THREE', 'id' : 3})()
-        # ]
+
+        # models.Meeting.objects.raw('select name, m.id, m.start_date, m.end_date, coalesce(avlb_count, 0)
+        #   from meeting_meeting m join (select meeting, count(*) avlb_count from meeting_timeavailability group by meeting) c
+        #   on m.id = c.meeting'
         meeting_list = {
-            1: type('obj', (object,), {'name': 'Meeting ONE', 'id': 1, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59'})(),
-            2: type('obj', (object,), {'name': 'Meeting TWO', 'id': 2, 'start_date': '2020-03-08 05:49:01', 'end_date': '2020-03-14 23:59:59'})(),
-            3: type('obj', (object,), {'name': 'Meeting THREE', 'id': 3, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59'})()
+            1: type('obj', (object,), {'name': 'Meeting ONE', 'id': 1, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59', 'avlb_count':2})(),
+            2: type('obj', (object,), {'name': 'Meeting TWO', 'id': 2, 'start_date': '2020-03-08 05:49:01', 'end_date': '2020-03-14 23:59:59', 'avlb_count':0})(),
+            3: type('obj', (object,), {'name': 'Meeting THREE', 'id': 3, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59', 'avlb_count':10})()
         }
         active_meeting = meeting_list.get(meeting_id)
         app_url = request.path
-        time_slots = models.TimeAvailability.objects.filter(meeting=meeting_id)
+        # time_slots = models.TimeAvailability.objects.filter(meeting=meeting_id)
+        time_slots = models.TimeAvailability.objects.raw('select * from meeting_timeavailability where meeting = %s', [meeting_id])
         
         context = {
             'active_meeting': active_meeting,
@@ -202,15 +202,15 @@ class Availability(View):
         models.TimeAvailability.objects.create(start_time=start_time,
                                                end_time=end_time,
                                                meeting=meeting_id)
-        # meeting_list = [
-        #     type('obj', (object,), {'name' : 'Meeting ONE', 'id' : 1})(),
-        #     type('obj', (object,), {'name' : 'Meeting TWO', 'id' : 2})(),
-        #     type('obj', (object,), {'name' : 'Meeting THREE', 'id' : 3})()
-        # ]
+        
+        
+        # models.Meeting.objects.raw('select name, m.id, m.start_date, m.end_date, coalesce(avlb_count, 0)
+        #   from meeting_meeting m join (select meeting, count(*) avlb_count from meeting_timeavailability group by meeting) c
+        #   on m.id = c.meeting'
         meeting_list = {
-            1: type('obj', (object,), {'name': 'Meeting ONE', 'id': 1, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59'})(),
-            2: type('obj', (object,), {'name': 'Meeting TWO', 'id': 2, 'start_date': '2020-03-08 05:49:01', 'end_date': '2020-03-14 23:59:59'})(),
-            3: type('obj', (object,), {'name': 'Meeting THREE', 'id': 3, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59'})()
+            1: type('obj', (object,), {'name': 'Meeting ONE', 'id': 1, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59', 'avlb_count':2})(),
+            2: type('obj', (object,), {'name': 'Meeting TWO', 'id': 2, 'start_date': '2020-03-08 05:49:01', 'end_date': '2020-03-14 23:59:59', 'avlb_count':0})(),
+            3: type('obj', (object,), {'name': 'Meeting THREE', 'id': 3, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59', 'avlb_count':10})()
         }
         active_meeting = meeting_list.get(meeting_id)
         app_url = request.path

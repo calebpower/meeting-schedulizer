@@ -3,11 +3,13 @@
     <div class="list-group">
         {% if meeting_list %}
             {% for id, meeting in meeting_list.items %}
-                <!-- <div class="avlb-meeting-label" data-id="{{ meeting.name }}" data-name="{{ meeting.name }}" onclick="onMeetingSelect(this)">
+                <!-- <a href="/meeting/availability/{{ meeting.id }}" data-badge="{{ meeting.avlb_count }}" class="avlb-meeting-label badge1 {% if meeting.avlb_count < 1 %} no-mtg {% endif %}">
                     {{ meeting.name }}
-                </div> -->
+                </a> -->
+
                 <a href="/meeting/availability/{{ meeting.id }}" class="avlb-meeting-label">
                     {{ meeting.name }}
+                    <span class="badge {% if meeting.avlb_count < 1 %} no-mtg {% endif %}">{{ meeting.avlb_count }}</a>
                 </a>
             {% endfor %}
         {% else %}
