@@ -1,7 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
-    <p style="color: blue"> This title is supplied by the home </p>
-</div>
+<div id="calendar"></div>
+<script type='text/javascript'>
+$(document).ready(function() {
+    // page is now read y, initialize the calendar...
+    $('#calendar').fullCalendar({
+        // put your options and callbacks here
+    })
+
+});
+</script> 
+<script src="http://fullcalendar.io/js/fullcalendar-2.1.1/lib/jquery-ui.custom.min.js"></script>
+<script src='http://fullcalendar.io/js/fullcalendar-2.1.1/lib/moment.min.js'></script>
+<script src='http://fullcalendar.io/js/fullcalendar-2.1.1/fullcalendar.min.js'></script>
 {% endblock %}
