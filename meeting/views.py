@@ -13,11 +13,11 @@ def pull_projects(profile):
         models.Member.UserProjectRole.OWNER: [],
         models.Member.UserProjectRole.ACTIVE: [],
         models.Member.UserProjectRole.INVITED: []
-    };
+    }
     
     if profile is not None:
         try:
-            members = models.Member.objects.filter(user=profile);
+            members = models.Member.objects.filter(user=profile)
             for member in members:
                 projects[member.role].append(member.project)
         except:
@@ -70,7 +70,7 @@ class ProjectCreationProcess(View):
         if invitees is None:
             errors['invited'] = 'Cannot be empty'
         else:
-            invitee_usernames = filter(lambda username: username, map(lambda username: username.strip(), invitees.split(',')));
+            invitee_usernames = filter(lambda username: username, map(lambda username: username.strip(), invitees.split(',')))
             
             seen_users = set()
             for invitee in invitee_usernames:
