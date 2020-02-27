@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
 {% include "modals.html" %}
 {% block content %}
-<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
-<!-- This is a change-->
+
 <style>
 body {font-family: Arial, Helvetica, sans-serif;}
 * {box-sizing: border-box;}
@@ -40,16 +39,14 @@ input[type=submit]:hover {
 
 <br><h3 align="center">Meeting Creation for {% if project %}{{project.project_name }}{% endif %} </h3>
 
-<!-- Meeting creation form -->
 <div class="container">
-  <form autocomplete="off" action="/action_page.php">
+  <form autocomplete="off" method="post">
+    {% csrf_token %}
     <label for="date">Date:</label>
     <input type="text" id="dateOfMeeting" name="date" placeholder="Enter the date as mm/dd/yyyy"> 
-    <!-- required> -->
 
     <label for="location">Location:</label>
     <input type="text" id="locationOfMeeting" name="Location" placeholder="Where we're meeting...">
-     <!-- required> -->
 
     <label for="optionalMembers">Optional Attendance:</label>
     <select id="optionalMembers" name="optionalMembers" placeholder="Select">
