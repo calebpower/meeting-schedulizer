@@ -43,3 +43,12 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
     
+''' Time availability '''
+class TimeAvailability(models.Model):
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    meeting = models.IntegerField()
+    # meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+    def __str__(self):
+        return "meeting " + str(self.meeting) + " from " + str(self.start_time) + " to " + str(self.end_time)
