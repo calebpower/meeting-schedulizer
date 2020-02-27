@@ -7,14 +7,18 @@
 
       <!-- View project -->
       <div id="active-pane-view">
-        <h2 style="text-align: center; padding: 0.5em;">[ Project Name ]</h2>
+        <h2 style="text-align: center; padding: 0.5em;">
+          {% if project %}{{ project.project_name }}{% endif %}
+        </h2>
         <div class="container">
           <div class="row">
             <div class="col">
               <div class="card text-white bg-secondary mb-3">
                 <div class="card-header">Description</div>
                 <div class="card-body">
-                  <p class="card-text">[ Insert description here. ]</p>
+                  <p class="card-text">
+                    {% if project %}{{ project.description }}{% endif %}
+                  </p>
                 </div>
               </div>
             </div>
@@ -24,17 +28,37 @@
               <div class="card text-white bg-success mb-3">
                 <div class="card-header">Team Members</div>
                 <div class="card-body">
-                  <p class="card-text">[ Team members go here. ]</p>
+                  {% for member in team %}
+                    <p class="card-text">
+                      &bull; {{ member.user.display_name }}
+                      {% if member.role == 0 %}
+                        <strong class="project-invited">- invited</strong>
+                      {% elif member.role == 1 %}
+                        <strong class="project-active">- active</strong>
+                      {% elif member.role == 2 %}
+                        <strong class="project-owner">- owner</strong>
+                      {% endif %}
+                    </p>
+                  {% endfor %}
                 </div>
               </div>
             </div>
             <div class="col-12 col-md-6">
-              <div class="card text-white bg-warning mb-3">
+              <div class="card text-light bg-primary mb-3">
                 <div class="card-header">Upcoming Meetings</div>
                 <div class="card-body">
+                  <!-- Waiting on Courtney's code -->
                   <p class="card-text">[ Upcoming meetings go here. ]</p>
                 </div>
               </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              {% if owns %}
+                <button type="button" id="edit-project-btn" class="btn btn-warning">Edit Project</button>
+                <button type="button" id="new-meeting-btn" class="btn btn-success">Create Meeting</button>
+              {% endif %}
             </div>
           </div>
         </div>

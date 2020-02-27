@@ -7,6 +7,35 @@ from django.contrib.auth.models import User
 from . import models
 import datetime
 
+''' Pulls a list of the user's projects '''
+def pull_projects(profile):
+    projects = {
+        models.Member.UserProjectRole.OWNER: [],
+        models.Member.UserProjectRole.ACTIVE: [],
+        models.Member.UserProjectRole.INVITED: []
+    }
+    
+    if profile is not None:
+        try:
+            members = models.Member.objects.filter(user=profile)
+            for member in members:
+                projects[member.role].append(member.project)
+        except:
+            pass
+        
+    return projects
+
+def pull_profile(user):
+    if user.is_authenticated:
+        try:
+            profile = models.Profile.objects.get(user=user)
+            if profile:
+                return profile
+        except:
+            pass
+        
+    return None
+    
 ''' Render the home page '''
 def index(request):
     app_url = request.path
@@ -15,7 +44,8 @@ def index(request):
 ''' Render the default projects page '''
 def projects(request):
     app_url = request.path
-    return render(request, 'projects/active_pane/no_selection.html', {'app_url': app_url})
+    projects = pull_projects(pull_profile(request.user))
+    return render(request, 'projects/active_pane/no_selection.html', {'app_url': app_url, 'projects': projects})
 
 class ProjectCreationProcess(View):
     def post(self, request, *args, **kwargs):
@@ -40,7 +70,7 @@ class ProjectCreationProcess(View):
         if invitees is None:
             errors['invited'] = 'Cannot be empty'
         else:
-            invitee_usernames = filter(lambda username: username, map(lambda username: username.strip(), invitees.split(',')));
+            invitee_usernames = filter(lambda username: username, map(lambda username: username.strip(), invitees.split(',')))
             
             seen_users = set()
             for invitee in invitee_usernames:
@@ -69,30 +99,97 @@ class ProjectCreationProcess(View):
         is_no_errors = not bool(errors)
         
         app_url = request.path
+        projects = pull_projects(pull_profile(request.user))
         
         if is_no_errors:
             project = models.Project.objects.create(project_name=title, description=description)
             models.Member.objects.create(project=project, user=profile, role=models.Member.UserProjectRole.OWNER)
             for invitee in invitee_profiles:
                 models.Member.objects.create(project=project, user=invitee, role=models.Member.UserProjectRole.INVITED)
-            return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'success': 'Successfully created project!'})
+            return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'success': 'Successfully created project!', 'projects': projects})
         else:
-            return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'errors': errors})
+            return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'errors': errors, 'projects': projects})
     
     def get(self, request, *args, **kwargs):
         app_url = request.path
-        return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url})
+        projects = pull_projects(pull_profile(request.user))
+        return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'projects': projects})
             
-
 ''' Render the "edit project" form '''
-def projects_edit(request, project_key):
-    app_url = request.path
-    return render(request, 'projects/active_pane/edit_project.html', {'app_url': app_url})
+class ProjectModificationProcess(View):
+    def post(self, request, *args, **kwargs):
+        title = request.POST.get('title') if request.POST.get('title') else None
+        description = request.POST.get('description') if request.POST.get('description') else None
+        user = request.user if request.user.is_authenticated else None
+        
+        if user is None:
+            return redirect('LoginProcess')
+        
+        errors = dict()
+        if title is None:
+            errors['title'] = 'Cannot be empty'
+        if description is None:
+            errors['description'] = 'Cannot be empty'
+            
+        is_no_errors = not bool(errors)
+        
+        project_key = kwargs['project_key']
+        app_url = request.path
+        projects = pull_projects(pull_profile(request.user))
+        project = None
+        
+        try:
+            project = models.Project.objects.get(pk=project_key)
+        except:
+            pass
+        
+        if is_no_errors and project is not None:
+            try:
+                project.project_name = title
+                project.description = description
+                project.save()
+            except:
+                pass
+            
+            return projects_view(request, project_key)
+        else:
+            return render(request, 'projects/active_pane/edit_project.html', {'app_url': app_url, 'projects': projects, 'project': project, 'errors': errors})
+    
+    def get(self, request, *args, **kwargs):
+        app_url = request.path
+        projects = pull_projects(pull_profile(request.user))
+        project = None
+        
+        try:
+            project_key = kwargs['project_key']
+            project = models.Project.objects.get(pk=project_key)
+        except:
+            pass
+        
+        return render(request, 'projects/active_pane/edit_project.html', {'app_url': app_url, 'projects': projects, 'project': project})
 
 ''' Render the "view project" form '''
 def projects_view(request, project_key):
     app_url = request.path
-    return render(request, 'projects/active_pane/view_project.html', {'app_url': app_url})
+    profile = pull_profile(request.user)
+    projects = pull_projects(profile)
+    
+    project = None
+    team = []
+    meetings = [] # depends on Courtney
+    owns = False
+    
+    try:
+        project = models.Project.objects.get(pk=project_key)
+        members = models.Member.objects.filter(project=project)
+        for member in members:
+            team.append(member)
+            if member.role == models.Member.UserProjectRole.OWNER and member.user == profile:
+                owns = True
+    except:
+        pass
+    
+    return render(request, 'projects/active_pane/view_project.html', {'app_url': app_url, 'projects': projects, 'project': project, 'team': team, 'meetings': meetings, 'owns': owns})
 
 class LoginProcess(View):
     def post(self, request, *args, **kwargs):
@@ -224,3 +321,15 @@ class Availability(View):
         }
 
         return render(request, 'availability/meeting_availability.html', context)
+
+'''Render the meetings form '''
+def createMeeting(request, project_key):
+    app_url = request.path
+    project = None
+        
+    try:
+        project = models.Project.objects.get(pk=project_key)
+    except:
+        pass
+    
+    return render(request, 'create_meeting.html', {'app_url': app_url, 'project': project})
