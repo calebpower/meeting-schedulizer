@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Page Content -->
+<div class="container">
+    <div class="row">
+
+        {% include "availability/meeting_pane.html" %}
+
+        <div class="col-lg-9">
+            <div class="card mt-4">
+                <div class="card-header">
+                    {{ active_meeting.name }}
+                </div>
+
+                <div id="avlb-meeting-selected" class="card-body">
+                    <input type="hidden" id="meeting-start-date" value="{{ active_meeting.start_date }}">
+                    <input type="hidden" id="meeting-end-date" value="{{ active_meeting.end_date }}">
+                    
+                    <h5 class="card-title">
+                        {{ active_meeting.start_date }} - {{ active_meeting.end_date }}
+                    </h5>
+
+
+                    <!-- existing time-slots -->
+                    {% for slot in time_slots %}
+                        From {{ slot.start_time }} To {{ slot.end_time }}
+                        <br>
+                    {% endfor %}
+                    <!-- end existing time-slots -->
+
+                    <form id="avlb-form" method="post" action="">
+                        {% csrf_token %}
+                        <!-- START -->
+                        <label for="start-time-picker">From</label>
+                        <input id="start-time-picker">
+
+                        <!-- END -->
+                        <label for="end-time-picker">To</label>
+                        <input id="end-time-picker">
+
+                        <input type="hidden" id="start-time" name="start_time">
+                        <input type="hidden" id="end-time" name="end_time">
+                    </form>
+
+                    <button class="btn btn-success avlb-save-btn" onclick="onSubmit()">Save</button>
+                </div>
+                <!-- end meeting selected div -->
+            </div>
+            <!-- /.card -->
+
+        </div>
+        <!-- /.col-lg-9 -->
+
+    </div>
+    <!-- /.row -->
+
+</div>
+<!-- /.container -->
+
+{% include "availability/js.html" %}
+{% endblock %}
