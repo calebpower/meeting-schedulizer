@@ -27,10 +27,10 @@ class Member(models.Model):
 
 ''' Denotes a single meeting. '''
 class ProjectMeeting(models.Model): 
-    date = models.CharField(max_length=100, blank=False)
-    location = models.CharField(max_length=100, blank=False)
-    optional_members = models.CharField(max_length=100, blank=False)
-    description = models.CharField(max_length=200, blank=False)
+    date = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)
+    optional_members = models.CharField(max_length=100)
+    description = models.CharField(max_length=200)
     
     project_name = models.ForeignKey(Project, on_delete=models.CASCADE)    
 
