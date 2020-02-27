@@ -25,6 +25,15 @@ class Member(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     role = models.IntegerField(choices=UserProjectRole.choices)
 
+''' Denotes a single meeting. '''
+class ProjectMeeting(models.Model): 
+    date = models.CharField(max_length=100, blank=False)
+    location = models.CharField(max_length=100, blank=False)
+    optional_members = models.CharField(max_length=100, blank=False)
+    description = models.CharField(max_length=200, blank=False)
+    
+    project_name = models.ForeignKey(Project, on_delete=models.CASCADE)    
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
