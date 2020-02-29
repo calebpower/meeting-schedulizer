@@ -61,13 +61,13 @@ class ProjectCreationProcess(View):
         profile = models.Profile.objects.get(user=user)
         invitee_profiles = set()
         errors = dict()
-        if title is None:
+        if title is None or not title.strip():
             errors['title'] = 'Cannot be empty'
-        if description is None:
+        if description is None or not description.strip():
             errors['description'] = 'Cannot be empty'
         if user is None:
             errors['user'] = 'Cannot be empty'
-        if invitees is None:
+        if invitees is None or not invitees.strip():
             errors['invited'] = 'Cannot be empty'
         else:
             invitee_usernames = filter(lambda username: username, map(lambda username: username.strip(), invitees.split(',')))
@@ -126,9 +126,9 @@ class ProjectModificationProcess(View):
             return redirect('LoginProcess')
         
         errors = dict()
-        if title is None:
+        if title is None or not title.strip():
             errors['title'] = 'Cannot be empty'
-        if description is None:
+        if description is None or not description.strip():
             errors['description'] = 'Cannot be empty'
             
         is_no_errors = not bool(errors)
