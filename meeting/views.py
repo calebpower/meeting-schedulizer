@@ -13,11 +13,11 @@ def pull_projects(profile):
         models.Member.UserProjectRole.OWNER: [],
         models.Member.UserProjectRole.ACTIVE: [],
         models.Member.UserProjectRole.INVITED: []
-    };
+    }
     
     if profile is not None:
         try:
-            members = models.Member.objects.filter(user=profile);
+            members = models.Member.objects.filter(user=profile)
             for member in members:
                 projects[member.role].append(member.project)
         except:
@@ -70,7 +70,7 @@ class ProjectCreationProcess(View):
         if invitees is None:
             errors['invited'] = 'Cannot be empty'
         else:
-            invitee_usernames = filter(lambda username: username, map(lambda username: username.strip(), invitees.split(',')));
+            invitee_usernames = filter(lambda username: username, map(lambda username: username.strip(), invitees.split(',')))
             
             seen_users = set()
             for invitee in invitee_usernames:
@@ -244,7 +244,92 @@ class RegisterProcess(View):
         app_url = request.path
         return render(request, 'register.html', {'app_url': app_url})
 
+''' Availability pages '''
+def availability(request):
+    # meeting_list = [
+    #     type('obj', (object,), {'name' : 'Meeting ONE', 'id' : 1})(),
+    #     type('obj', (object,), {'name' : 'Meeting TWO', 'id' : 2})(),
+    #     type('obj', (object,), {'name' : 'Meeting THREE', 'id' : 3})()
+    # ]
+    meeting_list = {
+        1: type('obj', (object,), {'name': 'Meeting ONE', 'id': 1, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59'})(),
+        2: type('obj', (object,), {'name': 'Meeting TWO', 'id': 2, 'start_date': '2020-03-08 05:49:01', 'end_date': '2020-03-14 23:59:59'})(),
+        3: type('obj', (object,), {'name': 'Meeting THREE', 'id': 3, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59'})()
+    }
+    context = {
+        'meeting_list': meeting_list,
+    }
+    return render(request, 'availability/index.html', context)
+
+class Availability(View):
+    def get(self, request, meeting_id):
+
+        # models.Meeting.objects.raw('select name, m.id, m.start_date, m.end_date, coalesce(avlb_count, 0)
+        #   from meeting_meeting m join (select meeting, count(*) avlb_count from meeting_timeavailability group by meeting) c
+        #   on m.id = c.meeting'
+        meeting_list = {
+            1: type('obj', (object,), {'name': 'Meeting ONE', 'id': 1, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59', 'avlb_count':2})(),
+            2: type('obj', (object,), {'name': 'Meeting TWO', 'id': 2, 'start_date': '2020-03-08 05:49:01', 'end_date': '2020-03-14 23:59:59', 'avlb_count':0})(),
+            3: type('obj', (object,), {'name': 'Meeting THREE', 'id': 3, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59', 'avlb_count':10})()
+        }
+        active_meeting = meeting_list.get(meeting_id)
+        app_url = request.path
+        # time_slots = models.TimeAvailability.objects.filter(meeting=meeting_id)
+        time_slots = models.TimeAvailability.objects.raw('select * from meeting_timeavailability where meeting = %s', [meeting_id])
+        
+        context = {
+            'active_meeting': active_meeting,
+            'meeting_list': meeting_list,
+            'app_url': app_url,
+            'time_slots': time_slots
+        }
+
+        return render(request, 'availability/meeting_availability.html', context)
+
+    def post(self, request, *args, **kwargs):
+        start_time = request.POST.get('start_time')
+        end_time = request.POST.get('end_time')
+        meeting_id = kwargs.get('meeting_id')
+        # meetingId = request.POST.get('meeting_id')
+        # user = request.user if request.user.is_authenticated else None
+        
+        # if user is None:
+        #     return redirect('LoginProcess')
+
+        models.TimeAvailability.objects.create(start_time=start_time,
+                                               end_time=end_time,
+                                               meeting=meeting_id)
+        
+        
+        # models.Meeting.objects.raw('select name, m.id, m.start_date, m.end_date, coalesce(avlb_count, 0)
+        #   from meeting_meeting m join (select meeting, count(*) avlb_count from meeting_timeavailability group by meeting) c
+        #   on m.id = c.meeting'
+        meeting_list = {
+            1: type('obj', (object,), {'name': 'Meeting ONE', 'id': 1, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59', 'avlb_count':2})(),
+            2: type('obj', (object,), {'name': 'Meeting TWO', 'id': 2, 'start_date': '2020-03-08 05:49:01', 'end_date': '2020-03-14 23:59:59', 'avlb_count':0})(),
+            3: type('obj', (object,), {'name': 'Meeting THREE', 'id': 3, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59', 'avlb_count':10})()
+        }
+        active_meeting = meeting_list.get(meeting_id)
+        app_url = request.path
+        time_slots = models.TimeAvailability.objects.filter(meeting=meeting_id)
+        
+        context = {
+            'meeting_list': meeting_list,
+            'active_meeting': active_meeting,
+            'app_url': app_url,
+            'time_slots': time_slots
+        }
+
+        return render(request, 'availability/meeting_availability.html', context)
+
 '''Render the meetings form '''
-def createMeetings(request):
+def createMeeting(request, project_key):
     app_url = request.path
-    return render(request, 'create_meetings.html', {'app_url': app_url})    
+    project = None
+        
+    try:
+        project = models.Project.objects.get(pk=project_key)
+    except:
+        pass
+    
+    return render(request, 'create_meeting.html', {'app_url': app_url, 'project': project})
