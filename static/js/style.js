@@ -51,6 +51,16 @@ $(document).ready(function() {
       } else window.location = '/meeting/projects/' + $(this).attr('project');
     });
     
+    // do this only for the view, create, or edit panes
+    if($('#active-pane-view').length || $('#active-pane-create').length || $('#active-pane-edit').length) {
+      if($('#current-project').length) {
+        let currentProject = $('#current-project').html();
+        $(`#project-card-${currentProject} > div`).attr('class', function(i, c){
+          return c.replace(/(^|\s)bg-\S+/g, ' bg-success');
+        });
+      }
+    }
+    
     // do this only for the create or edit panes
     if($('#active-pane-create').length || $('#active-pane-edit').length) {
       $('input[type="text"], textarea').on('keydown', function() {

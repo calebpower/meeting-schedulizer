@@ -61,13 +61,13 @@ class ProjectCreationProcess(View):
         profile = models.Profile.objects.get(user=user)
         invitee_profiles = set()
         errors = dict()
-        if title is None:
+        if title is None or not title.strip():
             errors['title'] = 'Cannot be empty'
-        if description is None:
+        if description is None or not description.strip():
             errors['description'] = 'Cannot be empty'
         if user is None:
             errors['user'] = 'Cannot be empty'
-        if invitees is None:
+        if invitees is None or not invitees.strip():
             errors['invited'] = 'Cannot be empty'
         else:
             invitee_usernames = filter(lambda username: username, map(lambda username: username.strip(), invitees.split(',')))
@@ -106,7 +106,8 @@ class ProjectCreationProcess(View):
             models.Member.objects.create(project=project, user=profile, role=models.Member.UserProjectRole.OWNER)
             for invitee in invitee_profiles:
                 models.Member.objects.create(project=project, user=invitee, role=models.Member.UserProjectRole.INVITED)
-            return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'success': 'Successfully created project!', 'projects': projects})
+            return redirect("/meeting/projects/" + str(project.pk))
+            # return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'success': 'Successfully created project!', 'projects': projects})
         else:
             return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'errors': errors, 'projects': projects})
     
@@ -126,9 +127,9 @@ class ProjectModificationProcess(View):
             return redirect('LoginProcess')
         
         errors = dict()
-        if title is None:
+        if title is None or not title.strip():
             errors['title'] = 'Cannot be empty'
-        if description is None:
+        if description is None or not description.strip():
             errors['description'] = 'Cannot be empty'
             
         is_no_errors = not bool(errors)

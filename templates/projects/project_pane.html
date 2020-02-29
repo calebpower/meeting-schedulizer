@@ -1,14 +1,17 @@
 <div id="project-pane" class="col bg-secondary text-white" style="text-align: center;">
+  {% if project %}
+    <span id="current-project" style="display: none">{{ project.pk }}</span>
+  {% endif %}
   <h1 style="padding-top: 0.5em; padding-left: 0.5em; padding-right: 0.5em;">Projects</h1>
   {% if projects %}
     {% for key, value in projects.items %}
       {% for project in value %}
-        <div class="project-card" style="padding-top: 10px; padding-left: 10px; padding-right: 10px;" project="{{ project.pk }}">
+        <div id="project-card-{{ project.pk }}" class="project-card" style="padding-top: 10px; padding-left: 10px; padding-right: 10px;" project="{{ project.pk }}">
         {% if key == 2 %}
           <div class="card text-light bg-danger mb-3">
             <div class="card-header">Owner</div>
         {% elif key == 1 %}
-          <div class="card text-dark bs-warning mb-3">
+          <div class="card text-dark bg-warning mb-3">
             <div class="card-header">Active</div>
         {% elif key == 0 %}
           <div class="card text-white bg-info mb-3">
