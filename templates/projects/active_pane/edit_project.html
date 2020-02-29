@@ -21,6 +21,7 @@
                    class="form-control"
                    id="create-project-title"
                    name="title"
+                   maxlength="100"
                    placeholder="Put your project title here!"
                    value="{% if project %}{{ project.project_name }}{% endif %}"/>
           </div>
@@ -34,6 +35,7 @@
                       id="create-project-description"
                       name="description"
                       rows="5"
+                      maxlength="250"
                       placeholder="Describe your project.">{% if project %}{{ project.description }}{% endif %}</textarea>
           </div>
           <div style="text-align: center;">
