@@ -106,7 +106,8 @@ class ProjectCreationProcess(View):
             models.Member.objects.create(project=project, user=profile, role=models.Member.UserProjectRole.OWNER)
             for invitee in invitee_profiles:
                 models.Member.objects.create(project=project, user=invitee, role=models.Member.UserProjectRole.INVITED)
-            return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'success': 'Successfully created project!', 'projects': projects})
+            return redirect("/meeting/projects/" + str(project.pk))
+            # return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'success': 'Successfully created project!', 'projects': projects})
         else:
             return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'errors': errors, 'projects': projects})
     
