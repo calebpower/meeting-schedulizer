@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div id="projects" class="row no-gutters">
+    {% include "modals.html" %}
+    {% include "projects/project_pane.html" %}
+    <div id="active-pane" class="col bg-light">
+
+      <!-- Project modification form -->
+      <div id="active-pane-edit">
+        <h2 style="text-align: center;">Edit Your Project</h2>
+        <form action="" method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="create-project-title">Project Title
+              {% if errors.title %}
+                <span class="text-danger">- {{ errors.title }}</span>
+              {% endif %}
+            </label>
+            <input type="text"
+                   class="form-control"
+                   id="create-project-title"
+                   name="title"
+                   maxlength="100"
+                   placeholder="Put your project title here!"
+                   value="{% if project %}{{ project.project_name }}{% endif %}"/>
+          </div>
+          <div class="form-group">
+            <label for="create-project-description">Project Description
+              {% if errors.description %}
+                <span class="text-danger">- {{ errors.description }}</span>
+              {% endif %}
+            </label>
+            <textarea class="form-control"
+                      id="create-project-description"
+                      name="description"
+                      rows="5"
+                      maxlength="250"
+                      placeholder="Describe your project.">{% if project %}{{ project.description }}{% endif %}</textarea>
+          </div>
+          <div style="text-align: center;">
+            <button type="submit" class="btn btn-success">Save Project</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div id="projects" class="row no-gutters">
+    {% include "projects/project_pane.html" %}
+    <div id="active-pane" class="col bg-light">
+
+      <!-- No project selected -->
+      <div id="active-pane-none" style="text-align: center; padding: 0.5em;">
+        Select a project to get started!
+      </div>
+
+    </div>
+  </div>
+{% endblock %}
