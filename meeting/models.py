@@ -31,6 +31,7 @@ class ProjectMeeting(models.Model):
     location = models.CharField(max_length=100)
     optional_members = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
+    
     project = models.ForeignKey(Project, on_delete=models.CASCADE, default=0)    
 
 @receiver(post_save, sender=User)
