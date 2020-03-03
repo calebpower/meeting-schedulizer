@@ -31,8 +31,7 @@ class ProjectMeeting(models.Model):
     location = models.CharField(max_length=100)
     optional_members = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
-    
-    project_name = models.ForeignKey(Project, on_delete=models.CASCADE)    
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, default=0)    
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
