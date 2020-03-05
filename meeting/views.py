@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views.generic import View
+from django.views.generic import View, TemplateView
 from django.contrib.auth.models import User
+
+from meeting.forms import MeetingForm
+from meeting.models import Meeting
 
 from . import models
 import datetime
@@ -323,14 +326,86 @@ class Availability(View):
 
         return render(request, 'availability/meeting_availability.html', context)
 
+
+
+
+# class MeetingView(TemplateView):
+    # template_name = 'create_meeting.html'
+    # def get(self, request, *args, **kwargs):
+        # form = MeetingForm()
+        # collect the information about the new project
+        # date = request.POST.get('date') if request.POST.get('date') else None
+        # location = request.POST.get('location') if request.POST.get('location') else None
+        # optional_members = request.POST.get('optional_members') if request.POST.get('optional_members') else None
+        # description = request.POST.get('description') if request.POST.get('description') else None
+        # project = request.project if request.project.is_authenticated else None
+            
+        # meeting = models.Project.objects.create(date=date, location=location, optional_members=optional_members, description=description)
+        # return render(request, 'create_meeting.html', { 'meeting': meeting})
+    
+    # def get(self, request, *args, **kwargs):
+        # app_url = request.path
+        # meeting = pull_projects(request.project)
+        # return render(request, 'create_meeting.html', {'app_url': app_url, 'meeting': meeting})
+            
+
+# class MeetingView(TemplateView):
+    # template_name = 'create_meeting.html'
+    # def get(self, request, project_key):
+        # form = MeetingForm()
+        # date = ProjectMeeting.date
+
+        # args = {'form': form, 'date': date}
+        # return render(request, self.template_name, args)
+
+    # def post(self, request, project_key):
+        # form = MeetingForm()
+        # date = request.POST.get('date') if request.POST.get('date') else None
+        # location = request.POST.get('location') if request.POST.get('location') else None
+        # description = request.POST.get('description') if request.POST.get('description') else None
+        
+        # project = models.Project.objects.get(pk=project_key)
+        # form.save()
+
+        # args = {'form': form, 'date': date, 'location': location, 'optional_members': optional_members, 'description': description, 'project': project}
+        # return render(request, self.template_name, args)
+         
+
 '''Render the meetings form '''
-def createMeeting(request, project_key):
+def MeetingCreation(request, project_key):
     app_url = request.path
-    project = None
+    #project = None
         
     try:
         project = models.Project.objects.get(pk=project_key)
     except:
         pass
-    
     return render(request, 'create_meeting.html', {'app_url': app_url, 'project': project})
+
+
+class MeetingView(TemplateView):
+   template_name = 'create_meeting.html'
+
+   def get(self, request, project_key):
+       form = MeetingForm()
+       try:
+           project = models.Project.objects.get(pk=project_key)
+       except:
+           pass    
+       return render(request, self.template_name, {'form': form, 'project': project})
+
+   def post(self, request, project_key):
+        form = MeetingForm(request.POST)
+        if form.is_valid():
+            meeting = form.save(commit=False)
+            meeting.project = models.Project.objects.get(pk=project_key)
+            meeting.save()
+
+            date = form.cleaned_data['date']
+            location = form.cleaned_data['location']
+            optional_members = form.cleaned_data['optional_members']
+            description = form.cleaned_data['description']
+            form = MeetingForm()
+            return redirect('../../../projects')
+        args = {'form': form, 'date': date, 'location': location, 'optional_members': optional_members, 'description': description,}
+        return render(request, self.template_name, args)         
