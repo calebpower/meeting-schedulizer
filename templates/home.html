@@ -1,13 +1,48 @@
-{% extends 'base.html' %} 
-{% block content %}
+{% extends 'base.html' %} {% block content %}
+<!-- generic filter for now until events are hooked up -->
+<select id="filter">
+    <option value="all">All Events</option>
+    <option value="1">Birthdays</option>
+    <option value="2">Meetings</option>
+  </select>
+
 <div id="calendar"></div>
 <script type='text/javascript'>
     $(document).ready(function() {
         $('#calendar').fullCalendar({
             themeSystem: 'bootstrap4',
-        })
+            header: {
+                right: 'month,agendaWeek,agendaDay,today, ',
+                left: 'title',
+                center: ' prevYear,prev,next,nextYear'
+            },
+            defaultView: 'month',
+            editable: true,
+            allDaySlot: false,
+            selectable: true,
+            fixedWeekCount: false,
+            showNonCurrentDates: false,
+            // select: function(start, end) {
+            //     var title = "Available";
+            //     var evid = SaveEvent(start, end, '1');
+            //     $('#calendar_1').fullCalendar('unselect');
+            // },
+            // eventClick: function(calEvent, jsEvent, view) {
+            //     var ev_id = calEvent.ID;
+            //     var st_dt = calEvent.start;
+            //     var ed_dt = calEvent.end;
+            //     infoEventShow('1', ev_id, st_dt, ed_dt);
+            // },
+        });
+        //way to select the months for calendar for current year
+        $(".fc-right").append('<select class="select_month"><option value="">Select Month</option><option value="1">Jan</option><option value="2">Feb</option><option value="3">Mrch</option><option value="4">Aprl</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">Aug</option><option value="9">Sep</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option></select>');
+        $(".select_month").on("change", function(event) {
+            $('#calendar').fullCalendar('changeView', 'month', this.value);
+            $('#calendar').fullCalendar('gotoDate', "2020-" + this.value + "-1");
+        });
     });
 </script>
+
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js" integrity="sha256-ABVkpwb9K9PxubvRrHMkk6wmWcIHUE9eBxNZLXYQ84k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js" integrity="sha256-QvhPq+evNjd8JyxSOU5KL3jPYTD7+gWVev1OH763SL0=" crossorigin="anonymous"></script>
