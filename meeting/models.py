@@ -25,15 +25,6 @@ class Member(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     role = models.IntegerField(choices=UserProjectRole.choices)
 
-''' Denotes a single meeting. '''
-class ProjectMeeting(models.Model): 
-    date = models.CharField(max_length=100)
-    location = models.CharField(max_length=100)
-    optional_members = models.CharField(max_length=100)
-    description = models.CharField(max_length=200)
-    
-    project_name = models.ForeignKey(Project, on_delete=models.CASCADE)    
-
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -52,3 +43,11 @@ class TimeAvailability(models.Model):
     # user = models.ForeignKey(User, on_delete=models.CASCADE)
     def __str__(self):
         return "meeting " + str(self.meeting) + " from " + str(self.start_time) + " to " + str(self.end_time)
+
+class Meeting(models.Model):
+    date = models.CharField(max_length=200, default=0)
+    location = models.CharField(max_length=200, default=0)
+    optional_members = models.CharField(max_length=200, default='None')
+    description = models.CharField(max_length=200, default='No description available')
+
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, default=0)
