@@ -4,6 +4,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View
 from django.contrib.auth.models import User
 
+from meeting.forms import MeetingForm
+from meeting.models import Meeting
+
 from . import models
 import datetime
 
@@ -323,14 +326,30 @@ class Availability(View):
 
         return render(request, 'availability/meeting_availability.html', context)
 
-'''Render the meetings form '''
-def createMeeting(request, project_key):
-    app_url = request.path
-    project = None
-        
-    try:
-        project = models.Project.objects.get(pk=project_key)
-    except:
-        pass
-    
-    return render(request, 'create_meeting.html', {'app_url': app_url, 'project': project})
+
+class MeetingView(View):
+   template_name = 'create_meeting.html'
+
+   def get(self, request, project_key):
+       form = MeetingForm()
+       try:
+           project = models.Project.objects.get(pk=project_key)
+       except:
+           pass    
+       return render(request, self.template_name, {'form': form, 'project': project})
+
+   def post(self, request, project_key):
+        form = MeetingForm(request.POST)
+        if form.is_valid():
+            meeting = form.save(commit=False)
+            meeting.project = models.Project.objects.get(pk=project_key)
+            meeting.save()
+
+            date = form.cleaned_data['date']
+            location = form.cleaned_data['location']
+            optional_members = form.cleaned_data['optional_members']
+            description = form.cleaned_data['description']
+            form = MeetingForm()
+            return redirect('../../../projects')
+        args = {'form': form, 'date': date, 'location': location, 'optional_members': optional_members, 'description': description,}
+        return render(request, self.template_name, args)         

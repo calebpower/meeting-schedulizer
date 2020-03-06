@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
 {% include "modals.html" %}
 {% block content %}
-<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
-<!-- This is a change-->
+
 <style>
 body {font-family: Arial, Helvetica, sans-serif;}
 * {box-sizing: border-box;}
@@ -40,19 +39,18 @@ input[type=submit]:hover {
 
 <br><h3 align="center">Meeting Creation for {% if project %}{{project.project_name }}{% endif %} </h3>
 
-<!-- Meeting creation form -->
 <div class="container">
-  <form autocomplete="off" action="/action_page.php">
+  <form method="post" autocomplete="off">
+    {% csrf_token %}
+    {{form.post}}
     <label for="date">Date:</label>
-    <input type="text" id="dateOfMeeting" name="date" placeholder="Enter the date as mm/dd/yyyy"> 
-    <!-- required> -->
+    <input type="text" id="date" name="date" placeholder="Enter the date as mm/dd/yyyy"> 
 
     <label for="location">Location:</label>
-    <input type="text" id="locationOfMeeting" name="Location" placeholder="Where we're meeting...">
-     <!-- required> -->
+    <input type="text" id="locationOfMeeting" name="location" placeholder="Where we're meeting...">
 
     <label for="optionalMembers">Optional Attendance:</label>
-    <select id="optionalMembers" name="optionalMembers" placeholder="Select">
+    <select id="optionalMembers" name="optional_members" placeholder="Select">
       <option value="requiredMeeting">N/A</option>
       <option value="member1">Member1</option>
       <option value="member2">Member2</option>
@@ -62,8 +60,7 @@ input[type=submit]:hover {
     <label for="description">Description:</label>
     <textarea id="description" name="description" placeholder="What we'll be doing..." style="height:100px"></textarea>
 
-    <input type="submit" value="Submit">
-    <input type="submit" value="Cancel" action="edit_project.html">
+    <button type="submit">Submit</button>
   </form>
 </div>
 

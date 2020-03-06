@@ -4,10 +4,10 @@ from .models import Profile
 from .models import Project
 from .models import Member
 from .models import TimeAvailability
-from .models import ProjectMeeting
+from .models import Meeting
 
 admin.site.register(Profile)
 admin.site.register(Project)
 admin.site.register(Member)
 admin.site.register(TimeAvailability)
-admin.site.register(ProjectMeeting)
+admin.site.register(Meeting)
