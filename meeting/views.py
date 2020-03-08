@@ -3,7 +3,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
 
 from meeting.forms import MeetingForm
 from meeting.models import Meeting
