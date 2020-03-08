@@ -1,13 +1,31 @@
 {% extends 'base.html' %} 
 {% block content %}
-<div id="calendar"></div>
-<script type='text/javascript'>
-    $(document).ready(function() {
-        $('#calendar').fullCalendar({
-            themeSystem: 'bootstrap4',
-        })
-    });
-</script>
+{% if user.is_authenticated %}
+    <div id="calendar"></div>
+    <script type='text/javascript'>
+        $(document).ready(function() {
+            $('#calendar').fullCalendar({
+                themeSystem: 'bootstrap4',
+            })
+        });
+    </script>
+{% else %}
+    <div class="container" style="width: 100%; max-width: 600px;">
+        <h1 style="padding-top: 10%" class="text-center">Stop right there!</h1>
+        <hr>
+        <div class="text-center">
+            <p>Unfortunately, this website isn't much use to you unless you're logged in!
+            Luckily for you, we have an easy way to do that! Login or Register to use our service.</p>
+            <hr>
+            <a href="/meeting/login"><button style="width: 100%" class="btn btn-primary">Login</button></a>
+            <br><br>
+            <a href="/meeting/register"><button style="width: 100%" class="btn btn-primary">Register</button></a>
+        </div>
+        
+    </div>
+{% endif %}
+
+
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js" integrity="sha256-ABVkpwb9K9PxubvRrHMkk6wmWcIHUE9eBxNZLXYQ84k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js" integrity="sha256-QvhPq+evNjd8JyxSOU5KL3jPYTD7+gWVev1OH763SL0=" crossorigin="anonymous"></script>

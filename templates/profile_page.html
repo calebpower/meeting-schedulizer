@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <style>
+        .form-signin {
+            width: 100%;
+            max-width: 500px;
+            padding: 15px;
+            margin: 0 auto;
+        }
+        .form-signin .form-control {
+            position: relative;
+            box-sizing: border-box;
+            height: auto;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .form-signin .form-control:focus {
+            z-index: 2;
+        }
+    </style>
+
+    <div class="container" style="padding-top: 10%;">
+        <form class="form-signin" method="POST" action="/meeting/profile">
+            {% csrf_token %}
+            <h1 class="text-center">Profile</h1>
+            <hr>
+
+            <div class="row">
+                <h3 class="h5 mb-3 font-weight-normal text-center">Username</h3>
+                {% if is_no_errors %}
+                    <input type="text" id="inputUsername" name="inputUsername" class="form-control" value="{{ username }}" placeholder="New Username" required readonly />
+                {% else %}
+                    <input type="text" id="inputUsername" name="inputUsername" class="form-control" value="{{ username }}" placeholder="New Username" required />
+                {% endif %}
+                {% if errors.usernameEmpty %}
+                    <p style="color: red">Required Field.</p>
+                {% endif %}
+            </div>
+            <br>
+
+            <div class="row">
+                <h3 class="h5 mb-3 font-weight-normal text-center">Display Name</h3>
+                {% if is_no_errors %}
+                    <input type="text" id="inputDisplayName" name="inputDisplayName" class="form-control" value="{{ displayName }}" placeholder="New Display Name" required readonly />
+                {% else %}
+                    <input type="text" id="inputDisplayName" name="inputDisplayName" class="form-control" value="{{ displayName }}" placeholder="New Display Name" required />
+                {% endif %}
+                {% if errors.displayNameEmpty %}
+                    <p style="color: red">Required Field.</p>
+                {% endif %}
+            </div>
+            <br>
+
+            {% if is_no_errors %}
+                <button id="editButton" class="btn btn-lg btn-primary btn-block" type="button" onclick="editPage()">Edit</button>
+                <button id="updateButton" class="btn btn-lg btn-primary btn-block" type="submit" disabled>Update</button>
+            {% else %}
+                <button id="editButton" class="btn btn-lg btn-primary btn-block" type="button" onclick="editPage()" disabled>Edit</button>
+                <button id="updateButton" class="btn btn-lg btn-primary btn-block" type="submit">Update</button>
+            {% endif %}
+            
+            {% if is_no_errors and not get_load %}
+            <br>
+            <p class="text-center" style="color: green">Successfully updated your profile!</p>
+            {% endif %}
+            <hr>
+        </form>
+    </div>
+    <script>
+        function editPage() {
+            document.getElementById('inputUsername').removeAttribute('readonly');
+            document.getElementById('inputDisplayName').removeAttribute('readonly');
+            document.getElementById('updateButton').removeAttribute('disabled');
+            document.getElementById('editButton').setAttribute('disabled', "");
+
+        }
+    </script>
+{% endblock %}
