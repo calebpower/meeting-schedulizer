@@ -6,12 +6,11 @@
     <option value="2">Meetings</option>
   </select>
 
-<div id="calendar"></div>	<div id="calendar"></div>
-<script type='text/javascript'>	<script type='text/javascript'>
-    $(document).ready(function() {	    $(document).ready(function() {
-        $('#calendar').fullCalendar({	        $('#calendar').fullCalendar({
-            themeSystem: 'bootstrap4',	            themeSystem: 'bootstrap4',
-        })	            header: {
+<div id="calendar"></div>
+<script type='text/javascript'>
+    $(document).ready(function() { $('#calendar').fullCalendar({
+            themeSystem: 'bootstrap4',
+    	     header: {
                 right: 'month,agendaWeek,agendaDay,today, ',
                 left: 'title',
                 center: ' prevYear,prev,next,nextYear'
@@ -39,6 +38,8 @@
         $(".select_month").on("change", function(event) {
             $('#calendar').fullCalendar('changeView', 'month', this.value);
             $('#calendar').fullCalendar('gotoDate', "2020-" + this.value + "-1");
+        });
+    });
 </script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js" integrity="sha256-ABVkpwb9K9PxubvRrHMkk6wmWcIHUE9eBxNZLXYQ84k=" crossorigin="anonymous"></script>
