@@ -7,39 +7,56 @@ window.onbeforeunload = function() {
 }
 
 $(function () {
-    $('#start-time-picker').bootstrapMaterialDatePicker({
-        date: true,
-        format: 'MMM DD h:mm a',
-        switchOnClick: false,
-        shortTime: true,
-        minDate: moment($('#meeting-start-date').val())
-    }).on('change', function(e, date) {
-        unsavedChanges = true;
-        $('#start-time').val(date.format('YYYY-MM-DD HH:MM'));
+    $('#start-time-picker').datetimepicker();
+    $('#end-time-picker').datetimepicker({
+        useCurrent: false //Important! See issue #1075
     });
-
-    $('#end-time-picker').bootstrapMaterialDatePicker({
-        date: true,
-        format: 'MMM DD h:mm a',
-        switchOnClick: false,
-        shortTime: true,
-        minDate: moment($('#meeting-start-date').val()),
-        maxDate: moment($('#meeting-end-date').val())
-    }).on('change', function(e, date) {
-        unsavedChanges = true;
-        $('#end-time').val(date.format('YYYY-MM-DD HH:MM'));
+    $("#start-time-picker").on("dp.change", function (e) {
+        $('#end-time-picker').data("DateTimePicker").minDate(e.date);
+    });
+    $("#end-time-picker").on("dp.change", function (e) {
+        $('#start-time-picker').data("DateTimePicker").maxDate(e.date);
     });
 });
 
-function onMeetingSelect(e) {
-    console.log(e);
-}
+$('#start-time-picker').on('dp.change', function(e) {
+    console.log('date: ', e.date);
+    console.log('previous date: ', e.oldDate);
+    unsavedChanges = true;
+});
+
+$('#end-time-picker').on('dp.change', function(e) {
+    console.log('date: ', e.date);
+    console.log('previous date: ', e.oldDate);
+    unsavedChanges = true;
+});
 
 function onSubmit() {
+    const st = $('#start-time-picker').data('DateTimePicker').date();
+    const et = $('#end-time-picker').data('DateTimePicker').date();
+
+    if (!st) {
+        $('#start-time-error').removeClass('d-none');
+        $('#start-time-form-group').addClass('has-error');
+        return;
+    } else {
+        $('#start-time-error').addClass('d-none');
+        $('#start-time-form-group').removeClass('has-error');
+    }
+
+    if (!et) {
+        $('#end-time-error').removeClass('d-none');
+        $('#end-time-form-group').addClass('has-error');
+        return;
+    } else {
+        $('#end-time-error').addClass('d-none');
+        $('#end-time-form-group').removeClass('has-error');
+    }
+
+    $('#start-time').val(st.format('YYYY-MM-DD HH:mm'));
+    $('#end-time').val(et.format('YYYY-MM-DD HH:mm'));
+
     unsavedChanges = false;
-    const st = $('#start-time').val();
-    const et = $('#end-time').val();
-    console.log('st', st, 'et', et);
 
     document.getElementById('avlb-form').submit();
 }
