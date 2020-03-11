@@ -155,7 +155,7 @@ class ProjectModificationProcess(View):
             except:
                 pass
             
-            return projects_view(request, project_key)
+            return redirect('../' + str(project_key))
         else:
             return render(request, 'projects/active_pane/edit_project.html', {'app_url': app_url, 'projects': projects, 'project': project, 'errors': errors})
     
@@ -172,28 +172,79 @@ class ProjectModificationProcess(View):
         
         return render(request, 'projects/active_pane/edit_project.html', {'app_url': app_url, 'projects': projects, 'project': project})
 
-''' Render the "view project" form '''
-def projects_view(request, project_key):
-    app_url = request.path
-    profile = pull_profile(request.user)
-    projects = pull_projects(profile)
-    
-    project = None
-    team = []
-    meetings = [] # depends on Courtney
-    owns = False
-    
-    try:
+class ProjectViewProcess(View):
+    def post(self, request, *args, **kwargs):
+        #app_url = request.path
+        
+        project_key = kwargs['project_key']
         project = models.Project.objects.get(pk=project_key)
-        members = models.Member.objects.filter(project=project)
-        for member in members:
-            team.append(member)
-            if member.role == models.Member.UserProjectRole.OWNER and member.user == profile:
-                owns = True
-    except:
-        pass
-    
-    return render(request, 'projects/active_pane/view_project.html', {'app_url': app_url, 'projects': projects, 'project': project, 'team': team, 'meetings': meetings, 'owns': owns})
+        
+        if request.POST.get('action') == 'remove':
+            print("member -> yeet")
+            try:
+                user = models.User.objects.get(pk=request.POST.get('user'))
+                profile = pull_profile(user)
+                models.Member.objects.get(user=profile, project=project).delete()
+            except Exception as e:
+                print(e)
+            
+            return redirect("./" + str(project_key))
+        elif request.POST.get('action') == 'invite':
+            print("member -> yoink")
+            try:
+                user = models.User.objects.get(username=request.POST.get('user'))
+                profile = pull_profile(user)
+                models.Member.objects.create(project=project, user=profile, role=models.Member.UserProjectRole.INVITED)
+            except Exception as e:
+                print(e)
+                
+            return redirect("./" + str(project_key))
+        elif request.POST.get('action') == 'accept':
+            print("invite -> yoink")
+            try:
+                user = request.user if request.user.is_authenticated else None
+                profile = pull_profile(user)
+                models.Member.objects.filter(user=profile, project=project).update(role=models.Member.UserProjectRole.ACTIVE)
+            except Exception as e:
+                print(e)
+                
+            return redirect("./" + str(project_key))
+        elif request.POST.get('action') == 'reject':
+            print("invite -> yeet")
+            try:
+                user = request.user if request.user.is_authenticated else None
+                profile = pull_profile(user)
+                models.Member.objects.get(user=profile, project=project).delete()
+            except:
+                print(e)
+                
+            return redirect('../projects')
+        
+        #redirect('.')
+        
+        #return render(request, 'projects/active_pane/view_project.html', {'app_url': app_url, 'projects': projects, 'project': project, 'team': team, 'meetings': meetings, 'role': role})
+
+    def get(self, request, *args, **kwargs):
+        app_url = request.path
+        profile = pull_profile(request.user)
+        projects = pull_projects(profile)
+        
+        project = None
+        team = []
+        meetings = [] # depends on Courtney
+        role = -1
+        
+        try:
+            project = models.Project.objects.get(pk=kwargs['project_key'])
+            members = models.Member.objects.filter(project=project)
+            for member in members:
+                team.append(member)
+                if member.user == profile:
+                    role = member.role
+        except Exception as e:
+            print(e)
+            
+        return render(request, 'projects/active_pane/view_project.html', {'app_url': app_url, 'projects': projects, 'project': project, 'team': team, 'meetings': meetings, 'role': role})
 
 class LoginProcess(View):
     def post(self, request, *args, **kwargs):
