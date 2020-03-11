@@ -34,16 +34,6 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
     
-''' Time availability '''
-class TimeAvailability(models.Model):
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
-    meeting = models.IntegerField()
-    # meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
-    def __str__(self):
-        return "meeting " + str(self.meeting) + " from " + str(self.start_time) + " to " + str(self.end_time)
-
 class Meeting(models.Model):
     date = models.CharField(max_length=200, default=0)
     location = models.CharField(max_length=200, default=0)
@@ -51,3 +41,13 @@ class Meeting(models.Model):
     description = models.CharField(max_length=200, default='No description available')
 
     project = models.ForeignKey(Project, on_delete=models.CASCADE, default=0)
+
+''' Time availability '''
+class TimeAvailability(models.Model):
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    # meeting = models.IntegerField()
+    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    def __str__(self):
+        return "meeting " + str(self.meeting) + " from " + str(self.start_time) + " to " + str(self.end_time)

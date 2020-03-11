@@ -9,6 +9,7 @@ from meeting.models import Meeting
 
 from . import models
 import datetime
+from itertools import chain, groupby
 
 ''' Pulls a list of the user's projects '''
 def pull_projects(profile):
@@ -248,18 +249,35 @@ class RegisterProcess(View):
         app_url = request.path
         return render(request, 'register.html', {'app_url': app_url})
 
-''' Availability pages '''
+'''
+    get_meetings_by_user returns a list of ALL (distinct) meetings
+    for ALL projects that the user is a member of.
+'''
+def get_meetings_by_user(user):
+    profile = pull_profile(user)
+    projects = pull_projects(profile)
+    meetings = []
+    
+    members = models.Member.objects.filter(user=profile)
+    for member in members:
+        for project in projects[member.role]:
+            project_meetings = models.Meeting.objects.filter(project_id=project.id)
+            meetings.append(project_meetings)
+
+    all_meetings = list(chain(*meetings))
+
+    unique_results = [next(rows) for (key, rows) in groupby(all_meetings, key=lambda obj: obj.id)]
+
+    return unique_results
+
 def availability(request):
-    # meeting_list = [
-    #     type('obj', (object,), {'name' : 'Meeting ONE', 'id' : 1})(),
-    #     type('obj', (object,), {'name' : 'Meeting TWO', 'id' : 2})(),
-    #     type('obj', (object,), {'name' : 'Meeting THREE', 'id' : 3})()
-    # ]
-    meeting_list = {
-        1: type('obj', (object,), {'name': 'Meeting ONE', 'id': 1, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59'})(),
-        2: type('obj', (object,), {'name': 'Meeting TWO', 'id': 2, 'start_date': '2020-03-08 05:49:01', 'end_date': '2020-03-14 23:59:59'})(),
-        3: type('obj', (object,), {'name': 'Meeting THREE', 'id': 3, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59'})()
-    }
+    user = request.user if request.user.is_authenticated else None
+    
+    if user is None:
+        return redirect('LoginProcess')
+
+    meeting_list = get_meetings_by_user(user)
+
     context = {
         'meeting_list': meeting_list,
     }
@@ -267,27 +285,26 @@ def availability(request):
 
 class Availability(View):
     def get(self, request, meeting_id):
+        user = request.user if request.user.is_authenticated else None
+        
+        if user is None:
+            return redirect('LoginProcess')
 
-        # models.Meeting.objects.raw('select name, m.id, m.start_date, m.end_date, coalesce(avlb_count, 0)
-        #   from meeting_meeting m join (select meeting, count(*) avlb_count from meeting_timeavailability group by meeting) c
-        #   on m.id = c.meeting'
-        meeting_list = {
-            1: type('obj', (object,), {'name': 'Meeting ONE', 'id': 1, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59', 'avlb_count':2})(),
-            2: type('obj', (object,), {'name': 'Meeting TWO', 'id': 2, 'start_date': '2020-03-08 05:49:01', 'end_date': '2020-03-14 23:59:59', 'avlb_count':0})(),
-            3: type('obj', (object,), {'name': 'Meeting THREE', 'id': 3, 'start_date': '2020-03-01 06:00:00', 'end_date': '2020-03-07 23:59:59', 'avlb_count':10})()
-        }
-        active_meeting = meeting_list.get(meeting_id)
+        meeting_list = get_meetings_by_user(user)
+        active_meeting = [meeting for meeting in meeting_list if meeting.id == meeting_id][0]
+       
         app_url = request.path
         # time_slots = models.TimeAvailability.objects.filter(meeting=meeting_id)
-        time_slots = models.TimeAvailability.objects.raw('select * from meeting_timeavailability where meeting = %s', [meeting_id])
-        
+        time_slots = models.TimeAvailability.objects.raw('select * from meeting_timeavailability where meeting_id = %s', [meeting_id])
+        print(active_meeting)
+        print(meeting_list[0])
         context = {
             'active_meeting': active_meeting,
             'meeting_list': meeting_list,
             'app_url': app_url,
             'time_slots': time_slots
         }
-
+        print("debug 0")
         return render(request, 'availability/meeting_availability.html', context)
 
     def post(self, request, *args, **kwargs):
