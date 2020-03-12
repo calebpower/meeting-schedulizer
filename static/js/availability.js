@@ -20,14 +20,14 @@ $(function () {
 });
 
 $('#start-time-picker').on('dp.change', function(e) {
-    console.log('date: ', e.date);
-    console.log('previous date: ', e.oldDate);
+    // console.log('date: ', e.date);
+    // console.log('previous date: ', e.oldDate);
     unsavedChanges = true;
 });
 
 $('#end-time-picker').on('dp.change', function(e) {
-    console.log('date: ', e.date);
-    console.log('previous date: ', e.oldDate);
+    // console.log('date: ', e.date);
+    // console.log('previous date: ', e.oldDate);
     unsavedChanges = true;
 });
 
@@ -51,6 +51,23 @@ function onSubmit() {
     } else {
         $('#end-time-error').addClass('d-none');
         $('#end-time-form-group').removeClass('has-error');
+    }
+
+
+    const tslots_str = $('#time_slots_json').text();
+    const tslots = JSON.parse(tslots_str);
+    for (const slot of tslots) {
+        const slot_start = moment(slot.start_time);
+        const slot_end = moment(slot.end_time);
+
+        if (et.isAfter(slot_start) && st.isBefore(slot_end)) {
+            const msg = "This time overlaps with a time slot for meeting " +
+                slot.meeting.id + " (" + slot.meeting.description + ") from " +
+                slot_start.format('MMMM Do hh:mm a') + " to " + slot_end.format('MMMM Do hh:mm a') +
+                ". Please select a time frame that does not overlap with one previously entered.";
+            alert(msg);
+            return;
+        }
     }
 
     $('#start-time').val(st.format('YYYY-MM-DD HH:mm'));

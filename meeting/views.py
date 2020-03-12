@@ -10,6 +10,8 @@ from meeting.models import Meeting
 from . import models
 import datetime
 from itertools import chain, groupby
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 
 ''' Pulls a list of the user's projects '''
 def pull_projects(profile):
@@ -259,13 +261,14 @@ def get_meetings_by_user(user):
     meetings = []
     
     members = models.Member.objects.filter(user=profile)
+    
     for member in members:
-        for project in projects[member.role]:
-            project_meetings = models.Meeting.objects.filter(project_id=project.id)
-            meetings.append(project_meetings)
+        if member.role != models.Member.UserProjectRole.INVITED:
+            for project in projects[member.role]:
+                project_meetings = models.Meeting.objects.filter(project_id=project.id)
+                meetings.append(project_meetings)
 
     all_meetings = list(chain(*meetings))
-
     unique_results = [next(rows) for (key, rows) in groupby(all_meetings, key=lambda obj: obj.id)]
 
     return unique_results
@@ -278,7 +281,7 @@ def availability(request):
 
     meeting_list = get_meetings_by_user(user)
     avlb_meeting_list = []
-
+    
     # Get avlb counts
     for meeting in meeting_list:
         avlb_count = models.TimeAvailability.objects.filter(meeting_id=meeting.id).count()
@@ -309,13 +312,21 @@ class Availability(View):
         app_url = request.path
         # time_slots = models.TimeAvailability.objects.filter(meeting=meeting_id)
         time_slots = models.TimeAvailability.objects.raw('select * from meeting_timeavailability where meeting_id = %s', [meeting_id])
-        
-        
+        json_data = models.TimeAvailability.objects.all();
+
+        time_slots_json = "["
+        for datum in json_data:
+            meeting = '"meeting":{"id":"' + str(datum.meeting.id) + '","description":"' + datum.meeting.description + '"}';
+            time_slots_json += '{"id":"' + str(datum.id) + '","start_time":"' + str(datum.start_time) + '","end_time":"' + str(datum.end_time) + '",' + meeting + '},';
+        time_slots_json = time_slots_json[:-1]
+        time_slots_json += ']';
+
         context = {
             'active_meeting': active_meeting,
             'meeting_list': avlb_meeting_list,
             'app_url': app_url,
-            'time_slots': time_slots
+            'time_slots': time_slots,
+            'time_slots_json': time_slots_json
         }
         
         return render(request, 'availability/meeting_availability.html', context)
@@ -341,7 +352,8 @@ class Availability(View):
             'app_url': app_url,
             'success': True,
             'errors': dict(),
-            'time_slots': None
+            'time_slots': None,
+            'time_slots_json': None
         }
         
         if start_time is None:
@@ -366,9 +378,18 @@ class Availability(View):
             avlb_meeting_list.append({'meeting': meeting, 'avlb_count': avlb_count})
             
         time_slots = models.TimeAvailability.objects.filter(meeting=meeting_id)
+        
+        json_data = models.TimeAvailability.objects.all();
+        time_slots_json = "["
+        for datum in json_data:
+            meeting = '"meeting":{"id":"' + str(datum.meeting.id) + '","description":"' + datum.meeting.description + '"}';
+            time_slots_json += '{"id":"' + str(datum.id) + '","start_time":"' + str(datum.start_time) + '","end_time":"' + str(datum.end_time) + '",' + meeting + '},';
+        time_slots_json = time_slots_json[:-1]
+        time_slots_json += ']';
 
         context['meeting_list'] = avlb_meeting_list
         context['time_slots'] = time_slots
+        context['time_slots_json'] = time_slots_json
 
         return render(request, 'availability/meeting_availability.html', context)
 
@@ -399,11 +420,20 @@ class AvailabilityDelete(View):
         app_url = request.path
         time_slots = models.TimeAvailability.objects.filter(meeting=meeting_id)
         
+        json_data = models.TimeAvailability.objects.all();
+        time_slots_json = "["
+        for datum in json_data:
+            meeting = '"meeting":{"id":"' + str(datum.meeting.id) + '","description":"' + datum.meeting.description + '"}';
+            time_slots_json += '{"id":"' + str(datum.id) + '","start_time":"' + str(datum.start_time) + '","end_time":"' + str(datum.end_time) + '",' + meeting + '},';
+        time_slots_json = time_slots_json[:-1]
+        time_slots_json += ']';
+
         context = {
             'meeting_list': avlb_meeting_list,
             'active_meeting': active_meeting,
             'app_url': app_url,
-            'time_slots': time_slots
+            'time_slots': time_slots,
+            'time_slots_json': time_slots_json
         }
 
         return render(request, 'availability/meeting_availability.html', context)
