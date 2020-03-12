@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% include "modals.html" %}
 {% block content %}
 
 <style>
@@ -44,11 +43,13 @@ button[type=submit]:hover {
   <form method="post" autocomplete="off">
     {% csrf_token %}
     {{form.post}}
-    <label for="date">Date:</label>
-    <input type="text" id="date" name="date" placeholder="Enter the date as mm/dd/yyyy"> 
 
+    <label for="date">Date:</label>
+    <br>
+    <input type="date" id="date" name="date" placeholder="Enter the date as mm/dd/yyyy" required> 
+    <br><br>
     <label for="location">Location:</label>
-    <input type="text" id="locationOfMeeting" name="location" placeholder="Where we're meeting...">
+    <input type="text" id="locationOfMeeting" name="location" placeholder="Where we're meeting..." required>
 
     <label for="optionalMembers">Optional Attendance:</label>
     <select id="optionalMembers" name="optional_members" placeholder="Select">
@@ -59,10 +60,11 @@ button[type=submit]:hover {
     </select>
 
     <label for="description">Description:</label>
-    <textarea id="description" name="description" placeholder="What we'll be doing..." style="height:100px"></textarea>
+    <textarea id="description" name="description" placeholder="What we'll be doing..." style="height:100px" required></textarea>
 
-    <button type="submit">Submit</button>
+    <button type="submit" onclick="return confirm('You are about to create a meeting!!')">Submit</button>
     <a href="../../../projects"><button type="button">Cancel</button></a>
+
   </form>
 </div>
 
