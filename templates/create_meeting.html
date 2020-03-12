@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% include "modals.html" %}
 {% block content %}
 
 <style>
@@ -17,7 +16,7 @@ input[type=text], select, textarea {
   resize: vertical;
 }
 
-input[type=submit] {
+button[type=submit], button {
   background-color: rgb(106, 200, 255);
   color: black;
   padding: 12px 20px;
@@ -26,7 +25,7 @@ input[type=submit] {
   cursor: pointer;
 }
 
-input[type=submit]:hover {
+button[type=submit]:hover {
   background-color: rgb(106, 180, 255);
 }
 
@@ -35,6 +34,7 @@ input[type=submit]:hover {
   background-color: #f2f2f2;
   padding: 15px;
 }
+
 </style>
 
 <br><h3 align="center">Meeting Creation for {% if project %}{{project.project_name }}{% endif %} </h3>
@@ -43,11 +43,18 @@ input[type=submit]:hover {
   <form method="post" autocomplete="off">
     {% csrf_token %}
     {{form.post}}
-    <label for="date">Date:</label>
-    <input type="text" id="date" name="date" placeholder="Enter the date as mm/dd/yyyy"> 
 
+    <label for="date">Date:</label>
+    <br>
+    <label for="start_date">Start:</label>
+    <input type="date" id="start_date" name="start_date" required>
+    
+    <label for="end_date">End:</label>
+    <input type="date" id="end_date" name="end_date" required>
+    <br><br>
+    
     <label for="location">Location:</label>
-    <input type="text" id="locationOfMeeting" name="location" placeholder="Where we're meeting...">
+    <input type="text" id="locationOfMeeting" name="location" placeholder="Where we're meeting..." required>
 
     <label for="optionalMembers">Optional Attendance:</label>
     <select id="optionalMembers" name="optional_members" placeholder="Select">
@@ -58,9 +65,11 @@ input[type=submit]:hover {
     </select>
 
     <label for="description">Description:</label>
-    <textarea id="description" name="description" placeholder="What we'll be doing..." style="height:100px"></textarea>
+    <textarea id="description" name="description" placeholder="What we'll be doing..." style="height:100px" required></textarea>
 
-    <button type="submit">Submit</button>
+    <button type="submit" onclick="return confirm('You are about to create a meeting!!')">Submit</button>
+    <a href="../../../projects"><button type="button">Cancel</button></a>
+
   </form>
 </div>
 

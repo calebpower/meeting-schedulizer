@@ -61,6 +61,46 @@ $(document).ready(function() {
       }
     }
     
+    // do this only for the view pane
+    if($('#active-pane-view').length) {
+      let leYeetBtn;
+      
+      $('#invite-member-btn').on('click', function() {
+        $("#invite-member-modal").modal();
+      });
+      
+      $('button.remove-member').on('click', function() { // pre-yeet
+        leYeetBtn = $(this);
+        $("#confirm-yeet-modal").modal();
+      });
+      
+      $('#yeet-member').on('click', function() {
+        console.log("member -> yeet");
+        $("#passback-action").val("remove");
+        $("#passback-user").val(leYeetBtn.attr("datum"));
+        $("#passback-form").submit();
+      });
+      
+      $('#yoink-member').on('click', function() {
+        console.log("member -> yoink");
+        $("#passback-action").val("invite");
+        $("#passback-user").val($("#invite-username").val());
+        $("#passback-form").submit();
+      });
+      
+      $('#yeet-invite').on('click', function() {
+        console.log("invite -> yeet");
+        $("#passback-action").val("reject");
+        $("#passback-form").submit();
+      });
+      
+      $('#yoink-invite').on('click', function(){
+        console.log("invite -> yoink");
+        $("#passback-action").val("accept");
+        $("#passback-form").submit();
+      });
+    }
+    
     // do this only for the create or edit panes
     if($('#active-pane-create').length || $('#active-pane-edit').length) {
       $('input[type="text"], textarea').on('keydown', function() {

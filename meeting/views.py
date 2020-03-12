@@ -49,12 +49,16 @@ def index(request):
 
 ''' Render the default projects page '''
 def projects(request):
+    if not request.user.is_authenticated:
+            return redirect('LoginProcess')
     app_url = request.path
     projects = pull_projects(pull_profile(request.user))
     return render(request, 'projects/active_pane/no_selection.html', {'app_url': app_url, 'projects': projects})
 
 class ProjectCreationProcess(View):
     def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('LoginProcess')
         # collect the information about the new project
         title = request.POST.get('title') if request.POST.get('title') else None
         description = request.POST.get('description') if request.POST.get('description') else None
@@ -118,6 +122,8 @@ class ProjectCreationProcess(View):
             return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'errors': errors, 'projects': projects})
     
     def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('LoginProcess')
         app_url = request.path
         projects = pull_projects(pull_profile(request.user))
         return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'projects': projects})
@@ -125,6 +131,8 @@ class ProjectCreationProcess(View):
 ''' Render the "edit project" form '''
 class ProjectModificationProcess(View):
     def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('LoginProcess')
         title = request.POST.get('title') if request.POST.get('title') else None
         description = request.POST.get('description') if request.POST.get('description') else None
         user = request.user if request.user.is_authenticated else None
@@ -158,11 +166,13 @@ class ProjectModificationProcess(View):
             except:
                 pass
             
-            return projects_view(request, project_key)
+            return redirect('../' + str(project_key))
         else:
             return render(request, 'projects/active_pane/edit_project.html', {'app_url': app_url, 'projects': projects, 'project': project, 'errors': errors})
     
     def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('LoginProcess')
         app_url = request.path
         projects = pull_projects(pull_profile(request.user))
         project = None
@@ -175,28 +185,79 @@ class ProjectModificationProcess(View):
         
         return render(request, 'projects/active_pane/edit_project.html', {'app_url': app_url, 'projects': projects, 'project': project})
 
-''' Render the "view project" form '''
-def projects_view(request, project_key):
-    app_url = request.path
-    profile = pull_profile(request.user)
-    projects = pull_projects(profile)
-    
-    project = None
-    team = []
-    meetings = [] # depends on Courtney
-    owns = False
-    
-    try:
+class ProjectViewProcess(View):
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('LoginProcess')
+
+        project_key = kwargs['project_key']
         project = models.Project.objects.get(pk=project_key)
-        members = models.Member.objects.filter(project=project)
-        for member in members:
-            team.append(member)
-            if member.role == models.Member.UserProjectRole.OWNER and member.user == profile:
-                owns = True
-    except:
-        pass
-    
-    return render(request, 'projects/active_pane/view_project.html', {'app_url': app_url, 'projects': projects, 'project': project, 'team': team, 'meetings': meetings, 'owns': owns})
+        
+        if request.POST.get('action') == 'remove':
+            print("member -> yeet")
+            try:
+                user = models.User.objects.get(pk=request.POST.get('user'))
+                profile = pull_profile(user)
+                models.Member.objects.get(user=profile, project=project).delete()
+            except Exception as e:
+                print(e)
+            
+            return redirect("./" + str(project_key))
+        elif request.POST.get('action') == 'invite':
+            print("member -> yoink")
+            try:
+                user = models.User.objects.get(username=request.POST.get('user'))
+                profile = pull_profile(user)
+                models.Member.objects.create(project=project, user=profile, role=models.Member.UserProjectRole.INVITED)
+            except Exception as e:
+                print(e)
+                
+            return redirect("./" + str(project_key))
+        elif request.POST.get('action') == 'accept':
+            print("invite -> yoink")
+            try:
+                user = request.user if request.user.is_authenticated else None
+                profile = pull_profile(user)
+                models.Member.objects.filter(user=profile, project=project).update(role=models.Member.UserProjectRole.ACTIVE)
+            except Exception as e:
+                print(e)
+                
+            return redirect("./" + str(project_key))
+        elif request.POST.get('action') == 'reject':
+            print("invite -> yeet")
+            try:
+                user = request.user if request.user.is_authenticated else None
+                profile = pull_profile(user)
+                models.Member.objects.get(user=profile, project=project).delete()
+            except:
+                print(e)
+                
+        return redirect('../projects')
+        
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('LoginProcess')
+
+        app_url = request.path
+        profile = pull_profile(request.user)
+        projects = pull_projects(profile)
+        
+        project = None
+        team = []
+        meetings = [] # depends on Courtney
+        role = -1
+        
+        try:
+            project = models.Project.objects.get(pk=kwargs['project_key'])
+            members = models.Member.objects.filter(project=project)
+            for member in members:
+                team.append(member)
+                if member.user == profile:
+                    role = member.role
+        except Exception as e:
+            print(e)
+            
+        return render(request, 'projects/active_pane/view_project.html', {'app_url': app_url, 'projects': projects, 'project': project, 'team': team, 'meetings': meetings, 'role': role})
 
 class LoginProcess(View):
     def post(self, request, *args, **kwargs):
@@ -221,9 +282,13 @@ class RegisterProcess(View):
         confirm_password = request.POST.get('inputConfirmPassword') if request.POST.get('inputConfirmPassword') else None
         display_name = request.POST.get('inputDisplayName') if request.POST.get('inputDisplayName') else None
         errors = dict()
+        existing_user = User.objects.filter(username=username).count()
+        username_duplicate = False if existing_user == 0 else True
         
         if username is None:
             errors['usernameEmpty'] = True
+        if username_duplicate is True:
+            errors['usernameDuplicate'] = True
         if password is None:
             errors['passwordEmpty'] = True
         if confirm_password is None:
@@ -274,6 +339,9 @@ def get_meetings_by_user(user):
     return unique_results
 
 def availability(request):
+    if not request.user.is_authenticated:
+            return redirect('LoginProcess')
+    
     user = request.user if request.user.is_authenticated else None
     
     if user is None:
@@ -295,6 +363,10 @@ def availability(request):
 
 class Availability(View):
     def get(self, request, meeting_id):
+      
+        if not request.user.is_authenticated:
+            return redirect('LoginProcess')
+
         user = request.user if request.user.is_authenticated else None
         
         if user is None:
@@ -332,6 +404,9 @@ class Availability(View):
         return render(request, 'availability/meeting_availability.html', context)
 
     def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('LoginProcess')
+
         user = request.user if request.user.is_authenticated else None        
         
         if user is None:
@@ -342,6 +417,7 @@ class Availability(View):
         start_time = request.POST.get('start_time') if request.POST.get('start_time') else None
         end_time = request.POST.get('end_time') if request.POST.get('end_time') else None
         meeting_id = kwargs.get('meeting_id') if kwargs.get('meeting_id') else None
+
         # meetingId = request.POST.get('meeting_id')
         meeting = models.Meeting.objects.get(id=meeting_id) if models.Meeting.objects.get(id=meeting_id) else None
         app_url = request.path
@@ -443,6 +519,9 @@ class MeetingView(View):
    template_name = 'create_meeting.html'
 
    def get(self, request, project_key):
+       if not request.user.is_authenticated:
+            return redirect('LoginProcess')
+
        form = MeetingForm()
        try:
            project = models.Project.objects.get(pk=project_key)
@@ -451,17 +530,70 @@ class MeetingView(View):
        return render(request, self.template_name, {'form': form, 'project': project})
 
    def post(self, request, project_key):
+
+        if not request.user.is_authenticated:
+            return redirect('LoginProcess')
+
         form = MeetingForm(request.POST)
         if form.is_valid():
             meeting = form.save(commit=False)
             meeting.project = models.Project.objects.get(pk=project_key)
             meeting.save()
 
-            date = form.cleaned_data['date']
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
             location = form.cleaned_data['location']
             optional_members = form.cleaned_data['optional_members']
             description = form.cleaned_data['description']
             form = MeetingForm()
             return redirect('../../../projects')
-        args = {'form': form, 'date': date, 'location': location, 'optional_members': optional_members, 'description': description,}
+        args = {'form': form, 'start_date': start_date, 'end_date': end_date, 'location': location, 'optional_members': optional_members, 'description': description}
         return render(request, self.template_name, args)         
+
+class ProfilePage(View):
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('LoginProcess')
+        logged_in_user = request.user
+        username = logged_in_user.username
+        display_name = logged_in_user.profile.display_name
+        return render(request, 'profile_page.html', { 'username': username, 'displayName': display_name, 'is_no_errors': True, 'get_load': True })
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('LoginProcess')
+
+        username = request.POST.get('inputUsername') if request.POST.get('inputUsername') else None
+        display_name = request.POST.get('inputDisplayName') if request.POST.get('inputDisplayName') else None
+        errors = dict()
+
+        if display_name is None:
+            errors['displayNameEmpty'] = True
+        elif display_name.isspace() is True:
+            errors['displayNameEmpty'] = True
+
+        if username is None:
+            errors['usernameEmpty'] = True
+        elif username.isspace() is True:
+            errors['usernameEmpty'] = True
+
+        existing_user = User.objects.filter(username=username).count()
+        username_duplicate = False if existing_user == 0 else True
+        
+        if username_duplicate is True:
+            found_user = User.objects.filter(username=username)[0]
+            if found_user.username != request.user.username:
+                errors['usernameDuplicate'] = True
+
+        is_no_errors = not bool(errors)
+        if is_no_errors:
+            editing_user = User.objects.get(username=request.user.username)
+            editing_user.username = username
+            editing_user.profile.display_name = display_name
+            editing_user.save()
+        else:
+            logged_in_user = request.user
+            username = logged_in_user.username
+            display_name = logged_in_user.profile.display_name
+        return render(request, 'profile_page.html', {'username': username, 'displayName': display_name, 'errors': errors, 'is_no_errors': is_no_errors, 'get_load': False })
+      
