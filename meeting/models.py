@@ -49,5 +49,6 @@ class TimeAvailability(models.Model):
     # meeting = models.IntegerField()
     meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
     def __str__(self):
-        return "meeting " + str(self.meeting) + " from " + str(self.start_time) + " to " + str(self.end_time)
+        return "TimeAvailability " + str(self.id) + " for meeting " + str(self.meeting.id) + " from " + str(self.start_time) + " to " + str(self.end_time)

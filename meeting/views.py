@@ -277,10 +277,17 @@ def availability(request):
         return redirect('LoginProcess')
 
     meeting_list = get_meetings_by_user(user)
+    avlb_meeting_list = []
+
+    # Get avlb counts
+    for meeting in meeting_list:
+        avlb_count = models.TimeAvailability.objects.filter(meeting_id=meeting.id).count()
+        avlb_meeting_list.append({'meeting': meeting, 'avlb_count': avlb_count})
 
     context = {
-        'meeting_list': meeting_list,
+        'meeting_list': avlb_meeting_list,
     }
+
     return render(request, 'availability/index.html', context)
 
 class Availability(View):
@@ -292,19 +299,25 @@ class Availability(View):
 
         meeting_list = get_meetings_by_user(user)
         active_meeting = [meeting for meeting in meeting_list if meeting.id == meeting_id][0]
-       
+        avlb_meeting_list = []
+
+        # Get avlb counts
+        for meeting in meeting_list:
+            avlb_count = models.TimeAvailability.objects.filter(meeting_id=meeting.id).count()
+            avlb_meeting_list.append({'meeting': meeting, 'avlb_count': avlb_count})
+
         app_url = request.path
         # time_slots = models.TimeAvailability.objects.filter(meeting=meeting_id)
         time_slots = models.TimeAvailability.objects.raw('select * from meeting_timeavailability where meeting_id = %s', [meeting_id])
-        print(active_meeting)
-        print(meeting_list[0])
+        
+        
         context = {
             'active_meeting': active_meeting,
-            'meeting_list': meeting_list,
+            'meeting_list': avlb_meeting_list,
             'app_url': app_url,
             'time_slots': time_slots
         }
-        print("debug 0")
+        
         return render(request, 'availability/meeting_availability.html', context)
 
     def post(self, request, *args, **kwargs):
@@ -320,19 +333,15 @@ class Availability(View):
         meeting_id = kwargs.get('meeting_id') if kwargs.get('meeting_id') else None
         # meetingId = request.POST.get('meeting_id')
         meeting = models.Meeting.objects.get(id=meeting_id) if models.Meeting.objects.get(id=meeting_id) else None
-
-        meeting_list = get_meetings_by_user(user)
-        active_meeting = meeting
         app_url = request.path
-        time_slots = models.TimeAvailability.objects.filter(meeting=meeting_id)
-        
+
         context = {
-            'meeting_list': meeting_list,
-            'active_meeting': active_meeting,
+            'meeting_list': [],
+            'active_meeting': meeting,
             'app_url': app_url,
-            'time_slots': time_slots,
             'success': True,
-            'errors': dict()
+            'errors': dict(),
+            'time_slots': None
         }
         
         if start_time is None:
@@ -347,6 +356,55 @@ class Availability(View):
                                                 end_time=end_time,
                                                 meeting=meeting,
                                                 user=profile)
+
+        meeting_list = get_meetings_by_user(user)
+        avlb_meeting_list = []
+
+        # Get avlb counts
+        for meeting in meeting_list:
+            avlb_count = models.TimeAvailability.objects.filter(meeting_id=meeting.id).count()
+            avlb_meeting_list.append({'meeting': meeting, 'avlb_count': avlb_count})
+            
+        time_slots = models.TimeAvailability.objects.filter(meeting=meeting_id)
+
+        context['meeting_list'] = avlb_meeting_list
+        context['time_slots'] = time_slots
+
+        return render(request, 'availability/meeting_availability.html', context)
+
+class AvailabilityDelete(View):
+    def post(self, request, *args, **kwargs):
+        user = request.user if request.user.is_authenticated else None        
+        
+        if user is None:
+            return redirect('LoginProcess')
+        
+        id = request.POST.get('id') if request.POST.get('id') else None
+        slot = models.TimeAvailability.objects.get(id=id)
+        slot.delete()
+
+        meeting_id = kwargs.get('meeting_id') if kwargs.get('meeting_id') else None
+        # meetingId = request.POST.get('meeting_id')
+        meeting = models.Meeting.objects.get(id=meeting_id) if models.Meeting.objects.get(id=meeting_id) else None
+
+        meeting_list = get_meetings_by_user(user)
+        avlb_meeting_list = []
+
+        # Get avlb counts
+        for meeting in meeting_list:
+            avlb_count = models.TimeAvailability.objects.filter(meeting_id=meeting.id).count()
+            avlb_meeting_list.append({'meeting': meeting, 'avlb_count': avlb_count})
+            
+        active_meeting = meeting
+        app_url = request.path
+        time_slots = models.TimeAvailability.objects.filter(meeting=meeting_id)
+        
+        context = {
+            'meeting_list': avlb_meeting_list,
+            'active_meeting': active_meeting,
+            'app_url': app_url,
+            'time_slots': time_slots
+        }
 
         return render(request, 'availability/meeting_availability.html', context)
 

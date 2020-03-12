@@ -60,3 +60,18 @@ function onSubmit() {
 
     document.getElementById('avlb-form').submit();
 }
+
+function onDelete(id, st, et) {
+    $('#delete-start-time').text(st);
+    $('#delete-end-time').text(et);
+    $('#delete-id').val(id);
+    $('#delete-confirm').modal('show');
+}
+
+function onDeleteConfirm() {
+    document.getElementById('delete-form').submit();
+}
+
+$('#delete-confirm').on('shown.bs.modal', function () {
+    $('#delete-cancel').trigger('focus');
+});
