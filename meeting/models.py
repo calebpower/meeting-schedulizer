@@ -45,7 +45,8 @@ class TimeAvailability(models.Model):
         return "meeting " + str(self.meeting) + " from " + str(self.start_time) + " to " + str(self.end_time)
 
 class Meeting(models.Model):
-    date = models.CharField(max_length=200, default=0)
+    start_date = models.DateField(default = '0000/00/00')
+    end_date = models.DateField(default = '0000/00/00')
     location = models.CharField(max_length=200, default=0)
     optional_members = models.CharField(max_length=200, default='None')
     description = models.CharField(max_length=200, default='No description available')
