@@ -71,3 +71,7 @@
     color: red;
     transform: scale(1.1);
 }
+
+#myNavbar7 {
+    display: flex !important;
+}
