@@ -70,8 +70,21 @@
               <div class="card text-light bg-primary mb-3">
                 <div class="card-header">Upcoming Meetings</div>
                 <div class="card-body">
-                  <!-- Waiting on Courtney's code -->
-                  <p class="card-text">[ Upcoming meetings go here. ]</p>
+                  {% for meeting in meetings %}
+                    <p class="card-text">
+                      <div class="row" style="padding-bottom: 10px;">
+                        <div class="col-12 col-sm-5">
+                          {{ meeting.description }}
+                        </div>
+                        <div class="col-12 col-sm-4">
+                          {{ meeting.start_date }} - {{ meeting.end_date }}
+                        </div>
+                        <div class="col-12 col-sm-3">
+                          <button type="button" class="btn btn-info">View</button>
+                        </div>
+                      </div>
+                    </p>
+                  {% endfor %}
                 </div>
               </div>
             </div>
