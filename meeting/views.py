@@ -242,6 +242,7 @@ class ProjectViewProcess(View):
         
         project = None
         team = []
+        potential_yoinks = []
         meetings = [] # depends on Courtney
         role = -1
         
@@ -254,6 +255,15 @@ class ProjectViewProcess(View):
                 if member.user == profile:
                     role = member.role
                     
+            profiles = models.Profile.objects.all()
+            for p in profiles:
+                exists = False
+                for t in team:
+                    if p.user.get_username() == t.user.user.get_username():
+                        exists = True
+                if not exists:
+                    potential_yoinks.append(p.user.get_username())
+                    
             mtgs = models.Meeting.objects.filter(project=project)
             for mtg in mtgs:
                 meetings.append(mtg)
@@ -261,7 +271,7 @@ class ProjectViewProcess(View):
         except Exception as e:
             print(e)
             
-        return render(request, 'projects/active_pane/view_project.html', {'app_url': app_url, 'projects': projects, 'project': project, 'team': team, 'meetings': meetings, 'role': role})
+        return render(request, 'projects/active_pane/view_project.html', {'app_url': app_url, 'projects': projects, 'project': project, 'team': team, 'meetings': meetings, 'role': role, 'potential_yoinks': potential_yoinks})
 
 class LoginProcess(View):
     def post(self, request, *args, **kwargs):
