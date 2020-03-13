@@ -247,11 +247,17 @@ class ProjectViewProcess(View):
         
         try:
             project = models.Project.objects.get(pk=kwargs['project_key'])
+            
             members = models.Member.objects.filter(project=project)
             for member in members:
                 team.append(member)
                 if member.user == profile:
                     role = member.role
+                    
+            mtgs = models.Meeting.objects.filter(project=project)
+            for mtg in mtgs:
+                meetings.append(mtg)
+                
         except Exception as e:
             print(e)
             
