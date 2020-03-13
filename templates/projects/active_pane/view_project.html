@@ -34,17 +34,17 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-5">
               <div class="card text-white bg-success mb-3">
                 <div class="card-header">Team Members</div>
                 <div class="card-body">
                   {% for member in team %}
                     <p class="card-text">
                       <div class="row" style="padding-bottom: 10px;">
-                        <div class="col-12 col-sm-6 col-md-4">
+                        <div class="col-12 col-md-6 col-lg-4">
                           {{ member.user.display_name }}
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4">
+                        <div class="col-12 col-md-6 col-lg-4">
                           {% if member.role == 0 %}
                             <strong class="project-invited">invited</strong>
                           {% elif member.role == 1 %}
@@ -53,7 +53,7 @@
                             <strong class="project-owner">owner</strong>
                           {% endif %}
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4">
+                        <div class="col-12 col-md-6 col-lg-4">
                           {% if member.role == 1 and role == 2 %}
                             <button type="button" datum="{{ member.user.pk }}" class="remove-member btn btn-danger">Remove</button>
                           {% elif member.role == 0 and role == 2 %}
@@ -66,7 +66,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-7">
               <div class="card text-light bg-primary mb-3">
                 <div class="card-header">Upcoming Meetings</div>
                 <div class="card-body">
