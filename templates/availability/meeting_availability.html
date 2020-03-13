@@ -10,34 +10,64 @@
         <div class="col-lg-9">
             <div class="card mt-4">
                 <div class="card-header">
-                    {{ active_meeting.name }}
+                    Meeting {{ active_meeting.id }}: {{ active_meeting.description }}
                 </div>
 
                 <div id="avlb-meeting-selected" class="card-body">
                     <input type="hidden" id="meeting-start-date" value="{{ active_meeting.start_date }}">
                     <input type="hidden" id="meeting-end-date" value="{{ active_meeting.end_date }}">
-                    
+
                     <h5 class="card-title">
                         {{ active_meeting.start_date }} - {{ active_meeting.end_date }}
                     </h5>
 
-
                     <!-- existing time-slots -->
                     {% for slot in time_slots %}
+                    <div class="time-slot shadow p-3 mb-5 bg-white rounded">
                         From {{ slot.start_time }} To {{ slot.end_time }}
-                        <br>
+                        <div class="avlb-delete-btn material-icons"
+                            onclick="onDelete('{{ slot.id }}','{{ slot.start_time }}','{{ slot.end_time }}')">
+                            delete
+                        </div>
+                    </div>
                     {% endfor %}
                     <!-- end existing time-slots -->
 
                     <form id="avlb-form" method="post" action="">
                         {% csrf_token %}
-                        <!-- START -->
-                        <label for="start-time-picker">From</label>
-                        <input id="start-time-picker">
+                        <div class="container">
+                            <div class='col-md-4'>
+                                <div id="start-time-form-group"
+                                    class="form-group {% if errors.start_time %} has-error {% endif %}">
+                                    <div class='input-group date' id='start-time-picker'>
+                                        <input type='text' class="form-control" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                    <span id="start-time-error"
+                                        class="help-block {% if not errors.start_time %} d-none {% endif %}">
+                                        Start time is required
+                                    </span>
+                                </div>
+                            </div>
+                            <div class='col-md-4'>
+                                <div id="end-time-form-group"
+                                    class="form-group {% if errors.end_time %} has-error {% endif %}">
+                                    <div class='input-group date' id='end-time-picker'>
+                                        <input type='text' class="form-control" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
 
-                        <!-- END -->
-                        <label for="end-time-picker">To</label>
-                        <input id="end-time-picker">
+                                    <span id="end-time-error"
+                                        class="help-block {% if not errors.end_time %} d-none {% endif %}">
+                                        End time is required
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
 
                         <input type="hidden" id="start-time" name="start_time">
                         <input type="hidden" id="end-time" name="end_time">
@@ -55,6 +85,45 @@
     </div>
     <!-- /.row -->
 
+    <form method="post" id="delete-form" class="invisible" action="/meeting/availability/{{active_meeting.id}}/delete">
+        {% csrf_token %}
+        <input id="delete-id" name="id">
+    </form>
+
+    <div id="delete-confirm" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Are you sure you want to delete your time availability
+                        from <span id="delete-start-time"></span>
+                        to <span id="delete-end-time"></span>?
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="onDeleteConfirm()">Delete</button>
+                    <button type="button" id="delete-cancel" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% autoescape on %}
+    <!-- <script> -->
+        
+        <div id="time_slots_json" class="invisible">
+            {{ time_slots_json|safe }}
+        </div>
+        
+    <!-- </script> -->
+    {% endautoescape %}
+    
 </div>
 <!-- /.container -->
 
