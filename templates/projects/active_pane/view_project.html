@@ -39,6 +39,7 @@
                 <div class="card-header">Team Members</div>
                 <div class="card-body">
                   {% for member in team %}
+                    <span class="das-username" style="display: none;">{{ member.user.user.get_username }}</span>
                     <p class="card-text">
                       <div class="row" style="padding-bottom: 10px;">
                         <div class="col-12 col-md-6 col-lg-4">
@@ -107,5 +108,10 @@
       <input id="passback-action" name="action" type="hidden" />
       <input id="passback-user" name="user" type="hidden" />
     </form>
+    <div id="potential-yoinks" style="display: none;">
+      {% for py in potential_yoinks %}
+        <span>{{ py }}</span>
+      {% endfor %}
+    </div>
   </div>
 {% endblock %}

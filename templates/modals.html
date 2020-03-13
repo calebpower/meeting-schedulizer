@@ -51,6 +51,9 @@
         </button>
       </div>
       <div class="modal-body">
+        <p id="yoink-error" style="color: red; display: none;">
+          An error message.
+        </p>
         <input type="text"
                class="form-control"
                id="invite-username"
@@ -60,13 +63,13 @@
                value="" />
       </div>
       <div class="modal-footer">
-        <button id="yoink-member" type="button" class="btn btn-primary" data-dismiss="modal">Invite</button>
+        <button id="yoink-member" type="button" class="btn btn-primary">Invite</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Invite Member -->
+<!-- Accept Invitation -->
 <div class="modal fade" id="accept-invitation-modal" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
