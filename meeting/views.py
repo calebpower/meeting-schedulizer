@@ -388,8 +388,12 @@ class Availability(View):
         for datum in json_data:
             meeting = '"meeting":{"id":"' + str(datum.meeting.id) + '","description":"' + datum.meeting.description + '"}';
             time_slots_json += '{"id":"' + str(datum.id) + '","start_time":"' + str(datum.start_time) + '","end_time":"' + str(datum.end_time) + '",' + meeting + '},';
-        time_slots_json = time_slots_json[:-1]
+        if len(time_slots_json) > 1:
+            time_slots_json = time_slots_json[:-1]
         time_slots_json += ']';
+        
+        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        print(time_slots_json);
 
         context = {
             'active_meeting': active_meeting,
@@ -458,7 +462,8 @@ class Availability(View):
         for datum in json_data:
             meeting = '"meeting":{"id":"' + str(datum.meeting.id) + '","description":"' + datum.meeting.description + '"}';
             time_slots_json += '{"id":"' + str(datum.id) + '","start_time":"' + str(datum.start_time) + '","end_time":"' + str(datum.end_time) + '",' + meeting + '},';
-        time_slots_json = time_slots_json[:-1]
+        if len(time_slots_json) > 1:
+            time_slots_json = time_slots_json[:-1]
         time_slots_json += ']';
 
         context['meeting_list'] = avlb_meeting_list
@@ -499,7 +504,8 @@ class AvailabilityDelete(View):
         for datum in json_data:
             meeting = '"meeting":{"id":"' + str(datum.meeting.id) + '","description":"' + datum.meeting.description + '"}';
             time_slots_json += '{"id":"' + str(datum.id) + '","start_time":"' + str(datum.start_time) + '","end_time":"' + str(datum.end_time) + '",' + meeting + '},';
-        time_slots_json = time_slots_json[:-1]
+        if len(time_slots_json) > 1:
+            time_slots_json = time_slots_json[:-1]
         time_slots_json += ']';
 
         context = {
