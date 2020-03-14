@@ -1,10 +1,10 @@
 from django.urls import path
-from .viewpages import authentication
-from .viewpages import availability
-from .viewpages import meetings
-from .viewpages import notifications
-from .viewpages import projects
-from .viewpages import voting
+from .routes import authentication
+from .routes import availability
+from .routes import meetings
+from .routes import notifications
+from .routes import projects
+from .routes import voting
 from . import views
 
 urlpatterns = [
