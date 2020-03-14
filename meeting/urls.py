@@ -17,5 +17,6 @@ urlpatterns = [
     path('availability/<int:meeting_id>/delete', views.AvailabilityDelete.as_view(), name='AvailabilityDelete'),
     path('voting', views.Voting.as_view(), name='Voting'),
     path('profile', views.ProfilePage.as_view(), name="ProfilePage"),
-    path('notification_demo', views.notification_demo, name='notification_demo')
+    path('notification_demo', views.notification_demo, name='notification_demo'),
+    path('notifications', views.NotificationProcess.as_view(), name='NotificationProcess')
 ]
