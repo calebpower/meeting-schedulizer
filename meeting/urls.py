@@ -14,5 +14,7 @@ urlpatterns = [
     path('register', views.RegisterProcess.as_view(), name="RegisterProcess"),
     path('availability', views.availability, name='Availability'),
     path('availability/<int:meeting_id>', views.Availability.as_view(), name='meeting_availability'),
+    path('availability/<int:meeting_id>/delete', views.AvailabilityDelete.as_view(), name='AvailabilityDelete'),
     path('voting', views.Voting.as_view(), name='Voting'),
+    path('profile', views.ProfilePage.as_view(), name="ProfilePage")
 ]
