@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Page Content -->
+<div class="container">
+    <div class="row">
+
+        <!-- {% include "availability/meeting_pane.html" %} -->
+        Voting Page (Demo)
+
+        <div class="col-lg-9">
+            <div class="card mt-4">
+                <div class="card-header">
+                    <!-- {{ active_meeting.name }} -->
+                    {{ user.name }}
+                </div>
+
+                <div id="avlb-meeting-selected" class="card-body">
+
+                    <!-- userlist -->
+                    {% for user in users %}
+                        {{ user }}
+                        <br>
+                    {% endfor %}
+                    <!-- end userlist -->
+
+                    <form action="" method='post'>
+                        {% csrf_token %}
+                        <label for="Name">Name:</label><br>
+                        <input type="text" id="Name" name="Name" ><br><br>
+                        <button type="submit" value="Add User" onclick="add_user">Add User</button>
+                    </form>
+
+                    
+                </div>
+                <!-- end meeting selected div -->
+            </div>
+            <!-- /.card -->
+
+        </div>
+        <!-- /.col-lg-9 -->
+
+    </div>
+    <!-- /.row -->
+
+</div>
+<!-- /.container -->
+
+{% include "voting/js.html" %}
+{% endblock %}
