@@ -652,3 +652,6 @@ class ProfilePage(View):
             display_name = logged_in_user.profile.display_name
         return render(request, 'profile_page.html', {'username': username, 'displayName': display_name, 'errors': errors, 'is_no_errors': is_no_errors, 'get_load': False })
       
+
+def notification_demo(request):
+    return render(request, 'notification_demo.html', {})

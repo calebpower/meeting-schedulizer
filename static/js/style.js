@@ -133,5 +133,18 @@ $(document).ready(function() {
       });
     }
   }
+  
+  // notification demo
+  if($('#notification-demo').length) {
+    $("#notify-me").on('click', function() {
+      $.amaran({
+        'message': 'Click here to view projects!',
+        'onClick': function() {
+          window.location.pathname = '/meeting/projects'
+        }
+      });
+      console.log("Notified!");
+    });
+  }
 
 });
