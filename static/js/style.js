@@ -133,5 +133,15 @@ $(document).ready(function() {
       });
     }
   }
+  
+  // notification demo
+  if($('#notification-demo').length) {
+    $('#notify-btn').on('click', function() {
+      let user = $('#notify-user').val() == 0 ? null : $('#notify-user').val();
+      let message = $('#notify-message').val();
+      let link = $('#notify-link').val().trim() ? $('#notify-link').val().trim() : null;
+      notify(user, message, link);
+    });
+  }
 
 });

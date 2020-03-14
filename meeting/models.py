@@ -51,3 +51,8 @@ class TimeAvailability(models.Model):
 
     def __str__(self):
         return "TimeAvailability " + str(self.id) + " for meeting " + str(self.meeting.id) + " from " + str(self.start_time) + " to " + str(self.end_time)
+    
+class Notification(models.Model):
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    message = models.CharField(max_length=200, default="")
+    link = models.CharField(max_length=200, default="")

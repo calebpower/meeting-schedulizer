@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+
+  <div class="row justify-content-center" style="padding-top: 80px; padding-bottom: 80px;">
+    <div class="col-8">
+      <h3>Send a Notification</h3>
+      <form id="notification-demo">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="notify-user">User</label>
+          <select class="form-control"
+                  id="notify-user">
+            <option value="0">All</option>
+            {% for user in users %}
+              <option value="{{user.id}}">{{ user.username }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="notify-message">Message</label>
+          <textarea class="form-control"
+                    id="notify-message"
+                    maxlength="200"
+                    rows="5"
+                    placeholder="Write something..."
+                    style="resize: none;"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="notify-link">Link</label>
+          <input type="text"
+                 class="form-control"
+                 id="notify-link"
+                 maxlength="200"
+                 placeholder="Put a link here..." />
+        </div>
+        <button id="notify-btn" type="button" class="btn btn-info">Send Message</button>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
