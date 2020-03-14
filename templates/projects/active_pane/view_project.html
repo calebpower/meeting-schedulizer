@@ -2,8 +2,18 @@
 
 {% block content %}
   <div id="projects" class="row no-gutters">
+    {% include "modals.html" %}
     {% include "projects/project_pane.html" %}
     <div id="active-pane" class="col bg-light">
+    
+      {% if role == 0 %}
+        <script type="text/javascript">
+          $("#accept-invitation-modal").modal({
+            backdrop: 'static',
+            keyboard: false
+          });
+        </script>
+      {% endif %}
 
       <!-- View project -->
       <div id="active-pane-view">
@@ -24,46 +34,84 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-5">
               <div class="card text-white bg-success mb-3">
                 <div class="card-header">Team Members</div>
                 <div class="card-body">
                   {% for member in team %}
+                    <span class="das-username" style="display: none;">{{ member.user.user.get_username }}</span>
                     <p class="card-text">
-                      &bull; {{ member.user.display_name }}
-                      {% if member.role == 0 %}
-                        <strong class="project-invited">- invited</strong>
-                      {% elif member.role == 1 %}
-                        <strong class="project-active">- active</strong>
-                      {% elif member.role == 2 %}
-                        <strong class="project-owner">- owner</strong>
-                      {% endif %}
+                      <div class="row" style="padding-bottom: 10px;">
+                        <div class="col-12 col-md-6 col-lg-4">
+                          {{ member.user.display_name }}
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4">
+                          {% if member.role == 0 %}
+                            <strong class="project-invited">invited</strong>
+                          {% elif member.role == 1 %}
+                            <strong class="project-active">active</strong>
+                          {% elif member.role == 2 %}
+                            <strong class="project-owner">owner</strong>
+                          {% endif %}
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4">
+                          {% if member.role == 1 and role == 2 %}
+                            <button type="button" datum="{{ member.user.pk }}" class="remove-member btn btn-danger">Remove</button>
+                          {% elif member.role == 0 and role == 2 %}
+                            <button type="button" datum="{{ member.user.pk }}" class="remove-member btn btn-warning">Uninvite</button>
+                          {% endif %}
+                        </div>
+                      </div>
                     </p>
                   {% endfor %}
                 </div>
               </div>
             </div>
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-7">
               <div class="card text-light bg-primary mb-3">
                 <div class="card-header">Upcoming Meetings</div>
                 <div class="card-body">
-                  <!-- Waiting on Courtney's code -->
-                  <p class="card-text">[ Upcoming meetings go here. ]</p>
+                  {% for meeting in meetings %}
+                    <p class="card-text">
+                      <div class="row" style="padding-bottom: 10px;">
+                        <div class="col-12 col-sm-5">
+                          {{ meeting.description }}
+                        </div>
+                        <div class="col-12 col-sm-4">
+                          {{ meeting.start_date }} - {{ meeting.end_date }}
+                        </div>
+                        <div class="col-12 col-sm-3">
+                          <button type="button" class="btn btn-info">View</button>
+                        </div>
+                      </div>
+                    </p>
+                  {% endfor %}
                 </div>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              {% if owns %}
+              {% if role == 2 %}
                 <button type="button" id="edit-project-btn" class="btn btn-warning">Edit Project</button>
                 <button type="button" id="new-meeting-btn" class="btn btn-success">Create Meeting</button>
+                <button type="button" id="invite-member-btn" class="btn btn-primary">Invite Member</button>
               {% endif %}
             </div>
           </div>
         </div>
       </div>
 
+    </div>
+    <form id="passback-form" action="" method="POST">
+      {% csrf_token %}
+      <input id="passback-action" name="action" type="hidden" />
+      <input id="passback-user" name="user" type="hidden" />
+    </form>
+    <div id="potential-yoinks" style="display: none;">
+      {% for py in potential_yoinks %}
+        <span>{{ py }}</span>
+      {% endfor %}
     </div>
   </div>
 {% endblock %}

@@ -61,6 +61,71 @@ $(document).ready(function() {
       }
     }
     
+    // do this only for the view pane
+    if($('#active-pane-view').length) {
+      let leYeetBtn;
+      
+      $('#invite-member-btn').on('click', function() {
+        $("#invite-member-modal").modal();
+      });
+      
+      $('button.remove-member').on('click', function() { // pre-yeet
+        leYeetBtn = $(this);
+        $("#confirm-yeet-modal").modal();
+      });
+      
+      $('#yeet-member').on('click', function() {
+        console.log("member -> yeet");
+        $("#passback-action").val("remove");
+        $("#passback-user").val(leYeetBtn.attr("datum"));
+        $("#passback-form").submit();
+      });
+      
+      $('#yoink-member').on('click', function() {
+        console.log("member -> yoink");
+        
+        let username = $("#invite-username").val().trim();
+        if(username.length == 0) {
+          $("#yoink-error").text("Username cannot be blank.");
+        } else {
+          let existsInTeam = false;
+          $(".das-username").each(function() {
+            if(username == $(this).text()) existsInTeam = true;
+          });
+          
+          let existsAtAll = false;
+          $("#potential-yoinks span").each(function() {
+            if(username == $(this).text()) existsAtAll = true;
+          });
+          
+          if(existsInTeam) $("#yoink-error").text("That user is already in the project.");
+          else if(!existsAtAll) $("#yoink-error").text("That user doesn't exist.");
+          else $("#yoink-error").text("");
+        }
+        
+        if($("#yoink-error").text().length > 0) $("#yoink-error").show();
+        else {
+          $("#yoink-error").hide();
+          $("#passback-action").val("invite");
+          $("#passback-user").val($("#invite-username").val());
+          $("#invite-member-modal").modal('toggle');
+          $("#passback-form").submit();
+        }
+      });
+      
+      $('#yeet-invite').on('click', function() {
+        console.log("invite -> yeet");
+        $("#passback-action").val("reject");
+        $("#passback-form").submit();
+      });
+      
+      $('#yoink-invite').on('click', function(){
+        console.log("invite -> yoink");
+        $("#passback-action").val("accept");
+        $("#passback-form").submit();
+      });
+    }
+    
     // do this only for the create or edit panes
     if($('#active-pane-create').length || $('#active-pane-edit').length) {
       $('input[type="text"], textarea').on('keydown', function() {
