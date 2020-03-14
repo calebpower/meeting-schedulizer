@@ -2,9 +2,9 @@
     <h1 class="my-4">My Meetings</h1>
     <div class="list-group">
         {% if meeting_list %}
-            {% for id, meeting in meeting_list.items %}
-                <a href="/meeting/availability/{{ meeting.id }}" class="avlb-meeting-label {% if meeting.id == active_meeting.id %} avlb-meeting-active {% endif %}">
-                    {{ meeting.name }}
+            {% for meeting in meeting_list %}
+                <a href="/meeting/availability/{{ meeting.meeting.id }}" class="avlb-meeting-label {% if meeting.meeting.id == active_meeting.id %} avlb-meeting-active {% endif %}">
+                    Meeting {{ meeting.meeting.id }}: {{ meeting.meeting.description }}
                     <span class="badge avlb-badge {% if meeting.avlb_count < 1 %} no-mtg {% endif %}">
                         {{ meeting.avlb_count }}
                     </span>

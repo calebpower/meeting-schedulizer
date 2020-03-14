@@ -9,6 +9,9 @@
   {% if errors.usernameEmpty %}
     <p style="color: red">Required Field.</p>
   {% endif %}
+  {% if errors.usernameDuplicate %}
+    <p style="color: red">This username is taken, please try again.</p>
+  {% endif %}
   
   <input type="password" name="inputPassword" class="form-control" placeholder="Password" required>
   {% if errors.passwordEmpty %}

@@ -55,3 +55,23 @@
 .avlb-meeting-active {
     border: 2px solid;
 }
+
+.time-slot {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.avlb-delete-btn {
+    float: right;
+    color: grey;
+    cursor: pointer;
+}
+
+.avlb-delete-btn:hover {
+    color: red;
+    transform: scale(1.1);
+}
+
+#myNavbar7 {
+    display: flex !important;
+}
