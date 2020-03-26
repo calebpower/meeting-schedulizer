@@ -1,39 +1,63 @@
 .split {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  overflow-y: auto;
-  overflow-x: hidden;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .gutter {
-  background-color: transparent;
-  background-repeat: no-repeat;
-  background-position: 50%;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: 50%;
 }
 
 .gutter.gutter-horizontal {
-  cursor: col-resize;
-  background-image:  url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+    cursor: col-resize;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
 }
 
 .gutter.gutter-vertical {
-  cursor: row-resize;
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
+    cursor: row-resize;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
 }
 
-.split.split-horizontal, .gutter.gutter-horizontal {
-  height: 100%;
-  float: left;
+.split.split-horizontal,
+.gutter.gutter-horizontal {
+    height: 100%;
+    float: left;
 }
-           
+
 #project-pane {
-  background:red;
+    background: red;
 }
 
 #active-pane {
-  background:green;
-  padding-left: 1em;
-  padding-right: 1em;
-  padding-top: 1em;
+    background: green;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 1em;
+}
+
+.cursor {
+    width: 3rem;
+    height: 3rem;
+    border: 2px solid black;
+    border-radius: 50%;
+    position: absolute;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    transition-property: background, transform;
+    transform-origin: 100% 100%;
+    z-index: -1;
+    backdrop-filter: grayscale();
+}
+
+.link-grow {
+    transform: scale(2);
+    background: black;
+}
+
+.hovered-link {
+    color: white;
 }
