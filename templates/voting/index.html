@@ -130,16 +130,18 @@
                         <h5>Results</h5>
                     </div>
                     <br>
-                {% for timeslot in availableTimeSlots %}
-                    From {{timeslot.tStart}} to {{timeslot.tEnd}}: 
-                    {% for user in timeslot.members %}
-                     [
-                     {{user}}
-                     ]
+
+                    {% for timeslot in availableTimeSlots %}
+                        From {{timeslot.tStart}} to {{timeslot.tEnd}}: 
+                        {% for user in timeslot.members %}
+                        [
+                        {{user}}
+                        ]
+                        {% endfor %}
+                        is availabile
+                        <br>
                     {% endfor %}
-                    is availabile
-                    <br>
-                {% endfor %}
+
             </div>
             <!-- /.card -->
         </div>
