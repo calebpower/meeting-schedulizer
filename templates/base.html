@@ -46,8 +46,9 @@
 </head>
 
 <body>
-
     <!-- Navbar ------------------------------------------------>
+    <div class="pointer"></div>
+    <div class="pointer pointer2"></div>
     <nav id="titular-nav" class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="d-flex flex-grow-1">
             <span class="w-100 d-lg-none d-block"><!-- hidden spacer to center brand on mobile --></span>
@@ -85,9 +86,9 @@
     </nav>
     <script src="{% static 'js/trail.js' %}"></script>
 
-    <!-- Content that child html files supply-->
     {% block content %} {% endblock %}
 
+    <!-- Content that child html files supply-->
 </body>
 
 </html>

@@ -1,22 +1,20 @@
-let mouseCursor = document.querySelector("mousemove", cursor);
-let naviLinks = document.querySelectorAll(".nav-links li");
+let pointer = document.querySelectorAll(".pointer")
 
-window.addEventListener('mousemove', cursor);
+pointer.forEach(function(e) {
+    mouseMove(e);
+})
 
-function cursor(e) {
-    mouseCursor.style.top = e.pageY + "px";
-    mouseCursor.style.left = e.pageX + "px";
-
+function mouseMove(pointer) {
+    document.addEventListener("mousemove", function(e) {
+        pointerPos(e, pointer)
+    })
 }
 
-naviLinks.forEach(link => {
-    link.addEventListener('mouseleave', () => {
-        mouseCursor.classList.remove('link-grow');
-        link.classList.remove("hovered-link");
-    });
+function pointerPos(e, pointer) {
+    mousePosX = e.x;
+    mousePosY = e.y;
+    pointer.style.left = mousePosX - (pointer.getBoundingClientRect().width * 0.5) + "px";
+    pointer.style.top = mousePosY - (pointer.getBoundingClientRect().height * 0.5) + "px";
 
-    link.addEventListener('mouseover', () => {
-        mouseCursor.classList.add('link-grow')
-        link.classList.add("hovered-link");
-    });
-});
+
+}
