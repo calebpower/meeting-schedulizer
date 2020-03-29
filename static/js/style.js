@@ -83,9 +83,34 @@ $(document).ready(function() {
       
       $('#yoink-member').on('click', function() {
         console.log("member -> yoink");
-        $("#passback-action").val("invite");
-        $("#passback-user").val($("#invite-username").val());
-        $("#passback-form").submit();
+        
+        let username = $("#invite-username").val().trim();
+        if(username.length == 0) {
+          $("#yoink-error").text("Username cannot be blank.");
+        } else {
+          let existsInTeam = false;
+          $(".das-username").each(function() {
+            if(username == $(this).text()) existsInTeam = true;
+          });
+          
+          let existsAtAll = false;
+          $("#potential-yoinks span").each(function() {
+            if(username == $(this).text()) existsAtAll = true;
+          });
+          
+          if(existsInTeam) $("#yoink-error").text("That user is already in the project.");
+          else if(!existsAtAll) $("#yoink-error").text("That user doesn't exist.");
+          else $("#yoink-error").text("");
+        }
+        
+        if($("#yoink-error").text().length > 0) $("#yoink-error").show();
+        else {
+          $("#yoink-error").hide();
+          $("#passback-action").val("invite");
+          $("#passback-user").val($("#invite-username").val());
+          $("#invite-member-modal").modal('toggle');
+          $("#passback-form").submit();
+        }
       });
       
       $('#yeet-invite').on('click', function() {
@@ -107,6 +132,16 @@ $(document).ready(function() {
         hasEdited = true; 
       });
     }
+  }
+  
+  // notification demo
+  if($('#notification-demo').length) {
+    $('#notify-btn').on('click', function() {
+      let user = $('#notify-user').val() == 0 ? null : $('#notify-user').val();
+      let message = $('#notify-message').val();
+      let link = $('#notify-link').val().trim() ? $('#notify-link').val().trim() : null;
+      notify(user, message, link);
+    });
   }
 
 });

@@ -34,17 +34,18 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-5">
               <div class="card text-white bg-success mb-3">
                 <div class="card-header">Team Members</div>
                 <div class="card-body">
                   {% for member in team %}
+                    <span class="das-username" style="display: none;">{{ member.user.user.get_username }}</span>
                     <p class="card-text">
                       <div class="row" style="padding-bottom: 10px;">
-                        <div class="col-12 col-sm-6 col-md-4">
+                        <div class="col-12 col-md-6 col-lg-4">
                           {{ member.user.display_name }}
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4">
+                        <div class="col-12 col-md-6 col-lg-4">
                           {% if member.role == 0 %}
                             <strong class="project-invited">invited</strong>
                           {% elif member.role == 1 %}
@@ -53,7 +54,7 @@
                             <strong class="project-owner">owner</strong>
                           {% endif %}
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4">
+                        <div class="col-12 col-md-6 col-lg-4">
                           {% if member.role == 1 and role == 2 %}
                             <button type="button" datum="{{ member.user.pk }}" class="remove-member btn btn-danger">Remove</button>
                           {% elif member.role == 0 and role == 2 %}
@@ -66,12 +67,25 @@
                 </div>
               </div>
             </div>
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-7">
               <div class="card text-light bg-primary mb-3">
                 <div class="card-header">Upcoming Meetings</div>
                 <div class="card-body">
-                  <!-- Waiting on Courtney's code -->
-                  <p class="card-text">[ Upcoming meetings go here. ]</p>
+                  {% for meeting in meetings %}
+                    <p class="card-text">
+                      <div class="row" style="padding-bottom: 10px;">
+                        <div class="col-12 col-sm-5">
+                          {{ meeting.description }}
+                        </div>
+                        <div class="col-12 col-sm-4">
+                          {{ meeting.start_date }} - {{ meeting.end_date }}
+                        </div>
+                        <div class="col-12 col-sm-3">
+                          <button type="button" class="btn btn-info">View</button>
+                        </div>
+                      </div>
+                    </p>
+                  {% endfor %}
                 </div>
               </div>
             </div>
@@ -94,5 +108,10 @@
       <input id="passback-action" name="action" type="hidden" />
       <input id="passback-user" name="user" type="hidden" />
     </form>
+    <div id="potential-yoinks" style="display: none;">
+      {% for py in potential_yoinks %}
+        <span>{{ py }}</span>
+      {% endfor %}
+    </div>
   </div>
 {% endblock %}
