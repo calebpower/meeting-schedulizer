@@ -50,18 +50,18 @@ class Availability(View):
             avlb_meeting_list.append({'meeting': meeting, 'avlb_count': avlb_count})
 
         app_url = request.path
-        # time_slots = models.TimeAvailability.objects.filter(meeting=meeting_id)
-        time_slots = models.TimeAvailability.objects.raw('select * from meeting_timeavailability where meeting_id = %s', [meeting_id])
+        
+        time_slots = get_timeslots(user.id, meeting_id)
+
         json_data = models.TimeAvailability.objects.all();
 
-        time_slots_json = "["
-        for datum in json_data:
-            meeting = '"meeting":{"id":"' + str(datum.meeting.id) + '","description":"' + datum.meeting.description + '"}';
-            time_slots_json += '{"id":"' + str(datum.id) + '","start_time":"' + str(datum.start_time) + '","end_time":"' + str(datum.end_time) + '",' + meeting + '},';
-        if len(time_slots_json) > 1:
-            time_slots_json = time_slots_json[:-1]
-        time_slots_json += ']';
+        time_slots_json = get_json_timeslots()
         
+        other_timeslots = get_other_timeslots(user.id, meeting_id)
+
+        for k, v in other_timeslots.items():
+            print(k, v)
+
         print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         print(time_slots_json);
 
@@ -70,7 +70,8 @@ class Availability(View):
             'meeting_list': avlb_meeting_list,
             'app_url': app_url,
             'time_slots': time_slots,
-            'time_slots_json': time_slots_json
+            'time_slots_json': time_slots_json,
+            'other_timeslots': other_timeslots
         }
         
         return render(request, 'availability/meeting_availability.html', context)
@@ -125,20 +126,14 @@ class Availability(View):
             avlb_count = models.TimeAvailability.objects.filter(meeting_id=meeting.id).count()
             avlb_meeting_list.append({'meeting': meeting, 'avlb_count': avlb_count})
             
-        time_slots = models.TimeAvailability.objects.filter(meeting=meeting_id)
+        time_slots = get_timeslots(user.id, meeting_id)
         
-        json_data = models.TimeAvailability.objects.all();
-        time_slots_json = "["
-        for datum in json_data:
-            meeting = '"meeting":{"id":"' + str(datum.meeting.id) + '","description":"' + datum.meeting.description + '"}';
-            time_slots_json += '{"id":"' + str(datum.id) + '","start_time":"' + str(datum.start_time) + '","end_time":"' + str(datum.end_time) + '",' + meeting + '},';
-        if len(time_slots_json) > 1:
-            time_slots_json = time_slots_json[:-1]
-        time_slots_json += ']';
+        time_slots_json = get_json_timeslots()
 
         context['meeting_list'] = avlb_meeting_list
         context['time_slots'] = time_slots
         context['time_slots_json'] = time_slots_json
+        context['other_timeslots'] = get_other_timeslots(user.id, meeting_id)
 
         return render(request, 'availability/meeting_availability.html', context)
 
@@ -167,24 +162,53 @@ class AvailabilityDelete(View):
             
         active_meeting = meeting
         app_url = request.path
-        time_slots = models.TimeAvailability.objects.filter(meeting=meeting_id)
+        time_slots = get_timeslots(user.id, meeting_id)
         
-        json_data = models.TimeAvailability.objects.all();
-        time_slots_json = "["
-        for datum in json_data:
-            meeting = '"meeting":{"id":"' + str(datum.meeting.id) + '","description":"' + datum.meeting.description + '"}';
-            time_slots_json += '{"id":"' + str(datum.id) + '","start_time":"' + str(datum.start_time) + '","end_time":"' + str(datum.end_time) + '",' + meeting + '},';
-        if len(time_slots_json) > 1:
-            time_slots_json = time_slots_json[:-1]
-        time_slots_json += ']';
+        time_slots_json = get_json_timeslots()
+
+        other_timeslots = get_other_timeslots(user.id, meeting_id)
 
         context = {
             'meeting_list': avlb_meeting_list,
             'active_meeting': active_meeting,
             'app_url': app_url,
             'time_slots': time_slots,
-            'time_slots_json': time_slots_json
+            'time_slots_json': time_slots_json,
+            'other_timeslots': other_timeslots
         }
 
         return render(request, 'availability/meeting_availability.html', context)
+
+
+###############################################################################################################
+# Helper functions
+###############################################################################################################
+
+# Get current user's time slots for the meeting
+def get_timeslots(user_id, meeting_id):
+    # time_slots = models.TimeAvailability.objects.filter(meeting=meeting_id, user=user_id)
+    time_slots = models.TimeAvailability.objects.raw('select * from meeting_timeavailability where meeting_id = %s and user_id = %s', [meeting_id, user_id])
+
+    return time_slots
+        
+# Get other users' time slots for the meeting
+def get_other_timeslots(user_id, meeting_id):
+    users = models.Profile.objects.exclude(id=user_id)
+    other_timeslots = {}
+    for u in users:
+        other_timeslots[u.display_name] = models.TimeAvailability.objects.filter(meeting=meeting_id, user=u.id)
     
+    return other_timeslots
+
+# Get all timeslots in JSON format
+def get_json_timeslots():
+    json_data = models.TimeAvailability.objects.all();
+    time_slots_json = "["
+    for datum in json_data:
+        meeting = '"meeting":{"id":"' + str(datum.meeting.id) + '","description":"' + datum.meeting.description + '"}';
+        time_slots_json += '{"id":"' + str(datum.id) + '","start_time":"' + str(datum.start_time) + '","end_time":"' + str(datum.end_time) + '",' + meeting + '},';
+    if len(time_slots_json) > 1:
+        time_slots_json = time_slots_json[:-1]
+    time_slots_json += ']';
+
+    return time_slots_json
