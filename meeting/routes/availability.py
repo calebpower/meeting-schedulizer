@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.views.generic import View
 from meeting.views import get_meetings_by_user
 from meeting.views import pull_profile
+from django.http import HttpResponseRedirect
+from django.contrib import messages
 
 from .. import models
 
@@ -91,18 +93,11 @@ class Availability(View):
         end_time = request.POST.get('end_time') if request.POST.get('end_time') else None
         meeting_id = kwargs.get('meeting_id') if kwargs.get('meeting_id') else None
 
-        # meetingId = request.POST.get('meeting_id')
         meeting = models.Meeting.objects.get(id=meeting_id) if models.Meeting.objects.get(id=meeting_id) else None
-        app_url = request.path
 
         context = {
-            'meeting_list': [],
-            'active_meeting': meeting,
-            'app_url': app_url,
             'success': True,
-            'errors': dict(),
-            'time_slots': None,
-            'time_slots_json': None
+            'errors': dict()
         }
         
         if start_time is None:
@@ -118,24 +113,9 @@ class Availability(View):
                                                 meeting=meeting,
                                                 user=profile)
 
-        meeting_list = get_meetings_by_user(user)
-        avlb_meeting_list = []
-
-        # Get avlb counts
-        for meeting in meeting_list:
-            avlb_count = models.TimeAvailability.objects.filter(meeting_id=meeting.id).count()
-            avlb_meeting_list.append({'meeting': meeting, 'avlb_count': avlb_count})
-            
-        time_slots = get_timeslots(user.id, meeting_id)
+        # TODO: server side validation error response
         
-        time_slots_json = get_json_timeslots()
-
-        context['meeting_list'] = avlb_meeting_list
-        context['time_slots'] = time_slots
-        context['time_slots_json'] = time_slots_json
-        context['other_timeslots'] = get_other_timeslots(user.id, meeting_id)
-
-        return render(request, 'availability/meeting_availability.html', context)
+        return HttpResponseRedirect(self.request.path_info)
 
 class AvailabilityDelete(View):
     def post(self, request, *args, **kwargs):
@@ -148,36 +128,9 @@ class AvailabilityDelete(View):
         slot = models.TimeAvailability.objects.get(id=aid)
         slot.delete()
 
-        meeting_id = kwargs.get('meeting_id') if kwargs.get('meeting_id') else None
-        # meetingId = request.POST.get('meeting_id')
-        meeting = models.Meeting.objects.get(id=meeting_id) if models.Meeting.objects.get(id=meeting_id) else None
-
-        meeting_list = get_meetings_by_user(user)
-        avlb_meeting_list = []
-
-        # Get avlb counts
-        for meeting in meeting_list:
-            avlb_count = models.TimeAvailability.objects.filter(meeting_id=meeting.id).count()
-            avlb_meeting_list.append({'meeting': meeting, 'avlb_count': avlb_count})
-            
-        active_meeting = meeting
-        app_url = request.path
-        time_slots = get_timeslots(user.id, meeting_id)
+        meeting_id = kwargs.get('meeting_id') if kwargs.get('meeting_id') else ""
         
-        time_slots_json = get_json_timeslots()
-
-        other_timeslots = get_other_timeslots(user.id, meeting_id)
-
-        context = {
-            'meeting_list': avlb_meeting_list,
-            'active_meeting': active_meeting,
-            'app_url': app_url,
-            'time_slots': time_slots,
-            'time_slots_json': time_slots_json,
-            'other_timeslots': other_timeslots
-        }
-
-        return render(request, 'availability/meeting_availability.html', context)
+        return HttpResponseRedirect("../" + str(meeting_id))
 
 
 ###############################################################################################################
