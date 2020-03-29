@@ -21,7 +21,7 @@ def availability(request):
     
     # Get avlb counts
     for meeting in meeting_list:
-        avlb_count = models.TimeAvailability.objects.filter(meeting_id=meeting.id).count()
+        avlb_count = models.TimeAvailability.objects.filter(meeting_id = meeting.id, user_id = user.id).count()
         avlb_meeting_list.append({'meeting': meeting, 'avlb_count': avlb_count})
 
     context = {
@@ -48,7 +48,7 @@ class Availability(View):
 
         # Get avlb counts
         for meeting in meeting_list:
-            avlb_count = models.TimeAvailability.objects.filter(meeting_id=meeting.id).count()
+            avlb_count = models.TimeAvailability.objects.filter(meeting_id = meeting.id, user_id = user.id).count()
             avlb_meeting_list.append({'meeting': meeting, 'avlb_count': avlb_count})
 
         app_url = request.path
@@ -93,7 +93,7 @@ class Availability(View):
         end_time = request.POST.get('end_time') if request.POST.get('end_time') else None
         meeting_id = kwargs.get('meeting_id') if kwargs.get('meeting_id') else None
 
-        meeting = models.Meeting.objects.get(id=meeting_id) if models.Meeting.objects.get(id=meeting_id) else None
+        meeting = models.Meeting.objects.get(id = meeting_id) if models.Meeting.objects.get(id = meeting_id) else None
 
         context = {
             'success': True,
@@ -108,10 +108,10 @@ class Availability(View):
             context["errors"]["end_time"] = True
 
         if context["success"]:
-            models.TimeAvailability.objects.create(start_time=start_time,
-                                                end_time=end_time,
-                                                meeting=meeting,
-                                                user=profile)
+            models.TimeAvailability.objects.create(start_time = start_time,
+                                                end_time = end_time,
+                                                meeting = meeting,
+                                                user = profile)
 
         # TODO: server side validation error response
         
@@ -149,7 +149,7 @@ def get_other_timeslots(user_id, meeting_id):
     users = models.Profile.objects.exclude(id=user_id)
     other_timeslots = {}
     for u in users:
-        other_timeslots[u.display_name] = models.TimeAvailability.objects.filter(meeting=meeting_id, user=u.id)
+        other_timeslots[u.display_name] = models.TimeAvailability.objects.filter(meeting = meeting_id, user = u.id)
     
     return other_timeslots
 
