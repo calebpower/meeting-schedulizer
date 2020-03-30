@@ -2,6 +2,7 @@ from django import forms
 from meeting.models import Meeting
 
 class MeetingForm(forms.ModelForm):
+    title = forms.CharField()
     start_date = forms.DateField()
     end_date = forms.DateField()
     location = forms.CharField()
@@ -10,4 +11,4 @@ class MeetingForm(forms.ModelForm):
 
     class Meta:
         model = Meeting
-        fields = ('start_date', 'end_date', 'location', 'optional_members', 'description',)
+        fields = ('title','start_date', 'end_date', 'location', 'optional_members', 'description',)
