@@ -152,7 +152,15 @@ class ProjectViewProcess(View):
         project_key = kwargs['project_key']
         project = models.Project.objects.get(pk=project_key)
         
-        if request.POST.get('action') == 'remove':
+        if request.POST.get('action') == 'delete':
+            print("project -> yeet")
+            try:
+                project.delete()
+            except Exception as e:
+                print(e)
+            
+            return redirect("../projects")
+        elif request.POST.get('action') == 'remove':
             print("member -> yeet")
             try:
                 user = models.User.objects.get(pk=request.POST.get('user'))

@@ -69,6 +69,10 @@ $(document).ready(function() {
         $("#invite-member-modal").modal();
       });
       
+      $('#delete-project-btn').on('click', function() {
+        $("#confirm-remove-project-modal").modal();
+      });
+      
       $('button.remove-member').on('click', function() { // pre-yeet
         leYeetBtn = $(this);
         $("#confirm-yeet-modal").modal();
@@ -78,6 +82,12 @@ $(document).ready(function() {
         console.log("member -> yeet");
         $("#passback-action").val("remove");
         $("#passback-user").val(leYeetBtn.attr("datum"));
+        $("#passback-form").submit();
+      });
+      
+      $('#yeet-project').on('click', function() {
+        console.log("member -> yeet");
+        $("#passback-action").val("delete");
         $("#passback-form").submit();
       });
       
