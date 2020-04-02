@@ -1,5 +1,10 @@
 from django.urls import path
-
+from .routes import authentication
+from .routes import availability
+from .routes import meetings
+from .routes import notifications
+from .routes import projects
+from .routes import voting
 from . import views
 
 urlpatterns = [

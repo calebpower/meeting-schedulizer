@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 import random
 import time
 from itertools import chain, groupby
+from . import models
 
 ''' Pulls a list of the user's projects '''
 def pull_projects(profile):
@@ -33,6 +34,7 @@ def pull_projects(profile):
         
     return projects
 
+''' Pulls a user's profile '''
 def pull_profile(user):
     if user.is_authenticated:
         try:
