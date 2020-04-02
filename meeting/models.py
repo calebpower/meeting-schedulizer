@@ -36,11 +36,12 @@ def save_user_profile(sender, instance, **kwargs):
 
 class Meeting(models.Model):
     title = models.CharField(max_length=200, default='None')
-    start_date = models.DateField(default = '1970-01-01')
-    end_date = models.DateField(default = '1970-01-01')
     location = models.CharField(max_length=200, default=0)
     optional_members = models.CharField(max_length=200, default='None')
     description = models.CharField(max_length=200, default='No description available')
+    start_date = models.DateField(default = '1970-01-01')
+    end_date = models.DateField(default = '1970-01-01')
+
     project = models.ForeignKey(Project, on_delete=models.CASCADE, default=0)
     
 ''' Time availability '''
