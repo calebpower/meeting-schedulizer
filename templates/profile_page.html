@@ -9,9 +9,9 @@
     
     .form-signin .form-control {
         position: relative;
-        box-sizing: border-box;
         height: auto;
         padding: 10px;
+        box-sizing: border-box;
         font-size: 16px;
     }
     
@@ -19,19 +19,46 @@
         z-index: 2;
     }
     
-    .parallax-background {
-        height: 100%;
-        /* Create the parallax scrolling effect */
-        background-attachment: fixed;
-        background-position: center;
-        background-repeat: no-repeat;
+    .container1 {
+        animation: color-change 8s infinite;
+        /*position: relative;
+        width: 100%;
+        height: 100vh;
+        background: url("{{STATIC_URL}}/static/img/bg2.jpg");
         background-size: cover;
-        background-image: url("images/profile-background.jpeg");
+        animation: color-change 2s linear infinite;*/
+    }
+    
+    @keyframes color-change {
+        0% {
+            background: #22ee55;
+        }
+        20% {
+            background: #6e8898
+        }
+        40% {
+            background: #9fb1bc;
+        }
+        60% {
+            background: #d3d0cb;
+        }
+        80% {
+            background: #e2c044;
+        }
+        100% {
+            background: #0ca98a;
+        }
+        /*0%,
+        100% {
+            filter: hue-rotate(0deg)
+        }
+        50% {
+            filter: hue-rotate(360deg)
+        }*/
     }
 </style>
-
-<div class="container" style="padding-top: 10%;">
-    <div class="paralllax-background">
+<div class="container1">
+    <div class="container" style="padding-top: 10%;">
         <form class="form-signin" method="POST" action="/meeting/profile">
             {% csrf_token %}
             <h1 class="text-center">Profile</h1>
@@ -68,13 +95,14 @@
             <hr>
         </form>
     </div>
-    <script>
-        function editPage() {
-            document.getElementById('inputUsername').removeAttribute('readonly');
-            document.getElementById('inputDisplayName').removeAttribute('readonly');
-            document.getElementById('updateButton').removeAttribute('disabled');
-            document.getElementById('editButton').setAttribute('disabled', "");
+</div>
+<script>
+    function editPage() {
+        document.getElementById('inputUsername').removeAttribute('readonly');
+        document.getElementById('inputDisplayName').removeAttribute('readonly');
+        document.getElementById('updateButton').removeAttribute('disabled');
+        document.getElementById('editButton').setAttribute('disabled', "");
 
-        }
-    </script>
-    {% endblock %}
+    }
+</script>
+{% endblock %}

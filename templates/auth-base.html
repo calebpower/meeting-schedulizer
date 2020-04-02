@@ -35,13 +35,11 @@
 
 <body class="text-center">
 
-    <div class="pointer"></div>
-    <div class="pointer pointer2"></div>
-    <script src="{% static 'js/trail.js' %}"></script>
+    <div id="cursor">
+        <script src="{% static 'js/trail.js' %}"></script>
 
-    </div>
-    <!-- Content that child html files supply-->
-    {% block content %} {% endblock %}
+        <!-- Content that child html files supply-->
+        {% block content %} {% endblock %}
 </body>
 
 </html>

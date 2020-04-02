@@ -39,6 +39,31 @@
     padding-top: 1em;
 }
 
+#cursor {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    transition: .1s ease;
+    border: 3px solid #146eb4;
+    border-radius: 50%;
+    animation: animate .3s infinite alternate;
+    z-index: 4
+}
+
+@keyframes animate {
+    0% {
+        transform: scale(.7);
+    }
+    50% {
+        box-shadow: 0px 0px 10px #146eb4, 0px 0px 20px#146eb4, 0px 0px 30px #146eb4;
+    }
+    100% {
+        transform: scale(1.5);
+    }
+}
+
+
+/*
 * {
     cursor: none;
 }
@@ -50,10 +75,12 @@
     background: rgb(87, 87, 222);
     border-radius: 50%;
     transition: 0.05s;
+    z-index: 1;
 }
 
 .pointer2 {
     transition: 0.15s;
     width: 10px;
     height: 10px;
-}
+    z-index: 1;
+}*/
