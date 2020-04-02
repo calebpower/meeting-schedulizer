@@ -15,6 +15,9 @@ urlpatterns = [
     path('availability', views.availability, name='Availability'),
     path('availability/<int:meeting_id>', views.Availability.as_view(), name='meeting_availability'),
     path('availability/<int:meeting_id>/delete', views.AvailabilityDelete.as_view(), name='AvailabilityDelete'),
-    path('voting', views.Voting.as_view(), name='Voting'),
+    path('voting_demo', views.VotingDemo.as_view(), name='voting_demo'),
+    path('voting', views.voting, name='Voting'),
+    path('voting/<int:meeting_id>', views.Voting.as_view(), name='meeting_vote'),
+    path('voting/thanks', views.thanks, name='thanks'),
     path('profile', views.ProfilePage.as_view(), name="ProfilePage")
 ]

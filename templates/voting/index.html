@@ -4,146 +4,24 @@
 <!-- Page Content -->
 <div class="container">
     <div class="row">
-
-        <!-- {% include "availability/meeting_pane.html" %} -->
-        <h2>Voting Page (Demo)</h2>
-        <br><br>
-        <!-- Add User for dropdown menu -->
-        <form action="" method='post'>
-                {% csrf_token %}
-                <label for="Name">Add user for dropdown menu:</label><br>
-                <input type="text" id="Name" name="Name" ><br><br>
-                <button type="submit" onclick="post">Add User</button>
-        </form>
-        <!-- Add User for dropdown menu -->
-        <br><br>
-                   <!-- Add availabile time -->
-                   <form action="" method='post'>
-                        {% csrf_token %}
-                    <label for="user">Choose a user to add availabile time:</label>
-                    <select id="user"name="user">
-                            {% for user in users %}
-                            <option name="user" >{{ user }}</option>
-                            {% endfor %}
-                    </select>
-                    <br>
-                    <label for="tStart">Pick availabile time:</label>
-                    <select id="tStart" name="tStart">
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                        <option value="21">21</option>
-                        <option value="22">22</option>
-                        <option value="23">23</option> 
-                    </select>
-                
-                    <label for="tEnd">To</label>
-                    <select id="tEnd" name="tEnd">
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                        <option value="21">21</option>
-                        <option value="22">22</option>
-                        <option value="23">23</option> 
-                    </select>
-                    <br>
-                    <button type="submit" value="tStart" onclick="post">Add available time</button>
-            </form>
-            <!-- Add availabile time End-->
-
+        {% include "voting/voting_pane.html" %}
         <div class="col-lg-9">
-            <div class="card mt-4">
-                <div class="card-header">
-                    <h5>Availability</h5>
-                </div>
-
-                <div id="avlb-meeting-selected" class="card-body">
-
-                    <!-- userlist -->
-                    {% for user in teamMember %}
-                        <h5>{{ user.name }}: </h5> 
-                        {% for timeslot in user.timeSlots %}
-                            From {{timeslot.tStart}} to {{timeslot.tEnd}}
-                            <br>
-                        {% endfor %}
-                        <br>
-                    {% endfor %}
-                    <!-- end userlist -->
+                <br>
+                {% if meeting_list %}
+                <div class="card mt-4">
                     
-                </div>
-
-                <!-- end meeting selected div -->
-            </div>
-            <!-- /.card -->
-            <br>
-            <!-- <form action="" method='post'>
-                {% csrf_token %}
-                <label>Type 'G' to generate</label>
-                <input type="text" id="generate" name="generate"><br><br>
-                <button type="submit" onclick="post" name='generate'>Generate Meeting Time</button>
-            </form> -->
-            <form action="" method='post'>
-                    {% csrf_token %}
-                    <label for="Name">Type 'g' to generate:</label><br>
-                    <input type="text" id="generate" name="generate" ><br><br>
-                    <button type="submit" onclick="post">Generate Meetig Times</button>
-            </form>
-            <!--card -->
-            <div class="card mt-4">
-                    <div class="card-header">
-                        <h5>Results</h5>
+                    <div id="meeting-not-selected">
+                        <div>
+                            Select a meeting
+                        </div>
                     </div>
-                    <br>
+                    <!-- end meeting not selected div -->
+                </div>
+                {% else %}
+                    You will need to be a member of a meeting before you can enter your time availability.
+                {% endif %}
+                <!-- /.card -->
 
-                    {% for timeslot in availableTimeSlots %}
-                        From {{timeslot.tStart}} to {{timeslot.tEnd}}: 
-                        {% for user in timeslot.members %}
-                        [
-                        {{user}}
-                        ]
-                        {% endfor %}
-                        is availabile
-                        <br>
-                    {% endfor %}
-
-            </div>
-            <!-- /.card -->
         </div>
         <!-- /.col-lg-9 -->
 

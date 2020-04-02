@@ -51,3 +51,19 @@ class TimeAvailability(models.Model):
 
     def __str__(self):
         return "TimeAvailability " + str(self.id) + " for meeting " + str(self.meeting.id) + " from " + str(self.start_time) + " to " + str(self.end_time)
+
+class MeetingTime(models.Model):
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    
+class Vote(models.Model):
+    meeting_time = models.ForeignKey(MeetingTime, on_delete=models.CASCADE)
+    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    
+
+
+
