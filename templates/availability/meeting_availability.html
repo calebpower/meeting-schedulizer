@@ -10,29 +10,48 @@
         <div class="col-lg-9">
             <div class="card mt-4">
                 <div class="card-header">
-                    Meeting {{ active_meeting.id }}: {{ active_meeting.description }}
+                    Meeting {{ active_meeting.id }} ({{ active_meeting.start_date }} - {{ active_meeting.end_date }}): {{ active_meeting.description }}
                 </div>
 
                 <div id="avlb-meeting-selected" class="card-body">
                     <input type="hidden" id="meeting-start-date" value="{{ active_meeting.start_date }}">
                     <input type="hidden" id="meeting-end-date" value="{{ active_meeting.end_date }}">
 
-                    <h5 class="card-title">
-                        {{ active_meeting.start_date }} - {{ active_meeting.end_date }}
-                    </h5>
-
                     <!-- existing time-slots -->
-                    {% for slot in time_slots %}
-                    <div class="time-slot shadow p-3 mb-5 bg-white rounded">
-                        From {{ slot.start_time }} To {{ slot.end_time }}
-                        <div class="avlb-delete-btn material-icons"
-                            onclick="onDelete('{{ slot.id }}','{{ slot.start_time }}','{{ slot.end_time }}')">
-                            delete
+                    <div class="text-center slot-container">
+                        <h4>
+                            My Timeslots
+                        </h4>
+                        {% for slot in time_slots %}
+                        <div class="time-slot shadow p-3 mb-5 bg-white rounded">
+                            From {{ slot.start_time }} To {{ slot.end_time }}
+                            <div class="avlb-delete-btn material-icons"
+                                onclick="onDelete('{{ slot.id }}','{{ slot.start_time }}','{{ slot.end_time }}')">
+                                delete
+                            </div>
+                        </div>
+                        {% empty %}
+                            <div class="no-time-slots">You have no time slots for this meeting. Add one below!</div>
+                        {% endfor %}
+                    </div>
+
+                    {% for k, v in other_timeslots.items %}
+                    {% if v.all %}
+                    <div class="text-center slot-container">    
+                        <div class="other-slots">
+                            <h4>{{ k }}'s time-slots</h4>
+                            {% for oslot in v %}
+                            <div class="time-slot other-time-slot shadow p-3 mb-5 bg-white rounded">
+                                From {{ oslot.start_time }} To {{ oslot.end_time }}
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
+                    {% endif %}
                     {% endfor %}
                     <!-- end existing time-slots -->
 
+                    <div class="create-slot-label">Add a new time slot</div>
                     <form id="avlb-form" method="post" action="">
                         {% csrf_token %}
                         <div class="container">

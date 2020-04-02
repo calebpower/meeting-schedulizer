@@ -43,6 +43,12 @@ $(document).ready(function() {
         window.location = window.location.href.slice(0, -5) + '/meetings/create';
       else window.location += '/meetings/create';
     });
+
+    $('#view-meeting-btn').on('click', function(){
+      if(window.location.href.endsWith('/edit'))
+        window.location = window.location.href.slice(0, -5) + '/meetings/view';
+      else window.location += '/meetings/view';
+    });
     
     $('.project-card').click(function() {
       if(hasEdited) {
