@@ -160,6 +160,15 @@ class ProjectViewProcess(View):
                 print(e)
             
             return redirect("../projects")
+        elif request.POST.get('action') == 'leave':
+            print("self -> yeet")
+            try:
+                profile = pull_profile(request.user)
+                models.Member.objects.get(user=profile, project=project).delete()
+            except Exception as e:
+                print(e)
+            
+            return redirect("../projects")
         elif request.POST.get('action') == 'remove':
             print("member -> yeet")
             try:

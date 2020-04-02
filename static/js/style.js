@@ -73,6 +73,10 @@ $(document).ready(function() {
         $("#confirm-remove-project-modal").modal();
       });
       
+      $('#leave-project-btn').on('click', function() {
+        $("#confirm-leave-project-modal").modal();
+      });
+      
       $('button.remove-member').on('click', function() { // pre-yeet
         leYeetBtn = $(this);
         $("#confirm-yeet-modal").modal();
@@ -88,6 +92,12 @@ $(document).ready(function() {
       $('#yeet-project').on('click', function() {
         console.log("member -> yeet");
         $("#passback-action").val("delete");
+        $("#passback-form").submit();
+      });
+      
+      $('#yeet-self').on('click', function() {
+        console.log("self -> yeet");
+        $("#passback-action").val("leave");
         $("#passback-form").submit();
       });
       
