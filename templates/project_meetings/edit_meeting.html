@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include "modals.html" %}
+<style>
+.button-submit {
+  background-color: rgb(106, 200, 255);
+  color: black;
+  padding: 12px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button-delete {
+  background-color: rgb(255, 24, 24);
+  color: black;
+  padding: 12px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button-delete:hover {
+  /* background-color: rgb(245, 0, 0); */
+  background-color: rgb(226, 51, 51);
+}
+
+button[type=submit]:hover {
+  background-color: rgb(106, 180, 255);
+}
+
+</style>
+
+
+
+  <div id="meetings" class="row no-gutters">
+    <div id="active-pane" class="col bg-light">
+
+      <div id="active-pane-edit">
+        <h2 align="center">Edit Meeting For {% if meeting %}{{meeting.project.project_name}}{% endif %}</h2>
+        <form action="" method="post">
+          {% csrf_token %}          
+          
+          <div class="form-group">
+            <label for="create-meeting-title">Title:
+              {% if errors.title %}
+                <span class="text-danger">- {{ errors.title }}</span>
+              {% endif %}
+            </label>
+            <input type="text"
+                   class="form-control"
+                   id="create-meeting-title"
+                   name="title"
+                   maxlength="100"
+                   placeholder="Put your meeting title here!"
+                   value="{% if meeting %}{{ meeting.title }}{% endif %}"/>
+          </div>
+
+          <div class="form-group">
+            <label for="create-meeting-location">Location:
+              {% if errors.location %}
+                <span class="text-danger">- {{ errors.location }}</span>
+              {% endif %}
+            </label>
+            <input type="text"
+                      class="form-control"
+                      id="create-meeting-location"
+                      name="location"
+                      maxlength="100"
+                      placeholder="Where we're meeting..."
+                      value="{% if meeting %}{{ meeting.location }}{% endif %}"/>
+          </div>
+
+          <div class="form-group">
+            <label for="create-meeting-description">Description:
+              {% if errors.description %}
+                <span class="text-danger">- {{ errors.description }}</span>
+              {% endif %}
+            </label>
+            <textarea class="form-control"
+                      id="create-meeting-description"
+                      name="description"
+                      rows="5"
+                      maxlength="250"
+                      placeholder="Describe your meeting.">{% if meeting %}{{ meeting.description }}{% endif %}</textarea>
+          </div>
+
+
+          <div class="form-group">
+            <label for="create-meeting-start_date">Meeting Dates:
+              {% if errors.start_date %}
+                <span class="text-danger">- {{ errors.start_date }}</span>
+              {% endif %}
+            </label>
+              <div>
+
+                <label for="start_date">Start:</label>
+                <input type="date" value="{{meeting.start_date|date:"Y-m-d" }}"    
+                     id="create-meeting-start_date"
+                     name="start_date"
+                     onchange=checkDate()>
+                
+                <label for="end_date">End:</label>
+                <input type="date" value="{{meeting.end_date|date:"Y-m-d" }}"
+                      id="create_meeting-end_date"
+                      name="end_date"
+                      onchange=checkDate()>     
+              </div>
+          </div>
+
+          <div style="text-align: center;">
+            <button type="submit" class="button-submit">Update</button>
+            <button class="button-delete" onclick="return confirm('You are about to delete a meeting!!')">Delete</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+{% endblock %}
+
