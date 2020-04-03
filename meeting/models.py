@@ -52,7 +52,7 @@ class TimeAvailability(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "TimeAvailability " + str(self.id) + " for meeting " + str(self.meeting.id) + " from " + str(self.start_time) + " to " + str(self.end_time)
+        return "[meeting_timeavailability] ID: " + str(self.id) + " | Meeting: " + str(self.meeting.id) + " | User: " + self.user.display_name + " | Start Time: " + str(self.start_time) + " | End Time: " + str(self.end_time)
     
 class Notification(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
