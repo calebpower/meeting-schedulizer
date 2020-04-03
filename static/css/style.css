@@ -46,6 +46,7 @@
     transition: .1s ease;
     border: 3px solid #146eb4;
     border-radius: 50%;
+    pointer-events: none;
     animation: animate .3s infinite alternate;
     z-index: 4
 }
@@ -61,26 +62,3 @@
         transform: scale(1.5);
     }
 }
-
-
-/*
-* {
-    cursor: none;
-}
-
-.pointer {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: rgb(87, 87, 222);
-    border-radius: 50%;
-    transition: 0.05s;
-    z-index: 1;
-}
-
-.pointer2 {
-    transition: 0.15s;
-    width: 10px;
-    height: 10px;
-    z-index: 1;
-}*/
