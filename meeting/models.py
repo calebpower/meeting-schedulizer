@@ -35,11 +35,13 @@ def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
 class Meeting(models.Model):
-    start_date = models.DateField(default = '1970-01-01')
-    end_date = models.DateField(default = '1970-01-01')
+    title = models.CharField(max_length=200, default='None')
     location = models.CharField(max_length=200, default=0)
     optional_members = models.CharField(max_length=200, default='None')
     description = models.CharField(max_length=200, default='No description available')
+    start_date = models.DateField(default = '1970-01-01')
+    end_date = models.DateField(default = '1970-01-01')
+
     project = models.ForeignKey(Project, on_delete=models.CASCADE, default=0)
     
 ''' Time availability '''
@@ -50,7 +52,7 @@ class TimeAvailability(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "TimeAvailability " + str(self.id) + " for meeting " + str(self.meeting.id) + " from " + str(self.start_time) + " to " + str(self.end_time)
+        return "[meeting_timeavailability] ID: " + str(self.id) + " | Meeting: " + str(self.meeting.id) + " | User: " + self.user.display_name + " | Start Time: " + str(self.start_time) + " | End Time: " + str(self.end_time)
     
 class Notification(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)

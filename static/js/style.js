@@ -43,6 +43,12 @@ $(document).ready(function() {
         window.location = window.location.href.slice(0, -5) + '/meetings/create';
       else window.location += '/meetings/create';
     });
+
+    $('#view-meeting-btn').on('click', function(){
+      if(window.location.href.endsWith('/edit'))
+        window.location = window.location.href.slice(0, -5) + '/meetings/view';
+      else window.location += '/meetings/view';
+    });
     
     $('.project-card').click(function() {
       if(hasEdited) {
@@ -69,6 +75,14 @@ $(document).ready(function() {
         $("#invite-member-modal").modal();
       });
       
+      $('#delete-project-btn').on('click', function() {
+        $("#confirm-remove-project-modal").modal();
+      });
+      
+      $('#leave-project-btn').on('click', function() {
+        $("#confirm-leave-project-modal").modal();
+      });
+      
       $('button.remove-member').on('click', function() { // pre-yeet
         leYeetBtn = $(this);
         $("#confirm-yeet-modal").modal();
@@ -78,6 +92,18 @@ $(document).ready(function() {
         console.log("member -> yeet");
         $("#passback-action").val("remove");
         $("#passback-user").val(leYeetBtn.attr("datum"));
+        $("#passback-form").submit();
+      });
+      
+      $('#yeet-project').on('click', function() {
+        console.log("member -> yeet");
+        $("#passback-action").val("delete");
+        $("#passback-form").submit();
+      });
+      
+      $('#yeet-self').on('click', function() {
+        console.log("self -> yeet");
+        $("#passback-action").val("leave");
         $("#passback-form").submit();
       });
       
