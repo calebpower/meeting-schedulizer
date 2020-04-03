@@ -4,7 +4,7 @@ from meeting.forms import MeetingForm
 
 from .. import models
 
-class MeetingView(View):
+class MeetingCreation(View):
     template_name = 'project_meetings/create_meeting.html'
 
     def get(self, request, project_key):
@@ -44,8 +44,8 @@ class MeetingView(View):
         args = {'form': form, 'start_date': start_date, 'end_date': end_date, 'location': location, 'optional_members': optional_members, 'description': description}
         return render(request, self.template_name, args)         
 
-class MeetingEdit(View): 
-    def post(self, request, meeting_key):
+class MeetingView(View): 
+    def post(self, request, project_key, meeting_key):
         
         title = request.POST.get('title') if request.POST.get('title') else None
         start_date = request.POST.get('start_date') if request.POST.get('start_date') else None
