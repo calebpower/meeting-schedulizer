@@ -113,16 +113,22 @@
                                                     <input type="hidden" name="id" value="{{ timeslot.id }}" />
                                                 </div>
                                                 <div class="col-sm-2">
-                                                    {% if has_voted  %}
-                                                        {% for slot in voted_slot %}
-                                                            {% if slot == timeslot %}
-                                                            <button class="btn btn-primary " type="submit" onclick="post" disabled>Voted</button>
-                                                            {% endif%}
-                                                        {%endfor%}
-                                                        
+                                                    {% if no_vote %}
+                                                    <font color="red">No voting needed!  </font>
+                
                                                     {% else %}
-                                                        <button class="btn btn-primary" type="submit" onclick="post">Vote</button>
-                                                    {% endif%}
+                                                    
+                                                        {% if has_voted  %}
+                                                            {% for slot in voted_slot %}
+                                                                {% if slot == timeslot %}
+                                                                <button class="btn btn-primary " type="submit" onclick="post" disabled>Voted</button>
+                                                                {% endif%}
+                                                            {%endfor%}
+                                                            
+                                                        {% else %}
+                                                            <button class="btn btn-primary" type="submit" onclick="post">Vote</button>
+                                                        {% endif%}
+                                                    {% endif %}
                                                     
                                                 </div>
                                             </div>

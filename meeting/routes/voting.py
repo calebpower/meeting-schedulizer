@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import View
+from django.db import connection
 
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout
@@ -7,13 +8,17 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View
 from django.contrib.auth.models import User
 
+from .. import models
+
 from meeting.forms import MeetingForm
 from meeting.models import Meeting
+from meeting.models import Vote
+from meeting.models import MeetingTime
 from meeting.views import pull_profile
 from meeting.views import get_meetings_by_user
 
-from meeting.models import Vote
-from . import models
+
+# from . import models
 import datetime
 from datetime import datetime, timedelta
 import random
@@ -1330,9 +1335,11 @@ class Voting(View):
 
                 #Save options to Database
                 for op in voting_options:
-                    models.MeetingTime.objects.create(start_time=op.start_time,
-                                                    end_time=op.end_time,
-                                                    meeting=meeting, user=profile)
+                    meeting_time = MeetingTime(start_time=op.start_time,
+                                                     end_time=op.end_time,
+                                                     meeting=meeting, user=profile)
+                    meeting_time.save()
+
                     print('option saved to database!')
 
             elif isReady and voting_options:
@@ -1340,6 +1347,7 @@ class Voting(View):
                     print('You voted')
                 else:
                     print('Start Voting')
+                    
                 if len(voting_options) == 1:
                     no_vote = True
                     print('No vote needed')
@@ -1368,6 +1376,7 @@ class Voting(View):
         }
         
         return render(request, 'voting/meeting_vote.html', context)
+
     
     def post(self, request, meeting_id, *args, **kwargs):
 
@@ -1377,13 +1386,21 @@ class Voting(View):
         user = request.user if request.user.is_authenticated else None
         profile = pull_profile(user)
         
-        if not models.Vote.objects.filter(user=profile):
+        # if not models.Vote.objects.filter(user=profile):
+        print('Called')
 
-            meeting = models.Meeting.objects.get(id=meeting_id) if models.Meeting.objects.get(id=meeting_id) else None
-            id = request.POST.get('id') if request.POST.get('id') else None
-            meeting_time = models.MeetingTime.objects.get(id=id)
+
+
+        meeting = models.Meeting.objects.get(id=meeting_id) if models.Meeting.objects.get(id=meeting_id) else None
+        meeting_time_id = request.POST.get('id') if request.POST.get('id') else None
+        print('id: ' + str(id))
+        meeting_time = models.MeetingTime.objects.get(id=meeting_time_id, meeting=meeting) if models.MeetingTime.objects.get(id=meeting_time_id, meeting=meeting) else None
+
+        if not models.Vote.objects.filter(user=profile):
             vote = Vote(meeting_time=meeting_time, meeting=meeting, user=profile)
             vote.save()
+            print('Vote Saved')
+
 
         context = {
             # 'active_meeting': active_meeting,
