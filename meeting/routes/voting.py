@@ -1,6 +1,25 @@
 from django.shortcuts import render
 from django.views.generic import View
 
+from django.shortcuts import render, redirect, reverse
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponse, HttpResponseRedirect
+from django.views.generic import View
+from django.contrib.auth.models import User
+
+from meeting.forms import MeetingForm
+from meeting.models import Meeting
+from meeting.views import pull_profile
+from meeting.views import get_meetings_by_user
+
+from meeting.models import Vote
+from . import models
+import datetime
+from datetime import datetime, timedelta
+import random
+import time
+
+
 class VotingDemo(View):
 
     MEETING_DURATION = 1
