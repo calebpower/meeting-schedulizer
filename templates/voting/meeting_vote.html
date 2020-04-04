@@ -170,17 +170,17 @@
                 </div>
             {% endif %}
             {% if no_vote %}
-                <div class="card mt-4 container">      
+                <div class="card mt-4 ">      
                     <div class="card-header">
-                        
                         <h5>Meeting Time</h5>
-                    </div>
-                    <br>
+                    </div>       
+                        <b class="card-body">
                             {% for timeslot in voting_options %}
                                     
-                                From {{timeslot.start_time}} to {{timeslot.end_time}}
+                            <font color="green">From {{timeslot.start_time}} to {{timeslot.end_time}}</font>
                                 <br>
                             {% endfor %}
+                        </b>
                         </div>
                     </div>
                 

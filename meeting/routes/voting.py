@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import View
-from django.db import connection
+
 
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout
@@ -17,8 +17,6 @@ from meeting.models import MeetingTime
 from meeting.views import pull_profile
 from meeting.views import get_meetings_by_user
 
-
-# from . import models
 import datetime
 from datetime import datetime, timedelta
 import random
