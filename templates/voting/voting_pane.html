@@ -1,0 +1,20 @@
+<div class="col-lg-3">
+        <h1 class="my-4">Voting Page</h1>
+        <div class="list-group list-group-flush">
+            {% if meeting_list %}
+                {% for meeting in meeting_list %}
+                    <a href="/meeting/voting/{{ meeting.meeting.id }}" class="list-group-item avlb-meeting-label {% if meeting.meeting.id == active_meeting.id %} avlb-meeting-active {% endif %}">
+                        Meeting {{ meeting.meeting.id }}: {{ meeting.meeting.description }}
+                    </a>
+                {% endfor %}
+            {% else %}
+                <!-- <p>No meetings are available.</p> -->
+                <div style="padding-bottom: 0.5em;">
+                    You haven't been invited to any meetings.
+                    <br>
+                    <span style="font-size: 12px;">Bring doughnuts next time and maybe you'll get invited.</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <!-- /.col-lg-3 -->
