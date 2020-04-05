@@ -1,9 +1,10 @@
-{% extends 'base.html' %}
-{% block content %}
+{% extends 'base.html' %} {% block content %}
+
 
 <!-- Page Content -->
 <div class="container">
     <div class="row">
+
         {% include "voting/voting_pane.html" %}
         <div class="col-lg-9">
                 <br>
@@ -16,6 +17,7 @@
                         </div>
                     </div>
                     <!-- end meeting not selected div -->
+
                 </div>
                 {% else %}
                     ...
@@ -31,5 +33,4 @@
 </div>
 <!-- /.container -->
 
-{% include "voting/js.html" %}
-{% endblock %}
+{% include "voting/js.html" %} {% endblock %}
