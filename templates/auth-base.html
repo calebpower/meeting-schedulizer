@@ -1,15 +1,16 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Schedulization</title>
-  <meta name="description" content="Meeting Project">
-  <meta name="author" content="Jacob Waldrip, Caleb L. Power">
 
-  <!-- Mobile Specific Metas
+<head>
+    <meta charset="utf-8">
+    <title>Schedulization</title>
+    <meta name="description" content="Meeting Project">
+    <meta name="author" content="Jacob Waldrip, Caleb L. Power">
+
+    <!-- Mobile Specific Metas
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- FONT –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link href="https://fonts.googleapis.com/css2?family=Rancho&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
@@ -18,23 +19,24 @@
   <script type="text/javascript" src="{{ STATIC_URL }} /static/js/jquery-3.4.0.js"></script> 
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-  <!-- CSS –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  <link rel="stylesheet" href="{% static 'css/signin.css' %}">
+    <!-- CSS –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/signin.css' %}">
 
-  <!-- JS –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <script type="text/javascript" src="{{ STATIC_URL }} /static/js/style.js"></script>
+    <!-- JS –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <script type="text/javascript" src="{{ STATIC_URL }} /static/js/style.js"></script>
 
-  <!-- Split.js -->
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.3.5/split.min.js"></script>
+    <!-- Split.js -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.3.5/split.min.js"></script>
 
 </head>
 
 <body class="text-center">
-    <!-- Content that child html files supply-->
-    {% block content %}
-    {% endblock %}
+
+    <div id="cursor"></div>
+    <script src="{% static 'js/trail.js' %}"></script>] {% block content %} {% endblock %}
 </body>
+
 </html>
