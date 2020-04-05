@@ -36,7 +36,10 @@ urlpatterns = [
     path('projects/<int:project_key>/meetings/<int:meeting_key>', meetings.MeetingView.as_view(), name="MeetingView"),
 
     # Voting
-    path('voting', voting.Voting.as_view(), name='Voting'),
+    # path('voting_demo', views.VotingDemo.as_view(), name='voting_demo'),
+    path('voting', voting.voting, name='Voting'),
+    path('voting/<int:meeting_id>', voting.Voting.as_view(), name='meeting_vote'),
+    path('voting/thanks', voting.thanks, name='thanks'),
   
     # Authentication
     path('register', authentication.RegisterProcess.as_view(), name="RegisterProcess"),

@@ -58,3 +58,17 @@ class Notification(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     message = models.CharField(max_length=200, default="")
     link = models.CharField(max_length=200, default="")
+
+class MeetingTime(models.Model):
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    hasVoted = models.BooleanField(default=False)
+    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    
+class Vote(models.Model):
+    meeting_time = models.ForeignKey(MeetingTime, on_delete=models.CASCADE)
+    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    
