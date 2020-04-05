@@ -45,29 +45,30 @@
                     {% for member in team %}
                     <div class="row card-body ">
                         <div class="col-sm-4">
-                        {% if member.name %}
-                            
-                            {% if member.isUser %}
-                                <b>{{ member.name }} &nbsp;(me)</b>
-                            {% else %}
+                        {% if member.name %} 
+                            {% if not member.isUser %}
                                 {{ member.name }}
                             {% endif %}
                         {% else %}
-                            No Name
+                            {% if not member.isUser %}
+                               No Name
+                            {% endif %}
                         {% endif %}
                         </div>
                         <div class="col-sm-8">
-                        {% if member.isSubmitted %}
-                            <!-- For debugging -->
-                            {% for slots in member.timeSlots %}
-                                <div>
-                                From {{ slots.start_time }} To {{ slots.end_time }}
-                                </div>
-                            {% endfor %}
-                            <!-- For debugging -->
-                            <!-- &nbsp; <font color="green">Submitted</font> -->
-                        {% else %}
-                            &nbsp; <font color="red">waiting</font>
+                        {% if not member.isUser %}
+                            {% if member.isSubmitted%}
+                                <!-- For debugging -->
+                                {% for slots in member.timeSlots %}
+                                    <div>
+                                    From {{ slots.start_time }} To {{ slots.end_time }}
+                                    </div>
+                                {% endfor %}
+                                <!-- For debugging -->
+                                <!-- &nbsp; <font color="green">Submitted</font> -->
+                            {% else %}
+                                &nbsp; <font color="red">No available slot</font>
+                            {% endif %}
                         {% endif %}
                         </div>
 
