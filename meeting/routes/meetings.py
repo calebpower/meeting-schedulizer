@@ -30,15 +30,12 @@ class MeetingCreation(View):
             meeting.project = models.Project.objects.get(pk=project_key)
             meeting.save()
 
-            # title = form.cleaned_data['title']
             start_date = form.cleaned_data['start_date']
             end_date = form.cleaned_data['end_date']
             location = form.cleaned_data['location']
             optional_members = form.cleaned_data['optional_members']
             description = form.cleaned_data['description']
             form = MeetingForm()
-
-            # meeting_id = kwargs.get('meeting_id') if kwargs.get('meeting_id') else None
 
             return redirect('../../../projects')
         args = {'form': form, 'start_date': start_date, 'end_date': end_date, 'location': location, 'optional_members': optional_members, 'description': description}
