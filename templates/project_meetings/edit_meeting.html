@@ -57,9 +57,8 @@
 <br>
 <h2 align="center">Edit Meeting For {% if meeting %}{{meeting.project.project_name}}{% endif %}</h2>
 <div class="container">
-  <form action="" method="post">
+  <form action="" method="post" id="meeting-view-form">
     {% csrf_token %}
-
 
     <label for="create-meeting-title">Title:
       {% if errors.title %}
@@ -104,8 +103,11 @@
 
     <div style="text-align: center;">
       <button type="submit" class="button-submit">Update</button>
-      <button class="button-delete" onclick="return confirm('You are about to delete a meeting!!')">Delete</button>
-
+      <button type="button" id="delete-meeting-btn" class="button-delete">Delete</button>
+  </form>
+  <form id="passback-form" action="" method="POST">
+    {% csrf_token %}
+    <input id="passback-action" name="action" type="hidden" />
   </form>
 </div>
 
