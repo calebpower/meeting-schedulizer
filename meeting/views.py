@@ -58,5 +58,15 @@ def get_meetings_by_user(user):
     
 ''' Render the home page '''
 def index(request):
+    json_data = models.MeetingTime.objects.all();
+    meetings_json = "["
+    for datum in json_data:
+        meetings_json += '{"title":"' + str(datum.meeting.description) + '", "start":"' + str(
+            datum.start_time) + '","end":"'
+        meetings_json += str(datum.end_time);
+        meetings_json += '"},';
+    if len(meetings_json) > 1:
+        meetings_json = meetings_json[:-1]
+    meetings_json += ']';
     app_url = request.path
-    return render(request, 'home.html', {'app_url': app_url})
+    return render(request, 'home.html', {'app_url': app_url, 'meetings_json': meetings_json})

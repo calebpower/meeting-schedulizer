@@ -9,6 +9,7 @@
 }
 
 body .fc {
+  padding: 15px;
   /* extra precedence to overcome jqui */
   font-size: 1em;
 }
