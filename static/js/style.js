@@ -164,17 +164,4 @@ $(document).ready(function() {
     });
   }
 
- //Meeting Deletion
-//  if($('#meeting-view-form').length){
-//   $('#delete-meeting-btn').on('click', function() {
-//   $("#confirm-remove-meeting-modal").modal();
-// });
-
-// $('#confirm-meeting-deletion').on('click', function() {
-//   console.log("meeting -> yeet");
-//   $("#passback-action").val("delete");
-//   $("#passback-form").submit();
-// });
-// }
-
 });

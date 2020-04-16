@@ -8,7 +8,7 @@
 
   input[type=text],
   select,
-  textarea {
+  textarea[type=text] {
     width: 100%;
     padding: 5px;
     border: .1px solid black;
@@ -81,7 +81,7 @@
       <span class="text-danger">- {{ errors.description }}</span>
       {% endif %}
     </label>
-    <textarea class="form-control" id="create-meeting-description" name="description" rows="5" maxlength="250"
+    <textarea type="text" class="form-control" id="create-meeting-description" name="description" rows="5" maxlength="250"
       placeholder="Describe your meeting.">{% if meeting %}{{ meeting.description }}{% endif %}</textarea>
 
 

@@ -1,3 +1,4 @@
+//Check Date
 function checkDate(){
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -18,6 +19,7 @@ function checkDate(){
     }  
 }
 
+//Delete Meeting
 $(document).ready(function() {
    if($('#meeting-view-form').length){
        $('#delete-meeting-btn').on('click', function() {

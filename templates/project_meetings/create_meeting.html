@@ -2,54 +2,55 @@
 {% block content %}
 
 <style>
-body {font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;}
-
-input[type=text], select, textarea {
-  width: 100%;
-  padding: 5px;
-  border: .1px solid black;
-  border-radius: 4px;
-  box-sizing: border-box;
-  margin-top: 6px;
-  margin-bottom: 16px;
-  resize: vertical;
-}
-
-.button-submit {
-  background-color: rgb(106, 200, 255);
-  color: black;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.button-submit:hover {
-  background-color: rgb(106, 180, 255);
-}
-
-.button-cancel {
-  background-color:rgb(255, 252, 59);
-  color: black;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.button-cancel:hover {
-  background-color:rgb(255, 220, 59);
-}
-
-.container {
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  padding: 15px;
-}
-
-</style>
+  body {font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;}
+  
+  input[type=text], select, textarea {
+    width: 100%;
+    padding: 5px;
+    border: .1px solid black;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+  }
+  
+  .button-submit {
+    background-color: rgb(106, 200, 255);
+    color: black;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .button-submit:hover {
+    background-color: rgb(106, 180, 255);
+  }
+  
+  .button-cancel {
+    background-color:rgb(255, 252, 59);
+    color: black;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .button-cancel:hover {
+    background-color:rgb(255, 220, 59);
+  }
+  
+  .container {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 15px;
+  }
+  
+  </style>
 
 <br><h2 align="center">Meeting Creation for {% if project %}{{project.project_name }}{% endif %} </h2>
+
 <div class="container">
   <form method="post" autocomplete="off">
     {% csrf_token %}
@@ -61,14 +62,19 @@ input[type=text], select, textarea {
     <label for="location">Location:</label>
     <input type="text" id="locationOfMeeting" name="location" placeholder="Where we're meeting..." required>
 
-    <label for="optionalMembers">Optional Attendance:</label>
-    <select id="optionalMembers" name="optional_members" placeholder="Select">
-      <option value="requiredMeeting">N/A</option>
-      <option value="member1">Member1</option>
-      <option value="member2">Member2</option>
-      <option value="member3">Member3</option>
-    </select>
 
+    
+    <label for="optionalMembers">Optional Attendance:</label>
+      
+
+    <select id="optionalMembers" name="optional_members" placeholder="Select" multiple="multiple" required>
+            
+      <option value="required_meeting">Required Meeting</option>
+            {% for member in team %}
+              <option value="{{member.user.display_name}}">{{member.user.display_name}}</option>
+            {% endfor %}
+    </select>
+    
     <label for="description">Description:</label>
     <textarea id="description" name="description" placeholder="What we'll be doing..." style="height:100px" required></textarea>
   
