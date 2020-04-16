@@ -9,12 +9,9 @@
         let randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
         const json_str = $('#meetings_json').text();
         const meetings = JSON.parse(json_str);
-        
-        console.log(JSON.stringify(meetings, null, 2));
-
         $(document).ready(function () {
             $('#calendar').fullCalendar({
-                defaultView: 'agendaWeek',
+                defaultView: 'month',
                 themeSystem: 'bootstrap4',
                 header: {
                     right: 'month,agendaWeek,agendaDay,today, ',
@@ -36,10 +33,6 @@
                         events: meetings,
                         allDayDefault: false
                     },
-                    {
-                        events: 'en.usa#holiday@group.v.calendar.google.com',
-                        allDayDefault: true
-                    }
                 ],
                 eventColor: randomColor,
                 editable: true,
@@ -50,10 +43,12 @@
             });
 
             //way to select the months for calendar for current year
-            $(".fc-right").append('<select class="select_month"><option value="">Select Month</option><option value="1">Jan</option><option value="2">Feb</option><option value="3">Mrch</option><option value="4">Aprl</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">Aug</option><option value="9">Sep</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option></select>');
-            $(".select_month").on("change", function (event) {
-                $('#calendar').fullCalendar('changeView', 'month', this.value);
-                $('#calendar').fullCalendar('gotoDate', "2020-" + this.value + "-1");
+            $(".fc-right").append('<select class="select_month"><option value="">Select Month</option><option value="1">Jan</option><option value="2">Feb</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">Aug</option><option value="9">Sep</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option></select>');
+           $(".select_month").on("change", function (event) {
+                const month = this.value < 10 ? '0' + this.value.toString() : this.value.toString();
+                $('#calendar').fullCalendar('changeView', 'month', "2020-" + month + "-01");
+                $('#calendar').fullCalendar('gotoDate', "2020-" + month + "-01");
+            });
             });
         });
     </script>
