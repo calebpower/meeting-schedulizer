@@ -101,18 +101,20 @@
                             {% csrf_token %}
                             <li class="list-group-item">
                                 <div class="row">
-                                    <div class="col-sm-10 text-center ">
+                                    <div class="col-sm-10 text-center">
                                         <div class="row ">
-                                            <div class="col">
-                                                <p class="lead"> <i class="fa fa-clock-o" aria-hidden="true"></i> From
-                                                    {{timeslot.start_time}} to {{timeslot.end_time}}</p>
-                                            </div>
+
+                                            <p class="lead"> <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                                From
+                                                {{timeslot.start_time}} to {{timeslot.end_time}}</p>
+                                        </div>
+                                        <div class="row" id="voter">
                                             {%for vote in votes%}
                                             {% if vote.meeting_time_option.start_time == timeslot.start_time%}
                                             {% if vote.user.user.username%}
-                                            <p><i class="fa fa-user fa-lg"></i> {{vote.user.user.username}}</p>
+                                            <p class=""><i class="fa fa-user fa-lg"></i> {{vote.user.user.username}}</p>
                                             {% else %}
-                                            <p><i class="fa fa-user fa-lg"></i> No Name</p>
+                                            <p class=""><i class="fa fa-user fa-lg"></i> No Name</p>
                                             {%endif%}
                                             {%endif%}
                                             {%endfor%}
@@ -121,7 +123,7 @@
                                     </div>
                                     <div class="col-sm-2 text-left">
                                         {% if state_no_vote %}
-                                        <font color="red">No voting needed! </font>
+                                        <p><font color="red">No voting needed! </font></p>
 
                                         {% else %}
 
@@ -131,10 +133,10 @@
                                         <form action="" method='post'>
                                             <input type="hidden" name="delete" value="delete" />
                                             {% if fifty_fifty_votes or state_closed%}
-                                            <button class="btn btn-primary mt-4" type="submit" onclick="post" disabled><i
-                                                    class="fa fa-thumbs-down fa-2x"></i>Unvote</button>
+                                            <button class="btn btn-primary mt-2" type="submit" onclick="post"
+                                                disabled><i class="fa fa-thumbs-down fa-2x"></i>Unvote</button>
                                             {% else %}
-                                            <button class="btn btn-primary mt-4" type="submit" onclick="post"><i
+                                            <button class="btn btn-primary mt-2" type="submit" onclick="post"><i
                                                     class="fa fa-thumbs-down fa-2x"></i>Unvote</button>
                                             {% endif%}
                                         </form>
@@ -144,14 +146,16 @@
                                         {% else %}
                                         {% if fifty_fifty_votes or state_closed%}
                                         <div id="btn1">
-                                            <button class="btn btn-primary" type="submit" onclick="post" disabled><i
-                                                    class="fa fa-thumbs-up fa-2x" aria-hidden="true"></i><p>Vote</p></button>
+                                            <button class="btn btn-primary mt-2" type="submit" onclick="post" disabled><i
+                                                    class="fa fa-thumbs-up fa-2x" aria-hidden="true"></i>
+                                                <p>Vote</p>
+                                            </button>
                                         </div>
                                         {% else %}
                                         <div id="btn1">
-                                        <button class="btn btn-primary" type="submit" onclick="post"><i
-                                                class="fa fa-thumbs-up fa-2x" aria-hidden="true"></i> Vote</button>
-                                            </div>
+                                            <button class="btn btn-primary mt-2" type="submit" onclick="post"><i
+                                                    class="fa fa-thumbs-up fa-2x" aria-hidden="true"></i> Vote</button>
+                                        </div>
                                         {% endif%}
 
                                         {% endif%}

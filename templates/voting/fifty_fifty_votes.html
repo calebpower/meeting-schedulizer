@@ -6,13 +6,13 @@
             <div class="col align-items-center">
             <div class=" mx-auto">
                 <div class="jumbotron  text-center">
-                    <h1 class="display-4">Fifty / Fifty!</h1>
+                    <h1 class="display-4">Vote ends in a tie!</h1>
                     <hr>
-                    <p class="lead"> Vote again from options down below!</p>
+                    <p class="lead mb-5"> Vote again from options down below!</p>
                     {%for slot in fifty_fifty_votes%}
-                    <p >From {{slot.start_time}} to {{slot.end_time}}</p>
+                    <p class="lead">From {{slot.start_time}} to {{slot.end_time}}</p>
                     {%endfor%}
-                    <p >have equal number of votes </p>
+                    <p class="lead">have equal number of votes </p>
 
                 </div>
             </div>

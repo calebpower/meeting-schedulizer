@@ -1,11 +1,11 @@
 <div class="col-lg-3">
-    <h1 class="mt-4 "><i class="fa fa-thumbs-up" aria-hidden="true"></i> Vote</h1>
-    <div class="list-group mt-4 ">
+    <h1 class="mt-4"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Vote</h1>
+    <div class="list-group mt-4 text-center ">
         {% if meeting_list %}
         {% for meeting in meeting_list %}
         <a href="/meeting/voting/{{ meeting.meeting.id }}"
             class="list-group-item {% if meeting.meeting.id == active_meeting.id %} list-group-item-action active {%else%} list-group-item-action {% endif %}">
-            Meeting {{ meeting.meeting.id }}: {{ meeting.meeting.description }}
+             {{ meeting.meeting.id }}: {{ meeting.meeting.description }}
         </a>
         {% endfor %}
     </div>

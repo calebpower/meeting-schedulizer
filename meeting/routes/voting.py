@@ -723,6 +723,9 @@ class Voting(View):
         print('meeting_time_options length is '+ str(len(meeting_time_options)))
         for op in ops:
             meeting_time_options.append(op)
+
+        votes = models.Vote.objects.filter(meeting_id=meeting_id)
+        print('Number of votes: ' + str(len(votes)))
         print('Member length = ' + str(len(members)))
         for member in members:
             timeslots = models.TimeAvailability.objects.filter(user=member.user,meeting_id=meeting_id)
@@ -851,12 +854,12 @@ class Voting(View):
             
             print('Vote is Open')
 
-            user_vote = models.Vote.objects.filter(user=profile)
+            user_vote = models.Vote.objects.filter(user=profile,meeting_id=meeting_id)
             for v in user_vote:
                 voted_slot.append(v.meeting_time_option)
             print('voted_slot: '+ str(len(voted_slot)))
             
-            votes = models.Vote.objects.filter(meeting=meeting)
+            votes = models.Vote.objects.filter(meeting_id=meeting_id)
             print('Number of votes: ' + str(len(votes)))
 
             #Check if all team member have voted
@@ -966,7 +969,7 @@ class Voting(View):
 
 
         meeting_time_option = models.MeetingTimeOption.objects.get(id=meeting_time_option_id, meeting=meeting) if models.MeetingTimeOption.objects.get(id=meeting_time_option_id, meeting=meeting) else None
-        if not models.Vote.objects.filter(user=profile):
+        if not models.Vote.objects.filter(user=profile,meeting_id=meeting_id):
             vote = Vote(meeting_time_option=meeting_time_option, meeting=meeting, user=profile)
             vote.save()
             print('Vote Saved')

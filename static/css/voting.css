@@ -1,6 +1,32 @@
-.list-group.mt-4 a{
- opacity: .8;
+.col-lg-3 h1.mt-4 {
+ /* margin-left: 2rem; */
+ letter-spacing: 3px;
 }
+.list-group.mt-4 a.list-group-item-action.active{
+ opacity: .4;
+ background-color: black;
+ border:black;
+
+}
+.list-group.mt-4 a{
+  height:2rem;
+  padding: 4px;
+}
+
+.col-lg-3 .list-group {
+
+  position: relative;
+  max-width: 15rem;
+  margin-bottom: 8rem;
+} 
+
+/* .fa.fa-handshake-o{
+  margin-left: 1rem;
+  margin-right: 3rem;
+} */
+
+
+
 .jumbotron
 {
     /* color: #FFFFFF; */
@@ -63,41 +89,47 @@ a
 color: black
 }
 
-.col-lg-3 .list-group {
-
-  position: relative;
-  margin-bottom: 5rem;
-  padding: 4px;
-  border-radius: 5px;
-  max-width: 15rem;
-} 
 
 .col-sm-2 .text-left
 {
   position: relative;
-  display: inline-block
+  justify-content: center;
 }
 
 .btn{
   margin-bottom: 1rem;
 }
 
-.col-sm-10 .row{
-  /* margin-left: 3rem; */
-  position: relative;
-  display: inline-block
-
+.list-group.list-group-flush{
+  margin-left: 1rem;
 }
 
-.fa-user{
- color: grey;
+
+
+.fa.fa-clock-o{
+  margin-top: 1rem;
+  margin-left: 1rem;
 }
 
+#voter p{
+  /* padding-right: 1rem; */
+  padding-left: 1rem;
+}
 
 
 
 #info{
   margin-bottom: 10rem;
+}
+
+.col-sm-10 {
+  padding-left: 1rem;
+
+}
+.col-sm-10 .row{
+
+  justify-content: center;
+  position: relative;
 }
 
 #lets_vote{
@@ -112,6 +144,8 @@ color: black
   margin-bottom: 3rem;
 
 }
+
+
 
 
 
