@@ -27,552 +27,6 @@ import random
 import time
 
 
-# class VotingDemo(View):
-
-#     MEETING_DURATION = 1
-#     refinedSlots = [] #Refined available time slots
-#     users = []
-#     teamMember = []
-
-#     #Check if the user exists in the given list
-#     def checkMember(self,members, name):
-#         for m in range(len(members)):
-#             if members[m] == name:
-#                 return True
-#         return False
-
-#     #Check if the timeslot exists in the given list
-#     def checkSlot(self, timeslots, ts):
-#         for s in range(len(timeslots)):
-#             if timeslots[s].start_time == ts.start_time and timeslots[s].end_time == ts.end_time:
-#                 return True
-#         return False
-    
-#     #Check if the identical(contains same members) timeslot exists in the given list
-#     def isIdentical(self, timeslots, ts):
-#         for s in range(len(timeslots)):
-#             if timeslots[s].start_time == ts.start_time and timeslots[s].end_time == ts.end_time:
-#                 if set(timeslots[s].members) == set(ts.members):
-#                     print('Identical!!!!!!!!!!!!!!!!')
-#                     return True
-#         return False
-
-#     #Generate permutation list
-#     def permutation(self, lst): 
-  
-#         # If list is empty then there are no permutations 
-#         if len(lst) == 0: 
-#             return [] 
-    
-#         # If there is only one element in list then, only 
-#         # one permuatation is possible 
-#         if len(lst) == 1: 
-#             return [lst] 
-    
-#         # Find the permutations for list if there are 
-#         # more than 1 characters 
-    
-#         l = [] # empty list that will store current permutation 
-    
-#         # Iterate the input(list) and calculate the permutation 
-#         for i in range(len(lst)): 
-#             m = lst[i] 
-    
-#             # Extract list[i] or m from the list.  remLst is 
-#             # remaining list 
-#             remLst = lst[:i] + lst[i+1:] 
-    
-#             # Generating all permutations where m is first 
-#             # element 
-#             for p in self.permutation(remLst): 
-#                 l.append([m] + p) 
-#         return l 
-  
-#     #Refine Available Time Slots list
-#     def refine_meeting_time_slots_lst(self, availableTimeSlotsLst):
-#         print('Refine ASL')
-#         FATS = []
-#         for i in range(len(availableTimeSlotsLst)):
-#             availableTimeSlots = []
-#             # Initialize FATS
-#             if len(FATS) == 0:
-#                 FATS.append(availableTimeSlotsLst[0][0])
-
-#             availableTimeSlots = availableTimeSlotsLst[i]
-#             print(' ')
-#             for j in range(len(availableTimeSlots)):
-#                 flag = True
-
-#                 for k in range(len(FATS)):
-                    
-#                     #Same Time Slot
-#                     if FATS[k].start_time == availableTimeSlots[j].start_time and FATS[k].end_time == availableTimeSlots[j].end_time:
-#                         flag = False
-#                         a = FATS[k].members
-#                         b = availableTimeSlots[j].members
-#                         if set(a) == set(b):
-#                             print('')
-#                             print('   Already exists!!!!!!!!!!!!!!!')
-
-#                         else:
-#                             print(' ')
-#                             print('a: ' + str(FATS[k].start_time) + '-' + str(
-#                                 FATS[k].end_time) + ' : ',end='')
-#                             for l in range(len(FATS[k].members)):
-#                                 print(str(FATS[k].members[l] + ' '), end='')
-#                             print(' ')
-#                             print('b: ' + str(availableTimeSlots[j].start_time) + '-' + str(
-#                                 availableTimeSlots[j].end_time) + ' : ', end='')
-#                             for l in range(len(availableTimeSlots[j].members)):
-#                                 print(str(availableTimeSlots[j].members[l] + ' '), end='')
-#                             print(' ')
-#                             if set(a) - set(b) and not set(b) - set(a):
-#                                 print('a - b')
-#                                 print(set(a) - set(b))
-#                                 print('Do nothing!')
-#                             elif set(b) - set(a) and not set(a) - set(b) and len(b) > len(a):
-#                                 print('b - a')
-#                                 print(set(b) - set(a))
-
-#                                 if self.isIdentical(FATS,availableTimeSlots[j]):
-#                                     print('******isIdentical is true******')
-
-#                                 else:
-#                                     print('******isIdentical is false******')
-#                                     FATS[k].members.clear()
-#                                     for l in range (len(b)):   
-#                                         if not self.checkMember(FATS[k].members, b[l]):
-#                                             FATS[k].members.append(b[l])
-
-#                             elif set(set(b) - set(a)) != set(set(b) - set(a)):
-#                                 print('set(set(b) - set(a)) != set(set(b) - set(a))')
-#                             else:
-#                                 print('Something wrong with your logic')
-
-
-#                 if flag:
-#                     FATS.append(availableTimeSlots[j])
-#                     print('Slot appended to availableTimeSlot ')
-#         return FATS
-                    
-#     #Generate available time slots list from permutation members list
-#     def generate_meeting_time_slots_lst(self,teamMember):
-#         print('Generate ASL')
-#         availableTimeSlotsLst = []
-#         permutationlst = self.permutation(teamMember)
-#         print(len(permutationlst))
-#         for p in range(len(permutationlst)):
-#             print(' ')
-#             for l in range(len(permutationlst[p])):
-#                 u = permutationlst[p][l].name
-#                 print( u + ' ', end = '')
-#             print(' ')
-#             g = self.generate_available_time_slots(permutationlst[p])
-#             availableTimeSlotsLst.append(g)
-#         return availableTimeSlotsLst
-
-#     #Refine available time slots
-#     def refine_meeting_time_slots(self,timeslots):
-
-#         cloneSlots = []
-#         aq = []
-#         removedLst = []
-
-#         for i in range(len(timeslots)):
-#             cloneSlots.append(timeslots[i])
-        
-#         for i in range(len(timeslots)):
-#             for j in range(len(cloneSlots)):
-#                 print(' ')
-#                 a = timeslots[i].members
-#                 b = cloneSlots[j].members
-#                 ts1 = timeslots[i]
-#                 ts2 = cloneSlots[j]
-#                 print('a: ' + str(ts1.start_time) + '-' + str(ts1.end_time) + ' ', end = '')
-#                 for k in range(len(a)):
-#                     print(a[k], end='')
-#                 print(' ')
-#                 print('b: ' + str(ts2.start_time) + '-' + str(ts2.end_time) + ' ', end = '')
-#                 for k in range(len(b)):
-#                     print(b[k], end='')
-#                 print(' ')
-#                 if set(a) == set(b):
-#                     print('a = b ')
-#                     if ts1.start_time > ts2.end_time or ts2.start_time > ts1.end_time:
-#                         print('no overlapping time')
-#                         print('Do nothing')
-
-
-#                     elif ts1.start_time == ts2.start_time and ts1.end_time == ts2.end_time:
-#                             print('Same time slot: Do nothing')
-
-#                     elif ts1.start_time < ts2.start_time and ts1.end_time < ts2.end_time:
-#                         if (ts1.end_time - ts2.start_time) < self.MEETING_DURATION:
-#                             print('Case 1A: Meeting time is ' + str(ts1.end_time -
-#                             ts2.start_time) + ': Not enough time for meeting')
-#                         else:
-#                             # Start time of B and end time of A is overlapping
-#                             print('Case 1B: Start time of B and end time of A is overlapping')
-#                             temp = TempTimeSlot(ts1.start_time, ts2.end_time)
-#                             for k in range(len(b)):
-#                                 temp.members.append(b[k])
-#                             if not not self.checkSlot(aq, temp):
-                                
-#                                 removedLst.append(ts1)
-#                                 removedLst.append(ts2)
-#                                 print(str(ts1.start_time) + '-' + str(ts1.end_time) + ' removed')
-#                                 # timeslots.remove(ts1)
-#                                 aq.append(temp)
-#                                 # timeslots.append(temp)
-#                                 print(str(temp.start_time) + '-' + str(temp.end_time) + ' appended')
-
-                        
-#                     elif ts1.start_time > ts2.start_time and ts1.end_time > ts2.end_time:
-#                         if (ts2.end_time - ts1.start_time) < self.MEETING_DURATION:
-#                             print('Case 2A: Meeting time is ' + str(ts2.end_time -
-#                                     ts1.start_time) + ': Not enough time for meeting')
-#                         else:
-#                             # Start time of A and End time of B is overlapping
-#                             print('Case 2B: Start time of A and End time of B is overlapping')
-#                             temp = TempTimeSlot(ts2.start_time, ts1.end_time)
-#                             for k in range(len(b)):
-#                                 temp.members.append(b[k])
-#                             if not self.checkSlot(aq, temp):
-#                                 removedLst.append(ts1)
-#                                 removedLst.append(ts2)
-#                                 print(str(ts1.start_time) + '-' + str(ts1.end_time) + ' removed')
-#                                 # timeslots.remove(ts1)
-#                                 # timeslots.append(temp)
-#                                 aq.append(temp)
-#                                 print(str(temp.start_time) + '-' + str(temp.end_time) + ' appended')
-
-
-#                     elif ts1.start_time >= ts2.start_time and ts1.end_time <= ts2.end_time:
-#                         # Start time of A and End time of A is overlapping
-#                         print('Case 3: Start time of A and End time of A is overlapping')
-#                         if not self.checkSlot(removedLst, ts2):
-#                             removedLst.append(ts1)
-#                             print(str(ts1.start_time) + '-' + str(ts1.end_time) + ' removed')
-#                             # timeslots.remove(ts1)
-
-
-#                     elif ts1.start_time <= ts2.start_time and ts1.end_time >= ts2.end_time:
-#                         # Start time of B and End time of B is overlapping
-#                         print('Case 4: Start time of B and End time of B is overlapping')
-#                         print('Do nothing')
-#                     else:
-#                         print('Someting wrong')
-
-#                 elif set(a) - set(b):
-#                     print('a - b ')
-#                     print(set(a) - set(b))
-#                     if ts1.start_time == ts2.start_time and ts1.end_time == ts2.end_time:
-#                         print('Same time slot')
-#                         print('Do nothing')
-#                     else:
-#                         print('Not same time slot')
-#                         print('Do nothing')
-
-
-
-#                 elif set(b) - set(a):
-#                     print('b - a')
-#                     if ts1.start_time == ts2.start_time and ts1.end_time == ts2.end_time:
-#                         print('Same time slot')
-#                         if not self.checkSlot(removedLst, ts2):
-#                             removedLst.append(ts1)
-#                             print(str(ts1.start_time) + '-' + str(ts1.end_time) + ' removed')
-#                             # timeslots.remove(ts1)
-#                             # timeslots.append(ts2)
-#                             aq.append(ts2)
-#                             print(str(ts2.start_time) + '-' + str(ts2.end_time) + ' appended')
-
-
-
-#                     else:
-#                         print('Not same time slot')
-#                         print('Do nothing')
-
-#                 else:
-#                     print('Not same time slot')
-#                     print('Do nothing')
-
-
-
-#                 # li = len(timeslots) - 1
-#                 # lj = len(availableTimeSlots) - 1
-#                 # # print('j = ' + str(j) + ': len(timeslots) - 1 = ' + str(lj))
-#                 # if li == i and lj == j:
-#         for a in range(len(aq)):
-#             timeslots.append(aq[a])
-#         aq.clear()
-
-#         for r in range(len(removedLst)):
-#             if self.checkSlot(timeslots, removedLst[r]):
-#                 timeslots.remove(removedLst[r])
-#         removedLst.clear()
-
-#         for i in range(len(timeslots)):
-    
-#             if len(timeslots[i].members) == 1:
-#                 removedLst.append(timeslots[i])
-#         for i in range(len(removedLst)):
-#             timeslots.remove(removedLst[i])
-
-#         return timeslots
-
-#     #Generate available time slots
-#     def generate_available_time_slots(self,teamMember):
-#         u = 0
-#         rq = []# remove queue
-#         aq = []# add queue 
-#         tempTimeSlots = []
-
-#         while u < len(teamMember):
-
-#             #Initialize members for own slots
-#             for s in range(len(teamMember[u].timeSlots)):
-#                 if not self.checkMember(teamMember[u].timeSlots[s].members, teamMember[u].name):
-#                     teamMember[u].timeSlots[s].members.append(teamMember[u].name)
-            
-#             # Add first members timeslots to available time slots 
-#             # for first iteration if availableTimeSlots is empty
-#             if len(tempTimeSlots) == 0:
-#                 for s in range(len(teamMember[u].timeSlots)):
-#                     tempTimeSlots.append(teamMember[u].timeSlots[s])
-
-#             else:
-                
-#                 for i in range(len(tempTimeSlots)):
-#                     for j in range(len(teamMember[u].timeSlots)):
-
-#                         ts1 = tempTimeSlots[i]
-#                         ts2 = teamMember[u].timeSlots[j]
-
-#                         if not self.checkMember(tempTimeSlots[i].members, teamMember[u].name):
-#                             # Compare each time slot
-#                             if ts1.start_time > ts2.end_time or ts2.start_time > ts1.end_time:
-#                                 # no overlapping time
-#                                 if not self.checkSlot(aq, ts2):
-#                                     if not self.checkMember(ts2.members,teamMember[u].name):
-#                                         ts2.members.append(teamMember[u].name)
-#                                     aq.append(ts2)
-
-#                                 if not self.checkSlot(aq, ts1):
-#                                     aq.append(ts1)
-
-#                                 if j == 0: # To make sure to add to remove queue just once 
-#                                     rq.append(tempTimeSlots[i])
-
-#                             elif ts1.start_time == ts2.start_time and ts1.end_time == ts2.end_time:
-#                                 # Case1: Same time slot
-
-#                                 ts = TempTimeSlot(ts1.start_time, ts1.end_time)
-#                                 for m in range(len(tempTimeSlots[i].members)):
-#                                     ts.members.append(
-#                                         tempTimeSlots[i].members[m])
-#                                 if not self.checkMember(ts.members, teamMember[u].name):
-#                                     ts.members.append(teamMember[u].name)
-                            
-#                                 if j == 0:
-
-#                                     rq.append(tempTimeSlots[i])
-#                                     aq.append(ts)
-
-#                                 else:
-#                                     aq.append(ts)
-
-#                             elif ts1.start_time < ts2.start_time and ts1.end_time < ts2.end_time:
-#                                 if (ts1.end_time - ts2.start_time) < self.MEETING_DURATION:
-#                                     # Case 2-1: Start time of B and end time of A is overlapping
-#                                     #           but not enough time for meeting
-#                                     if not self.checkSlot(aq, ts2):
-#                                         if not self.checkMember(ts2.members, teamMember[u].name):
-#                                             ts2.members.append(teamMember[u].name)
-#                                         aq.append(ts2)
-                                    
-#                                     if not self.checkSlot(aq, ts1):
-#                                         aq.append(ts1)
-                                       
-#                                     if j == 0:
-#                                         rq.append(tempTimeSlots[i])
-
-#                                 else:
-#                                     # Case 2-2: Start time of B and end time of A is overlapping
-
-#                                     ts = TempTimeSlot(ts2.start_time, ts1.end_time)
-#                                     for m in range(len(tempTimeSlots[i].members)):
-#                                         ts.members.append(
-#                                             tempTimeSlots[i].members[m])
-#                                     if not self.checkMember(ts.members, teamMember[u].name):
-#                                         ts.members.append(teamMember[u].name)
-
-#                                     if j == 0:
-#                                         rq.append(tempTimeSlots[i])
-#                                         aq.append(ts)
-#                                     else:
-#                                         aq.append(ts)
-
-#                             elif ts1.start_time > ts2.start_time and ts1.end_time > ts2.end_time:
-#                                 if (ts2.end_time - ts1.start_time) < self.MEETING_DURATION:
-#                                     # Case 3-1: Start time of A and End time of B is overlapping
-#                                     #           but not enough time for meeting
-
-#                                     if not self.checkSlot(aq, ts2):
-#                                         if not self.checkMember(ts2.members, teamMember[u].name):
-#                                             ts2.members.append(teamMember[u].name)
-#                                         aq.append(ts2)
-                                        
-#                                     if not self.checkSlot(aq, ts1):
-#                                         aq.append(ts1)
-                                       
-#                                     if j == 0:
-#                                         rq.append(tempTimeSlots[i])
-
-#                                 else:
-#                                     # Case 3-2: Start time of A and End time of B is overlapping
-
-#                                     ts = TempTimeSlot(ts1.start_time, ts2.end_time)
-#                                     for m in range(len(tempTimeSlots[i].members)):
-#                                         ts.members.append(
-#                                             tempTimeSlots[i].members[m])
-#                                     if not self.checkMember(ts.members, teamMember[u].name):
-#                                         if not self.checkMember(ts.members, teamMember[u].name):
-#                                             ts.members.append(teamMember[u].name)
-                                        
-#                                     if j == 0:
-
-#                                         rq.append(tempTimeSlots[i])
-#                                         aq.append(ts)
-
-#                                     else:
-#                                         aq.append(ts)
-
-#                             elif ts1.start_time >= ts2.start_time and ts1.end_time <= ts2.end_time:
-#                                 # Case 4: Start time of A and End time of A is overlapping
-
-#                                 ts = TempTimeSlot(ts1.start_time, ts1.end_time)
-#                                 for m in range(len(tempTimeSlots[i].members)):
-#                                     ts.members.append(
-#                                         tempTimeSlots[i].members[m])
-#                                 if not self.checkMember(ts.members, teamMember[u].name):
-#                                     ts.members.append(teamMember[u].name)
-                                    
-#                                 if j == 0:
-#                                     rq.append(tempTimeSlots[i])
-#                                     aq.append(ts)
-#                                 else:
-#                                     aq.append(ts)
-
-#                             elif ts1.start_time <= ts2.start_time and ts1.end_time >= ts2.end_time:
-#                                 # Case 5: Start time of B and End time of B is overlapping
-
-#                                 ts = TempTimeSlot(ts2.start_time, ts2.end_time)
-#                                 for m in range(len(tempTimeSlots[i].members)):
-#                                     ts.members.append(
-#                                         tempTimeSlots[i].members[m])
-#                                 if not self.checkMember(ts.members, teamMember[u].name):
-#                                     ts.members.append(teamMember[u].name)
-                                    
-#                                 if j == 0:
-#                                     rq.append(tempTimeSlots[i])
-#                                     aq.append(ts)
-#                                 else:
-#                                     aq.append(ts)
-#                             else:
-#                                 print('Someting wrong')
-
-#                             #Check if it's end of nested loop
-#                             li = len(tempTimeSlots) - 1
-#                             lj = len(teamMember[u].timeSlots) - 1
-
-#                             # When nested loop ends remove all objects in rq from the available time slots
-#                             if len(rq) != 0 and li == i and lj == j:
-#                                 for r in range(len(rq)):
-#                                     if self.checkSlot(tempTimeSlots, rq[r]):
-#                                         tempTimeSlots.remove(rq[r])
-#                                 rq = []
-
-#                             # When nested loop ends add all objects in aq to the availabile time slots
-#                             if len(aq) != 0 and li == i and lj == j:
-#                                 for a in range(len(aq)):
-#                                     tempTimeSlots.append(aq[a])
-
-#                                 aq = []    
-
-#                     #--------------------- For loop for teamMember's timeslots  ----------------------
-
-#                 #--------------------- For loop for available timeslots ------------------------                       
-
-#             u += 1
-
-#         #---------------------------- while loop for teamMember  -----------------------------
-
-#         return tempTimeSlots
-
-#     def post(self, request,):
-#         duplicateSlot = False
-#         duplicateName = False
-#         nameFound = False
-#         add_name = request.POST.get('Name')
-#         if add_name:
-#             if len(self.users) != 0:
-#                 for name in self.users:
-#                     if  add_name != None:
-#                         if add_name == name:
-#                             duplicateName = True
-#                             print('Duplicate name')
-#                 if not duplicateName and add_name != None:
-#                     self.users.append(request.POST.get('Name'))
-#             else:
-#                 if add_name != None:
-#                     self.users.append(request.POST.get('Name'))
-#         t = TempTimeSlot(-1,-1,)
-#         u = Person(None)
-
-#         startTime = request.POST.get('tStart') if request.POST.get('tStart') else None
-#         endTime = request.POST.get('tEnd') if request.POST.get('tEnd') else None
-
-#         t.start_time = int(startTime) if startTime else None
-#         t.end_time = int(endTime) if endTime else None
-
-#         u.name = request.POST.get('user')
-
-#         if t.start_time != -1 and u.name != None:
-#             for user in self.teamMember:
-#                 duplicateSlot = False
-#                 if u.name == user.name:
-#                     for timeslot in user.timeSlots:
-#                         if timeslot.start_time == t.start_time and timeslot.end_time == t.end_time: 
-#                             duplicateSlot = True
-#                             print('Duplicate slot')
-#                     if not duplicateSlot:
-#                         user.timeSlots.append(t)
-#                         duplicateSlot = False
-#                     nameFound = True 
-#             if not nameFound:
-#                 u.timeSlots.append(t)
-#                 self.teamMember.append(u)
-
-#         value = request.POST.get('generate')
-#         if value == 'g':
-#             g = self.generate_meeting_time_slots_lst(self.teamMember)
-#             self.refinedSlots = self.refine_meeting_time_slots(self.refine_meeting_time_slots_lst(g))
-            
-
-#         context = {
-#             'users':self.users,
-#             'teamMember':self.teamMember,
-#             'availableTimeSlots':self.refinedSlots,
-#         }
-#         return render(request, 'voting_demo/index.html', context)
-    
-#     def get(self, request):
-
-#         context = {
-#             'users':self.users,
-#         }
-#         return render(request, 'voting_demo/index.html', context)
 
 class Person:
     def __init__(self, name):
@@ -752,6 +206,8 @@ class Voting(View):
             # print(len(g))
             for t in g:
                 print(str(t.start_time) + (' - ') + str(t.end_time) + ' : ', end='')
+                print('www')
+                print(str(len(t.members)))
                 for m in t.members:
                     print(m)
                 print(' ')
@@ -790,7 +246,7 @@ class Voting(View):
 
         return timeslots
 
-    #Refine meeting time slots
+   #Refine meeting time slots
     def refine_meeting_time_slots(self,timeslots):
 
         cloneSlots = []
@@ -934,7 +390,7 @@ class Voting(View):
 
         print('Done')
         return timeslots
-
+ 
     #Generate time slots that all members available
     def generate_available_time_slots(self,teamMember):
         u = 0
@@ -1094,7 +550,7 @@ class Voting(View):
                                 else:
                                     aq.append(ts)
                             else:
-                                print('Someting wrong')
+                                print('Someting went wrong')
 
                             #Check if it's end of nested loop
                             li = len(tempTimeSlots) - 1
@@ -1267,11 +723,12 @@ class Voting(View):
         print('meeting_time_options length is '+ str(len(meeting_time_options)))
         for op in ops:
             meeting_time_options.append(op)
-        
+        print('Member length = ' + str(len(members)))
         for member in members:
             timeslots = models.TimeAvailability.objects.filter(user=member.user,meeting_id=meeting_id)
-            u = Person(member.user.display_name)
-            uTest = Person(member.user.display_name) #For Debug
+            print('username: ' + str(member.user.user.username))
+            u = Person(member.user.user.username)
+            uTest = Person(member.user.user.username) #For Debug
             if member.user.id == profile.user.id:
                 u.isUser = True
                 uTest.isUser = True #For Debug
@@ -1280,11 +737,12 @@ class Voting(View):
                 u.slots_submitted = True
                 uTest.slots_submitted = True  #For Debug                
                 for slot in timeslots:
+                    print(str(slot.start_time) + '----' + str(slot.end_time))
                     #Convert to milli
                     start = self.datetime_to_milli(slot.start_time)
                     end = self.datetime_to_milli(slot.end_time)
                     t = TempTimeSlot(start, end)
-                    t.members.append(member.user.display_name)
+                    t.members.append(member.user.user.username)
                     u.timeSlots.append(t)
                     tTest = TempTimeSlot(slot.start_time, slot.end_time) #For Debug
                     uTest.timeSlots.append(tTest) #For Debug
@@ -1296,67 +754,76 @@ class Voting(View):
             team.append(u)
             teamTest.append(uTest)
 
-            try:  
-                if not meeting_time_options and state_ready:
-                    print('Generate Meeting Time Option')
-                    g_asl = self.generate_meeting_time_slots_lst(team)
-                    r_slots = self.refine_meeting_time_slots(self.refine_meeting_time_slots_lst(g_asl))
-                    meeting_time_slots = self.find_meeting_slots(r_slots, team)
-                    print(len(meeting_time_slots))
+            for t in teamTest:
+                print('name: ' + t.name)
+                for s in t.timeSlots:
+                    print(str(s.start_time) + '-'+ str(s.end_time))
+
+        try:  
+            
+            if not meeting_time_options and state_ready:
+                print('Generate Meeting Time Option')
+                print(len(meeting_time_options))
+                g_asl = self.generate_meeting_time_slots_lst(team)
+                print('g_asl done')
+                print(len(g_asl))
+                r_slots = self.refine_meeting_time_slots(self.refine_meeting_time_slots_lst(g_asl))
+                print('r_slots done')
+                print(len(r_slots))
+                meeting_time_slots = self.find_meeting_slots(r_slots, team)
+                print('meeing_time_slots len = ' + str(len(meeting_time_slots)))
+                
+                for timeslot in meeting_time_slots:
+
+                    start = timeslot.start_time
+                    end = timeslot.end_time
+                    dStart = self.milli_to_datetime(start)
+                    dEnd = self.milli_to_datetime(end)
                     print(' ')
-                    
-                    for timeslot in meeting_time_slots:
-                    
+                    print('Before round-up')
+                    print(dStart)
 
-                        start = timeslot.start_time
-                        end = timeslot.end_time
-                        dStart = self.milli_to_datetime(start)
-                        dEnd = self.milli_to_datetime(end)
-                        print(' ')
-                        print('Before round-up')
-                        print(dStart)
+                    for option in self.generate_meeting_time_option(start, end):
+                        meeting_time_options.append(option)
+                print(len(meeting_time_options))
 
-                        for option in self.generate_meeting_time_option(start, end):
-                            meeting_time_options.append(option)
-                    print(len(meeting_time_options))
-
-                    #Save options to Database
-                    for i in range(len(meeting_time_options)):
-                        meeting_time_option = MeetingTimeOption(start_time=meeting_time_options[i].start_time,
-                                                        end_time=meeting_time_options[i].end_time,
-                                                        meeting=meeting)
-                        meeting_time_option.save()
-                        meeting_time_options[i].id = meeting_time_option.id
-        
-                    #Check status of meeting time option
-                    if len(meeting_time_options) == 0:
-                        print('No meeting time option is generated and Vote Closed')
-                        print('State changed')
-                        Meeting.objects.filter(id=meeting_id,project=project).update(state=models.Meeting.VoteState.REVIEW)
-                        state_review = True
-
-                    elif len(meeting_time_options) == 1:
-                        state_no_vote = True
-                        print('No vote needed')
-                        MeetingTime.objects.filter(meeting=meeting).delete()
-                        print('State changed')
-                        Meeting.objects.filter(id=meeting_id,project=project).update(state=models.Meeting.VoteState.NO_VOTE)
-                        meeting_time = MeetingTime(start_time=meeting_time_options[i].start_time,
-                                                        end_time=meeting_time_options[i].end_time,
-                                                        meeting=meeting)
-                        meeting_time.save()
-                    else:
-                        print('Meeting time options are generated and ready to vote')
-                        Meeting.objects.filter(id=meeting_id,project=project).update(state=models.Meeting.VoteState.OPEN)
-
-                else:
-                    if voted_slot:
-                        print('You voted')
-
-            except Exception as e:
-                print(e)
-                print(' ')
+                #Save options to Database
+                for i in range(len(meeting_time_options)):
+                    meeting_time_option = MeetingTimeOption(start_time=meeting_time_options[i].start_time,
+                                                    end_time=meeting_time_options[i].end_time,
+                                                    meeting=meeting)
+                    meeting_time_option.save()
+                    meeting_time_options[i].id = meeting_time_option.id
     
+                #Check status of meeting time option
+                if len(meeting_time_options) == 0:
+                    print('No meeting time option is generated and Vote Closed')
+                    print('State changed')
+                    Meeting.objects.filter(id=meeting_id,project=project).update(state=models.Meeting.VoteState.REVIEW)
+                    state_review = True
+
+                elif len(meeting_time_options) == 1:
+                    state_no_vote = True
+                    print('No vote needed')
+                    MeetingTime.objects.filter(meeting=meeting).delete()
+                    print('State changed')
+                    Meeting.objects.filter(id=meeting_id,project=project).update(state=models.Meeting.VoteState.NO_VOTE)
+                    meeting_time = MeetingTime(start_time=meeting_time_options[i].start_time,
+                                                    end_time=meeting_time_options[i].end_time,
+                                                    meeting=meeting)
+                    meeting_time.save()
+                else:
+                    print('Meeting time options are generated and ready to vote')
+                    Meeting.objects.filter(id=meeting_id,project=project).update(state=models.Meeting.VoteState.OPEN)
+
+            else:
+                if voted_slot:
+                    print('You voted')
+
+        except Exception as e:
+            print(e)
+            print(' ')
+
     #*******************************Check vote state***************************************
 
         print('START Meeting Current State is ' + str(meeting.state))
@@ -1366,7 +833,7 @@ class Voting(View):
             print('Vote Closed')
             state_closed = True
             # For Debugging
-            Meeting.objects.filter(id=meeting_id,project=project).update(state=models.Meeting.VoteState.CLOSE)
+            # Meeting.objects.filter(id=meeting_id,project=project).update(state=models.Meeting.VoteState.CLOSE)
 
 
         elif meeting.state == NO_VOTE or len(ops) == 1:
