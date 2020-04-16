@@ -28,6 +28,7 @@ class MeetingCreation(View):
         if form.is_valid():
             meeting = form.save(commit=False)
             meeting.project = models.Project.objects.get(pk=project_key)
+            meeting.state = models.Meeting.VoteState.OPEN
             meeting.save()
 
             # title = form.cleaned_data['title']

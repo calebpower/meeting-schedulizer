@@ -43,6 +43,16 @@ class Meeting(models.Model):
     end_date = models.DateField(default = '1970-01-01')
 
     project = models.ForeignKey(Project, on_delete=models.CASCADE, default=0)
+
+    class VoteState(models.IntegerChoices):
+        CLOSE = 0 # not ready to vote  
+        OPEN = 1 # ready to vote
+        DONE = 2 # vote is done and meeting time is available
+        REVIEW = 3 # no meeting time option is generated and resubmit their availability
+        REVOTE = 4 # equal votes and start vote again
+        NO_VOTE = 5
+
+    state = models.IntegerField(choices=VoteState.choices, default=1)
     
 ''' Time availability '''
 class TimeAvailability(models.Model):
@@ -59,16 +69,23 @@ class Notification(models.Model):
     message = models.CharField(max_length=200, default="")
     link = models.CharField(max_length=200, default="")
 
-class MeetingTime(models.Model):
+class MeetingTimeOption(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    hasVoted = models.BooleanField(default=False)
     meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    vote_count = models.IntegerField(default=0)
+
+    # user = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
     
 class Vote(models.Model):
-    meeting_time = models.ForeignKey(MeetingTime, on_delete=models.CASCADE)
     meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
+    meeting_time_option = models.ForeignKey(MeetingTimeOption, on_delete=models.CASCADE, default=None)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     
+
+class MeetingTime(models.Model):
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
+    # user = models.ForeignKey(Profile, on_delete=models.CASCADE)

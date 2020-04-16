@@ -1,0 +1,24 @@
+
+    <div class="container h-100  ">
+
+        <div class="row align-items-center h-100">
+
+            <div class="col align-items-center">
+            <div class=" mx-auto">
+                <div class="jumbotron  text-center">
+                    <h1 class="display-4"><font color="green">50 - 50!</font></h1>
+                    <hr>
+                    <p class="lead"> Vote again from options down below!</p>
+                    {%for slot in fifty_fifty_votes%}
+                    <p >From {{slot.start_time}} to {{slot.end_time}}</p>
+                    {%endfor%}
+                    <p >have equal number of votes </p>
+
+                </div>
+            </div>
+            </div>
+
+        </div>
+    </div>
+
+
