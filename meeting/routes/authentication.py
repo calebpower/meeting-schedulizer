@@ -67,7 +67,8 @@ class ProfilePage(View):
         logged_in_user = request.user
         username = logged_in_user.username
         display_name = logged_in_user.profile.display_name
-        return render(request, 'profile_page.html', { 'username': username, 'displayName': display_name, 'is_no_errors': True, 'get_load': True })
+        org = logged_in_user.profile.org
+        return render(request, 'profile_page.html', { 'username': username, 'displayName': display_name, 'org': org, 'is_no_errors': True, 'get_load': True })
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -75,7 +76,13 @@ class ProfilePage(View):
 
         username = request.POST.get('inputUsername') if request.POST.get('inputUsername') else None
         display_name = request.POST.get('inputDisplayName') if request.POST.get('inputDisplayName') else None
+        org = request.POST.get('inputOrg') if request.POST.get('inputOrg') else None
         errors = dict()
+
+        if org is None:
+            errors['orgEmpty'] = True
+        elif org.isspace() is True:
+            errors['orgEmpty'] = True
 
         if display_name is None:
             errors['displayNameEmpty'] = True
@@ -100,12 +107,14 @@ class ProfilePage(View):
             editing_user = User.objects.get(username=request.user.username)
             editing_user.username = username
             editing_user.profile.display_name = display_name
+            editing_user.profile.org = org
             editing_user.save()
         else:
             logged_in_user = request.user
             username = logged_in_user.username
             display_name = logged_in_user.profile.display_name
-        return render(request, 'profile_page.html', {'username': username, 'displayName': display_name, 'errors': errors, 'is_no_errors': is_no_errors, 'get_load': False })
+            org = logged_in_user.profile.org
+        return render(request, 'profile_page.html', {'username': username, 'displayName': display_name, 'org': org, 'errors': errors, 'is_no_errors': is_no_errors, 'get_load': False })
 
 class LogoutPage(View):
     def get(self, request, *args, **kwargs):
