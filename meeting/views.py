@@ -52,9 +52,22 @@ def get_meetings_by_user(user):
                 meetings.append(project_meetings)
 
     all_meetings = list(chain(*meetings))
-    unique_results = [next(rows) for (key, rows) in groupby(all_meetings, key=lambda obj: obj.id)]
 
-    return unique_results
+    # WTF? This was working before but now it's not!
+    # Screw it, I'm resorting to a naive double for loop for this.
+    # unique_meetings = [next(rows) for (key, rows) in groupby(all_meetings, key=lambda obj: obj.id)]
+
+    unique_meetings = []
+    for meeting in all_meetings:
+        notfound = True
+        for unique_meeting in unique_meetings:
+            if meeting.id == unique_meeting.id:
+                notfound = False
+                break
+        if notfound:
+            unique_meetings.append(meeting)
+
+    return unique_meetings
     
 ''' Render the home page '''
 def index(request):
