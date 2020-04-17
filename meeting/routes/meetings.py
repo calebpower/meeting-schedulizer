@@ -42,7 +42,7 @@ class MeetingCreation(View):
                                                 description=description, start_date=start_date, end_date=end_date,
                                                 project=models.Project.objects.get(pk=project_key))
     
-        return redirect('../../../projects')   
+        return redirect("/meeting/projects/" + str(project_key))   
 
             
               
@@ -58,7 +58,7 @@ class MeetingView(View):
            except Exception as e:
               print(e)
 
-           return redirect("../../../projects")
+           return redirect("/meeting/projects/" + str(project_key))
 
         else:
            title = request.POST.get('title') if request.POST.get('title') else None
@@ -97,7 +97,7 @@ class MeetingView(View):
                except:
                    pass
 
-               return redirect('../../../projects')
+               return redirect("/meeting/projects/" + str(project_key))
            else:
                return render(request, {'app_url': app_url, 'errors': errors})
 
