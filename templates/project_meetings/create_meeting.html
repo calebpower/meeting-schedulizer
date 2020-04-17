@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-
+{% include "modals.html" %}
 
 <style>
   body {
@@ -116,7 +116,7 @@
   
     <div style="text-align: center;">
     <button class="button-create-meeting" onclick="return confirm('You are about to create a meeting!!')">Submit</button>
-    <button type="button" id="back-meeting-btn" class="button-back-meeting">Back</button>
+    <a href="../../../projects"><button type="button" class="button-back-meeting">Back</button></a>
 
   </form>
 </div>

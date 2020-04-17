@@ -81,7 +81,7 @@
 
         {% else %}
             <label for="final_date">Final Meeting Date:</label><br>
-            <input disabled=True value="{{meeting.final_date}}" name="final_date"><br><br>
+            <input type="text" disabled=True value="{{meeting.final_date}}" name="final_date"><br><br>
             <input hidden=True name="start_date" value="{{meeting.start_date|date:"Y-m-d" }}">
             <input hidden=True name="end_date" value="{{meeting.end_date|date:"Y-m-d" }}">
         {% endif %}
