@@ -7,11 +7,10 @@
   }
 
   input[type=text],
-  select,
-  textarea[type=text] {
+  select, textarea[type=text] {
     width: 100%;
     padding: 5px;
-    border: .1px solid black;
+    border: .5px solid cadetblue;
     border-radius: 4px;
     box-sizing: border-box;
     margin-top: 6px;
@@ -19,30 +18,53 @@
     resize: vertical;
   }
 
-  .button-submit {
-    background-color: rgb(106, 200, 255);
-    color: black;
-    padding: 12px 20px;
+  input[type=date], .final_date{
+    border: .5px solid cadetblue;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+    padding: 2px;
+  }
+
+  .button-update-meeting {
+    background-color: rgb(16, 184, 66);
+    color: white;
+    padding: 7px 40px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
   }
 
-  .button-submit:hover {
-    background-color: rgb(106, 180, 255);
+  .button-update-meeting:hover {
+    background-color: rgb(16, 184, 106);
   }
 
-  .button-delete {
+  .button-delete-meeting {
     background-color: rgb(255, 24, 24);
-    color: black;
-    padding: 12px 20px;
+    color: white;
+    padding: 7px 40px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
   }
 
-  .button-delete:hover {
-    background-color: rgb(226, 51, 51);
+  .button-delete-meeting:hover {
+    background-color: rgb(255, 54, 24);
+  }
+
+  .button-back-meeting {
+    background-color: rgb(0, 7, 99);
+    color: white;
+    padding: 7px 40px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .button-back-meeting:hover {
+    background-color: rgb(0, 57, 99);
   }
 
   .container {
@@ -56,6 +78,7 @@
 
 <br>
 <h2 align="center">Edit Meeting For {% if meeting %}{{meeting.project.project_name}}{% endif %}</h2>
+
 <div class="container">
   <form action="" method="post" id="meeting-view-form">
     {% csrf_token %}
@@ -66,7 +89,7 @@
       {% endif %}
     </label>
     <input type="text" class="form-control" id="create-meeting-title" name="title" maxlength="100"
-      placeholder="Put your meeting title here!" value="{% if meeting %}{{ meeting.title }}{% endif %}" />
+      placeholder="Put your meeting title here!" value="{% if meeting %}{{ meeting.title }}{% endif %}"/>
 
     <label for="create-meeting-location">Location:
       {% if errors.location %}
@@ -84,26 +107,33 @@
     <textarea type="text" class="form-control" id="create-meeting-description" name="description" rows="5" maxlength="250"
       placeholder="Describe your meeting.">{% if meeting %}{{ meeting.description }}{% endif %}</textarea>
 
+    {% if meeting.final_date == 'TBA' %}
+       <label for="create-meeting-start_date">Meeting Dates:
+         {% if errors.start_date %}
+         <span class="text-danger">- {{ errors.start_date }}</span>
+         {% endif %}
+       </label><br>
 
-    <label for="create-meeting-start_date">Meeting Dates:
-      {% if errors.start_date %}
-      <span class="text-danger">- {{ errors.start_date }}</span>
-      {% endif %}
-    </label><br>
+       <label for="start_date">Start:</label>
+       <input type="date" value="{{meeting.start_date|date:"Y-m-d" }}" id="create-meeting-start_date" name="start_date"
+         onchange=checkDate()>
 
-    <label for="start_date">Start:</label>
-    <input type="date" value="{{meeting.start_date|date:"Y-m-d" }}" id="create-meeting-start_date" name="start_date"
-      onchange=checkDate()>
+       <label for="end_date">End:</label>
+       <input type="date" value="{{meeting.end_date|date:"Y-m-d" }}" id="create_meeting-end_date" name="end_date"
+         onchange=checkDate()>
+       <br><br>
+    {% else %}
+       <label for="final_date">Final Meeting Date:</label><br>
+       <input class="final_date" disabled=True value="{{meeting.final_date}}" name="final_date"><br><br>
+       <input hidden=True name="start_date" value="{{meeting.start_date|date:"Y-m-d" }}">
+       <input hidden=True name="end_date" value="{{meeting.end_date|date:"Y-m-d" }}">
+    {% endif %}   
 
-    <label for="end_date">End:</label>
-    <input type="date" value="{{meeting.end_date|date:"Y-m-d" }}" id="create_meeting-end_date" name="end_date"
-      onchange=checkDate()>
-    <br><br>
-
-
-    <div style="text-align: center;">
-      <button type="submit" class="button-submit">Update</button>
-      <button type="button" id="delete-meeting-btn" class="button-delete">Delete</button>
+      
+      <div style="text-align: center;">
+      <button type="submit" class="button-update-meeting">Update</button>
+      <button type="button" id="delete-meeting-btn" class="button-delete-meeting">Delete</button>
+      <button type="button" id="back-meeting-btn" class="button-back-meeting">Back</button>
   </form>
   <form id="passback-form" action="" method="POST">
     {% csrf_token %}

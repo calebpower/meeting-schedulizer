@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
-from meeting.forms import MeetingForm
+
 
 from .. import models
 
@@ -10,46 +10,49 @@ class MeetingCreation(View):
     def get(self, request, project_key):
         if not request.user.is_authenticated:
             return redirect('LoginProcess')
+        team = []
 
-        form = MeetingForm()
         try:
             project = models.Project.objects.get(pk=project_key)
+            
+            members = models.Member.objects.filter(project=project)
+            for member in members:
+                team.append(member)
         except:
-            pass    
-        return render(request, self.template_name, {'form': form, 'project': project})
+            pass   
+        return render(request, self.template_name, { 'project': project, 'team': team})
    
 
     def post(self, request, project_key):
 
         if not request.user.is_authenticated:
             return redirect('LoginProcess')
+        
+        title = request.POST.get('title') if request.POST.get('title') else None
+        location = request.POST.get('location') if request.POST.get('location') else None
+        optional_members = request.POST._getlist('optional_members')
+        description = request.POST.get('description') if request.POST.get('description') else None
+        start_date = request.POST.get('start_date') if request.POST.get('start_date') else None
+        end_date = request.POST.get('end_date') if request.POST.get('end_date') else None
 
-        form = MeetingForm(request.POST)
-        if form.is_valid():
-            meeting = form.save(commit=False)
-            meeting.project = models.Project.objects.get(pk=project_key)
-            meeting.save()
+        if 'required_meeting' in optional_members:
+            optional_members = 'required_meeting'
 
-            start_date = form.cleaned_data['start_date']
-            end_date = form.cleaned_data['end_date']
-            location = form.cleaned_data['location']
-            optional_members = form.cleaned_data['optional_members']
-            description = form.cleaned_data['description']
-            form = MeetingForm()
+        models.Meeting.objects.create(title=title, location=location, optional_members=optional_members, 
+                                                description=description, start_date=start_date, end_date=end_date,
+                                                project=models.Project.objects.get(pk=project_key))
+    
+        return redirect('../../../projects')   
 
-            return redirect('../../../projects')
-        args = {'form': form, 'start_date': start_date, 'end_date': end_date, 'location': location, 'optional_members': optional_members, 'description': description}
-        return render(request, self.template_name, args)         
+            
+              
 
 class MeetingView(View): 
     def post(self, request, project_key, meeting_key):
         
-        print("posted")
-        
         meeting = models.Meeting.objects.get(id=meeting_key)
         
         if request.POST.get('action') == 'delete':
-           print("deleting")
            try:
               meeting.delete()
            except Exception as e:
@@ -101,13 +104,20 @@ class MeetingView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect('LoginProcess')
-        
-        form = MeetingForm()
+       
         try:
             meeting_id = kwargs.get('meeting_key') if kwargs.get('meeting_key') else None
             meeting = models.Meeting.objects.get(id=meeting_id)
+
+
+            project = models.Project.objects.get(pk=kwargs.get('project_key'))
+            members = models.Member.objects.filter(project=project)
+            for member in members:
+                if (str(member.user.display_name) == str(request.user)):
+                    user = member
         except:
             pass    
-
-        return render(request, 'project_meetings/edit_meeting.html', {'form': form, 'meeting': meeting})
-   
+        if user.role == 2:
+           return render(request, 'project_meetings/edit_meeting.html', { 'meeting': meeting, 'user': user})
+        else:
+            return render(request, 'project_meetings/view_meeting.html', {'meeting': meeting})

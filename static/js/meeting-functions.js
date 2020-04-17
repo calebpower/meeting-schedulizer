@@ -25,10 +25,17 @@ $(document).ready(function() {
        $('#delete-meeting-btn').on('click', function() {
        $("#confirm-remove-meeting-modal").modal();
      });
-  
+ 
      $('#confirm-meeting-deletion').on('click', function() {
        $("#passback-action").val("delete");
        $("#passback-form").submit();
      });
+ 
+     $('#back-meeting-btn').on('click', function() {
+        window.history.back()
+      });
+ 
     }
 });
+
+
