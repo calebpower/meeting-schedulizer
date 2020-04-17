@@ -19,7 +19,7 @@
         {% include "voting/alert.html" %}
         {%endif%}
         <div class="col text-center ">
-            <button class="btn btn-primary " onclick="showDetail()">See Detail!</button>
+            <button class="btn btn-detail " onclick="showDetail()"><span>See Detail!</span> </button>
             <div id="showDetail" style="display: none">
 
                 <div class="jumbotron mt-4 ">
@@ -133,10 +133,10 @@
                                         <form action="" method='post'>
                                             <input type="hidden" name="delete" value="delete" />
                                             {% if fifty_fifty_votes or state_closed%}
-                                            <button class="btn btn-primary mt-2" type="submit" onclick="post"
+                                            <button class="btn btn-link mt-2" type="submit" onclick="post"
                                                 disabled><i class="fa fa-thumbs-down fa-2x"></i>Unvote</button>
                                             {% else %}
-                                            <button class="btn btn-primary mt-2" type="submit" onclick="post"><i
+                                            <button class="btn btn-link mt-2" type="submit" onclick="post"><i
                                                     class="fa fa-thumbs-down fa-2x"></i>Unvote</button>
                                             {% endif%}
                                         </form>
@@ -146,14 +146,14 @@
                                         {% else %}
                                         {% if fifty_fifty_votes or state_closed%}
                                         <div id="btn1">
-                                            <button class="btn btn-primary mt-2" type="submit" onclick="post" disabled><i
+                                            <button class="btn btn-link mt-2" type="submit" onclick="post" disabled><i
                                                     class="fa fa-thumbs-up fa-2x" aria-hidden="true"></i>
                                                 <p>Vote</p>
                                             </button>
                                         </div>
                                         {% else %}
                                         <div id="btn1">
-                                            <button class="btn btn-primary mt-2" type="submit" onclick="post"><i
+                                            <button class="btn btn-link mt-2" type="submit" onclick="post"><i
                                                     class="fa fa-thumbs-up fa-2x" aria-hidden="true"></i> Vote</button>
                                         </div>
                                         {% endif%}
