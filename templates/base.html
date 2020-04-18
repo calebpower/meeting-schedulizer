@@ -9,78 +9,89 @@
     <meta name="description" content="Meeting Project">
     <meta name="author" content="Jacob Waldrip, Caleb L. Power">
 
-    <!-- Mobile Specific Metas
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Mobile Specific Metas –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- FONT –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600|Material+Icons" rel="stylesheet" type="text/css">
- 
-  <!-- JQuery & Bootstrap ------------------------------------------------ -->
-  <script type="text/javascript" src="{{ STATIC_URL }} /static/js/jquery-3.4.0.js"></script> 
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <!-- FONT –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600|Material+Icons" rel="stylesheet" type="text/css">
 
-  <!-- CSS –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  <link rel="stylesheet" href="{% static 'css/bootstrap-material-datetimepicker.css' %}">
-  <!-- <link rel="stylesheet" href="{% static 'css/availability.css' %}"> -->
-  <link rel="stylesheet" href="{% static 'css/daygridmain.css' %}">
-  <link rel="stylesheet" href="{% static 'css/main.css' %}" > 
+    <!-- JQuery & Bootstrap ------------------------------------------------ -->
+    <script type="text/javascript" src="{{ STATIC_URL }} /static/js/jquery-3.4.0.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <script type="text/javascript" src="{{ STATIC_URL }} /static/js/meeting-data-check.js"></script>
 
-  <!-- Needed for Bootstrap datetimepicker https://eonasdan.github.io/bootstrap-datetimepicker/ -->
-  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css"> -->
+    <!-- CSS –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'css/bootstrap-material-datetimepicker.css' %}"> -->
+    <!-- <link rel="stylesheet" href="{% static 'css/availability.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'css/daygridmain.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/amaran.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
 
-  <!-- JS –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <script type="text/javascript" src="{{ STATIC_URL }} /static/js/style.js"></script>  
+    <!-- Needed for Bootstrap datetimepicker https://eonasdan.github.io/bootstrap-datetimepicker/ -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css"> -->
 
-  <!-- Split.js -->
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.3.5/split.min.js"></script>
+    <!-- JS –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <script type="text/javascript" src="{{ STATIC_URL }} /static/js/notifications.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }} /static/js/style.js"></script>
+
+    <!-- Split.js -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.3.5/split.min.js"></script>
+    <script src="{% static 'js/jquery.amaran.min.js' %}"></script>
 
 </head>
 
 <body>
+    <!-- Navbar ------------------------------------------------>
+    <div id="cursor"></div>
+    <nav id="titular-nav" class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="d-flex flex-grow-1">
+            <span class="w-100 d-lg-none d-block"><!-- hidden spacer to center brand on mobile --></span>
+            <a class="navbar-brand" href="/meeting">
+          Meeting Schedulizer
+        </a>
+            <div class="w-100 text-right">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar7">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+            </div>
+        </div>
+        <div class="collapse navbar-collapse flex-grow-1 text-right" id="myNavbar7">
+            <ul class="navbar-nav ml-auto flex-nowrap">
+                <li class="nav-item">
+                    <a href="#" class="nav-link"><i class="fa fa-home" aria-hidden="true"></i>About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/meeting/projects" class="nav-link"><i class="fa fa-code-fork" aria-hidden="true"></i>Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/meeting/availability" class="nav-link"><i class="fa fa-check-square" aria-hidden="true"></i>Availability</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/meeting/voting" class="nav-link"><i class="fa fa-thumbs-up" aria-hidden="true"></i>Voting</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/meeting/profile" class="nav-link"><i class="fa fa-address-card-o" aria-hidden="true"></i>Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/meeting/notification_demo" class="nav-link"><i class="fa fa-bell" aria-hidden="true"></i>Notification Demo</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/meeting/logout" class="nav-link"><i class="fa fa-sign-out" aria-hidden="true"></i>
+                    </i>Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <script src="{% static 'js/trail.js' %}"></script>
 
-  <!-- Navbar ------------------------------------------------>
-  <nav id="titular-nav" class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="d-flex flex-grow-1">
-      <span class="w-100 d-lg-none d-block"><!-- hidden spacer to center brand on mobile --></span>
-      <a class="navbar-brand" href="/meeting">
-        Meeting Schedulizer
-      </a>
-      <div class="w-100 text-right">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar7">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      </div>
-    </div>
-    <div class="collapse navbar-collapse flex-grow-1 text-right" id="myNavbar7">
-      <ul class="navbar-nav ml-auto flex-nowrap">
-        <li class="nav-item">
-          <a href="#" class="nav-link">About</a>
-        </li>
-        <li class="nav-item">
-          <a href="/meeting/projects" class="nav-link">Projects</a>
-        </li>
-        <li class="nav-item">
-          <a href="/meeting/availability" class="nav-link">Availability</a>
-        </li>
-        <li class="nav-item">
-          <a href="/meeting/voting" class="nav-link">Voting</a>
-        </li>
-        <li class="nav-item">
-          <a href="/meeting/profile" class="nav-link">Profile</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+    {% block content %} {% endblock %}
 
-  <!-- Content that child html files supply-->
-  {% block content %}
-  {% endblock %}
-
+    <!-- Content that child html files supply-->
 </body>
 
 </html>

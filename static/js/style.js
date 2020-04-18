@@ -69,6 +69,14 @@ $(document).ready(function() {
         $("#invite-member-modal").modal();
       });
       
+      $('#delete-project-btn').on('click', function() {
+        $("#confirm-remove-project-modal").modal();
+      });
+      
+      $('#leave-project-btn').on('click', function() {
+        $("#confirm-leave-project-modal").modal();
+      });
+      
       $('button.remove-member').on('click', function() { // pre-yeet
         leYeetBtn = $(this);
         $("#confirm-yeet-modal").modal();
@@ -78,6 +86,18 @@ $(document).ready(function() {
         console.log("member -> yeet");
         $("#passback-action").val("remove");
         $("#passback-user").val(leYeetBtn.attr("datum"));
+        $("#passback-form").submit();
+      });
+      
+      $('#yeet-project').on('click', function() {
+        console.log("member -> yeet");
+        $("#passback-action").val("delete");
+        $("#passback-form").submit();
+      });
+      
+      $('#yeet-self').on('click', function() {
+        console.log("self -> yeet");
+        $("#passback-action").val("leave");
         $("#passback-form").submit();
       });
       
@@ -132,6 +152,16 @@ $(document).ready(function() {
         hasEdited = true; 
       });
     }
+  }
+  
+  // notification demo
+  if($('#notification-demo').length) {
+    $('#notify-btn').on('click', function() {
+      let user = $('#notify-user').val() == 0 ? null : $('#notify-user').val();
+      let message = $('#notify-message').val();
+      let link = $('#notify-link').val().trim() ? $('#notify-link').val().trim() : null;
+      notify(user, message, link);
+    });
   }
 
 });

@@ -81,7 +81,7 @@
                           {{ meeting.start_date }} - {{ meeting.end_date }}
                         </div>
                         <div class="col-12 col-sm-3">
-                          <button type="button" class="btn btn-info">View</button>
+                          <a href="/meeting/projects/{{ project.id }}/meetings/{{ meeting.id }}" class="btn btn-info">View</a>
                         </div>
                       </div>
                     </p>
@@ -93,9 +93,12 @@
           <div class="row">
             <div class="col">
               {% if role == 2 %}
+                <button type="button" id="invite-member-btn" class="btn btn-success">Invite Member</button>
+                <button type="button" id="new-meeting-btn" class="btn btn-primary">Create Meeting</button>
                 <button type="button" id="edit-project-btn" class="btn btn-warning">Edit Project</button>
-                <button type="button" id="new-meeting-btn" class="btn btn-success">Create Meeting</button>
-                <button type="button" id="invite-member-btn" class="btn btn-primary">Invite Member</button>
+                <button type="button" id="delete-project-btn" class="btn btn-danger">Delete Project</button>
+              {% else %}
+                <button type="button" id="leave-project-btn" class="btn btn-danger">Leave Project</button>
               {% endif %}
             </div>
           </div>

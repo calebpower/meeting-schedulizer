@@ -8,7 +8,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 input[type=text], select, textarea {
   width: 100%;
   padding: 5px;
-  border: 1px solid #ccc;
+  border: .1px solid black;
   border-radius: 4px;
   box-sizing: border-box;
   margin-top: 6px;
@@ -29,6 +29,19 @@ button[type=submit]:hover {
   background-color: rgb(106, 180, 255);
 }
 
+button[type=button], button {
+  background-color: rgb(106, 200, 255);
+  color: black;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button[type=button]:hover {
+  background-color: rgb(106, 180, 255);
+}
+
 .container {
   border-radius: 5px;
   background-color: #f2f2f2;
@@ -44,14 +57,10 @@ button[type=submit]:hover {
     {% csrf_token %}
     {{form.post}}
 
-    <label for="date">Date:</label>
-    <br>
-    <label for="start_date">Start:</label>
-    <input type="date" id="start_date" name="start_date" required>
-    
-    <label for="end_date">End:</label>
-    <input type="date" id="end_date" name="end_date" required>
-    <br><br>
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" placeholder="Title of the meeting" required>
+
+ 
     
     <label for="location">Location:</label>
     <input type="text" id="locationOfMeeting" name="location" placeholder="Where we're meeting..." required>
@@ -66,7 +75,15 @@ button[type=submit]:hover {
 
     <label for="description">Description:</label>
     <textarea id="description" name="description" placeholder="What we'll be doing..." style="height:100px" required></textarea>
-
+  
+    <label for="date">Meeting Dates:</label><br>
+    <label for="start_date">Start:</label>
+    <input type="date" id="start_date" name="start_date" required>
+    <label for="end_date">End:</label>
+    <input type="date" id="end_date" name="end_date" required>
+    <br><br>
+  
+    <div style="text-align: center;">
     <button type="submit" onclick="return confirm('You are about to create a meeting!!')">Submit</button>
     <a href="../../../projects"><button type="button">Cancel</button></a>
 

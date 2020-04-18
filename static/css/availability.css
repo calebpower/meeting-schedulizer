@@ -75,3 +75,9 @@
 #myNavbar7 {
     display: flex !important;
 }
+
+.slot-container {
+    background: #f9f9f9;
+    border-radius: 3px;
+    margin-bottom: 30px;
+}
