@@ -28,6 +28,7 @@ import time
 
 
 
+
 class Person:
     def __init__(self, name):
         self.name = name
@@ -45,19 +46,35 @@ class TempTimeSlot:
 
 @receiver(post_save, sender=TimeAvailability)
 def availability_save_handler(sender, instance,**kwargs): 
-        REVIEW = 3   
+        DONE = 2
+        REVIEW = 3
+        NO_VOTE = 5   
         print('TimeAvailability Save Handler')
         meeting_time_option = MeetingTimeOption.objects.filter(meeting=instance.meeting)
-        meeting_time_option.delete()
+        print('State: '+ str(instance.meeting.state))
+        if instance.meeting.state == NO_VOTE or instance.meeting.state == DONE:
+            print('State: '+ str(instance.meeting.state))
+        else:
+            meeting_time_option.delete()
+            print('meeting_time_option is deleted')
         print('Time slots added')
         if instance.meeting.state == REVIEW:
+            print('State: '+ str(instance.meeting.state))
             Meeting.objects.filter(id=instance.meeting.id).update(state=models.Meeting.VoteState.CLOSE)
         
 @receiver(post_delete, sender=TimeAvailability)
-def availability_delete_handler(sender, instance, **kwargs):    
+def availability_delete_handler(sender, instance, **kwargs): 
+        DONE = 2
+        NO_VOTE = 5   
         print('TimeAvailability Delete Handler')
         meeting_time_option = MeetingTimeOption.objects.filter(meeting=instance.meeting)
-        meeting_time_option.delete()
+        print('')
+        print('State: '+ str(instance.meeting.state))
+        if instance.meeting.state == NO_VOTE or instance.meeting.state == DONE:
+            print('State: '+ str(instance.meeting.state))
+        else:
+            meeting_time_option.delete()
+            print('meeting_time_option is deleted')
         # Meeting.objects.filter(id=instance.meeting.id).update(state=models.Meeting.VoteState.CLOSE)
 
 class Voting(View):
@@ -752,7 +769,11 @@ class Voting(View):
             
             else:
                 state_ready = False
-                Meeting.objects.filter(id=meeting_id,project=project).update(state=models.Meeting.VoteState.CLOSE)
+                if meeting.state == NO_VOTE or meeting.state == DONE:
+                    print('state_ready is False and State: '+ str(meeting.state))
+                else:
+                    print('State: '+ str(meeting.state))
+                    Meeting.objects.filter(id=meeting_id,project=project).update(state=models.Meeting.VoteState.CLOSE)
 
             team.append(u)
             teamTest.append(uTest)
@@ -801,22 +822,22 @@ class Voting(View):
                 #Check status of meeting time option
                 if len(meeting_time_options) == 0:
                     print('No meeting time option is generated and Vote Closed')
-                    print('State changed')
+                    print('State: '+ str(meeting.state))
                     Meeting.objects.filter(id=meeting_id,project=project).update(state=models.Meeting.VoteState.REVIEW)
                     state_review = True
 
                 elif len(meeting_time_options) == 1:
                     state_no_vote = True
                     print('No vote needed')
-                    MeetingTime.objects.filter(meeting=meeting).delete()
-                    print('State changed')
+                    # MeetingTime.objects.filter(meeting=meeting).delete()
                     Meeting.objects.filter(id=meeting_id,project=project).update(state=models.Meeting.VoteState.NO_VOTE)
-                    meeting_time = MeetingTime(start_time=meeting_time_options[i].start_time,
-                                                    end_time=meeting_time_options[i].end_time,
-                                                    meeting=meeting)
-                    meeting_time.save()
+                    # meeting_time = MeetingTime(start_time=meeting_time_options[i].start_time,
+                    #                                 end_time=meeting_time_options[i].end_time,
+                    #                                 meeting=meeting)
+                    # meeting_time.save()
                 else:
                     print('Meeting time options are generated and ready to vote')
+                    print('State: '+ str(meeting.state))
                     Meeting.objects.filter(id=meeting_id,project=project).update(state=models.Meeting.VoteState.OPEN)
 
             else:
@@ -828,6 +849,8 @@ class Voting(View):
             print(' ')
 
     #*******************************Check vote state***************************************
+
+        meeting = models.Meeting.objects.get(id=meeting_id) if models.Meeting.objects.get(id=meeting_id) else None
 
         print('START Meeting Current State is ' + str(meeting.state))
 
@@ -842,7 +865,7 @@ class Voting(View):
         elif meeting.state == NO_VOTE or len(ops) == 1:
             print('No vote needed!!')
             state_no_vote = True
-            # Meeting.objects.filter(id=meeting_id,project=project).update(state=models.Meeting.VoteState.CLOSE)
+            Meeting.objects.filter(id=meeting_id,project=project).update(state=models.Meeting.VoteState.NO_VOTE)
             
 
         elif meeting.state == REVIEW:
@@ -877,6 +900,7 @@ class Voting(View):
                 meeting_time_options.sort(key=lambda MeetingTimeOption:MeetingTimeOption.vote_count, reverse=True)
                 if meeting_time_options[0].vote_count == meeting_time_options[1].vote_count :
                     print('Vote Count is equal - Review time slots again')
+                    print('State: '+ str(meeting.state))
                     Meeting.objects.filter(id=meeting_id,project=project).update(state=models.Meeting.VoteState.OPEN)
                     fifty_fifty_votes.append(meeting_time_options[0])
                     fifty_fifty_votes.append(meeting_time_options[1])

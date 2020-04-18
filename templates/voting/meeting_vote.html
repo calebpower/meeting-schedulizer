@@ -22,21 +22,25 @@
             <button class="btn btn-detail " onclick="showDetail()"><span>See Detail!</span> </button>
             <div id="showDetail" style="display: none">
 
-                <div class="jumbotron mt-4 ">
+                <div class="jumbotron mt-5">
                     <div id="avlb-meeting-selected">
                         <input type="hidden" id="meeting-start-date" value="{{ active_meeting.start_date }}">
                         <input type="hidden" id="meeting-end-date" value="{{ active_meeting.end_date }}">
-
-                        <div id="info">
-                            <h3 class="mt-3 mb-4">
-                                Meeting Date
-                            </h3>
-                            <div>
-                                <p class="lead">{{ active_meeting.start_date }} - {{ active_meeting.end_date }}</p>
+                        <div id="meeting-info">
+                            <div id="info" class="mt-5">
+                                <!-- <h3 id="title-meeting"><i class="fa fa-calendar fa-3x" aria-hidden="true"></i></h3> -->
+                                <h3 class="mt-3 mb-5" id="title-meeting">
+                                    Meeting Date
+                                </h3>
+                                <div>
+                                    <p class="lead">{{ active_meeting.start_date }} - {{ active_meeting.end_date }}</p>
+                                </div>
                             </div>
                         </div>
                         <div id="info">
-                            <h3 class="mt-5 mb-4">My Available Time</h3>
+                            <!-- <h3 id="title-availability"><i class="fa fa-calendar-check-o fa-3x" aria-hidden="true"></i> -->
+                            </h3>
+                            <h3 id="title-availability" class="mt-3 mb-5"> My Available Time</h3>
                             {% if time_slots %}
                             <!-- existing time-slots -->
                             {% for slot in time_slots %}
@@ -52,7 +56,11 @@
                             {% endif %}
                         </div>
                         <div id="info">
-                            <h3 class="mt-5 mb-4"> Members</h3>
+
+                            <!-- <h3><i class="fa fa-users fa-3x" aria-hidden="true"></i></h3> -->
+                            <h3 class="mt-4 mb-5"> Members</h3>
+
+                            <!-- <h3 id="title-members" class="mt-4 mb-4"> Members</h3> -->
 
                             <!-- existing time-slots -->
                             {% for member in team %}
@@ -91,8 +99,10 @@
                 {% if state_ready %}
 
                 <div class="jumbotron">
-                    <div id="lets_vote">
-                        <h1 class="display-4">Let's Vote!</h1>
+                    <div id="lets_vote" class="text-center">
+                        <!-- <h1 id="title-vote"class="display-4" ><i class="fa fa-check-circle-o fa-lg" aria-hidden="true"></i></h1> -->
+                        <h1 id="title-vote" class="display-4">Let's Vote! </h1>
+                        <!-- <h1><i class="fa fa-check fa-lg"></i></h1> -->
                     </div>
                     {% if meeting_time_options %}
                     <ul class="list-group list-group-flush">
@@ -104,7 +114,8 @@
                                     <div class="col-sm-10 text-center">
                                         <div class="row ">
 
-                                            <p class="lead"> <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                            <p class="lead">
+                                                <i class="fa fa-clock-o fa-lg ml-5 mr-2" aria-hidden="true"></i>
                                                 From
                                                 {{timeslot.start_time}} to {{timeslot.end_time}}</p>
                                         </div>
@@ -123,8 +134,12 @@
                                     </div>
                                     <div class="col-sm-2 text-left">
                                         {% if state_no_vote %}
-                                        <p><font color="red">No voting needed! </font></p>
-
+                                        <div id="hide-comment">
+                                            <i class="fa fa-check fa-2x"></i>
+                                            <span class="text-center" id="hide-element">
+                                                <p class="mt-2 mr-4"> Meeting Time!!</p>
+                                            </span>
+                                        </div>
                                         {% else %}
 
                                         {% if voted_slot%}
@@ -133,24 +148,36 @@
                                         <form action="" method='post'>
                                             <input type="hidden" name="delete" value="delete" />
                                             {% if fifty_fifty_votes or state_closed%}
-                                            <button class="btn btn-link mt-2" type="submit" onclick="post"
-                                                disabled><i class="fa fa-thumbs-down fa-2x"></i>Unvote</button>
+                                            <button class="btn btn-link mt-2" type="submit" onclick="post" disabled><i
+                                                    class="fa fa-thumbs-down fa-2x"></i>Unvote</button>
                                             {% else %}
                                             <button class="btn btn-link mt-2" type="submit" onclick="post"><i
                                                     class="fa fa-thumbs-down fa-2x"></i>Unvote</button>
                                             {% endif%}
                                         </form>
+                                        {%else%}
+                                        <button class="btn btn-link mt-2" type="submit" onclick="post" disabled><i
+                                                class="fa fa-thumbs-up fa-2x" aria-hidden="true"></i>
+                                            <p>Vote</p>
+                                        </button>
                                         {% endif%}
                                         {%endfor%}
 
                                         {% else %}
+
                                         {% if fifty_fifty_votes or state_closed%}
+                                        {%if state_closed%}
+                                        {%if timeslot.start_time == meeting_time.start_time%}
+                                        <i class="fa fa-check fa-2x"></i>
+                                        {%endif%}
+                                        {%else%}
                                         <div id="btn1">
                                             <button class="btn btn-link mt-2" type="submit" onclick="post" disabled><i
                                                     class="fa fa-thumbs-up fa-2x" aria-hidden="true"></i>
                                                 <p>Vote</p>
                                             </button>
                                         </div>
+                                        {%endif%}
                                         {% else %}
                                         <div id="btn1">
                                             <button class="btn btn-link mt-2" type="submit" onclick="post"><i
@@ -169,10 +196,10 @@
                         {% endfor %}
                     </ul>
                     {% else %}
-                    <h5 class='card-body'>
+                    <!-- <h5 class='card-body'>
                         <font color="red">No Option
                         </font>
-                    </h5>
+                    </h5> -->
 
                     {% endif %}
                 </div>
