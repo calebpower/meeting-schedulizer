@@ -2,8 +2,6 @@ from django.shortcuts import render
 from itertools import chain, groupby
 from . import models
 
-
-
 ''' Pulls a list of the user's projects '''
 def pull_projects(profile):
     projects = {
