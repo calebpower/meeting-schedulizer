@@ -10,7 +10,6 @@ from django.contrib.auth.models import User
 
 from .. import models
 
-from meeting.forms import MeetingForm
 from meeting.models import Meeting
 from meeting.models import Vote
 from meeting.models import MeetingTime
