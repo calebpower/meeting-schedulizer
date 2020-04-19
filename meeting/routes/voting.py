@@ -58,7 +58,8 @@ def vote(request):
 
 
 class Person:
-    def __init__(self, name):
+    def __init__(self, name, id):
+        self.id = id
         self.name = name
         self.slots_submitted = False
         self.isUser = False
@@ -786,17 +787,20 @@ class Voting(View):
             meeting_time_options.append(op)
 
         votes = models.Vote.objects.filter(meeting_id=meeting_id)
+
         print('Number of votes: ' + str(len(votes)))
         print('Member length = ' + str(len(members)))
+        # print('Members ID:'+ str(members.id))
         for member in members:
             timeslots = models.TimeAvailability.objects.filter(
                 user=member.user, meeting_id=meeting_id)
             print('username: ' + str(member.user.user.username))
-            u = Person(member.user.user.username)
-            uTest = Person(member.user.user.username)  # For Debug
+            u = Person(member.user.user.username,member.user.id)
+            uTest = Person(member.user.user.username,member.user.id)  # For Debug
             if member.user.id == profile.user.id:
                 u.isUser = True
                 uTest.isUser = True  # For Debug
+            print('Name:' + u.name + ' ID: ' + str(u.id)+ ' added!')
             print('Timeslots length: ' + str(len(timeslots)))
             if timeslots:
                 u.slots_submitted = True
