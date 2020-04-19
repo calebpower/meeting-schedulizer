@@ -104,6 +104,8 @@ class MeetingView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect('LoginProcess')
+        
+        user = None
        
         try:
             meeting_id = kwargs.get('meeting_key') if kwargs.get('meeting_key') else None
@@ -116,8 +118,9 @@ class MeetingView(View):
                 if (str(member.user.display_name) == str(request.user)):
                     user = member
         except:
-            pass    
-        if user.role == 2:
+            pass
+        
+        if user is not None and user.role == 2:
            return render(request, 'project_meetings/edit_meeting.html', { 'meeting': meeting, 'user': user})
         else:
             return render(request, 'project_meetings/view_meeting.html', {'meeting': meeting})
