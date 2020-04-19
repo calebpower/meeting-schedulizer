@@ -71,7 +71,17 @@
                 <p style="color: red">Required Field.</p>
                 {% endif %}
             </div>
-            <br> {% if is_no_errors %}
+            <br> 
+            <div class="row">
+                <h3 class="h5 mb-3 font-weight-normal text-center">Organization</h3>
+                {% if is_no_errors %}
+                <input type="text" id="inputOrg" name="inputOrg" class="form-control" value="{{ org }}" placeholder="New Organization" required readonly /> {% else %}
+                <input type="text" id="inputOrg" name="inputOrg" class="form-control" value="{{ org }}" placeholder="New Display Name" required /> {% endif %} {% if errors.orgEmpty %}
+                <p style="color: red">Required Field.</p>
+                {% endif %}
+            </div>
+            <br>
+            {% if is_no_errors %}
             <button id="editButton" class="btn btn-lg btn-primary btn-block" type="button" onclick="editPage()">Edit</button>
             <button id="updateButton" class="btn btn-lg btn-primary btn-block" type="submit" disabled>Update</button> {% else %}
             <button id="editButton" class="btn btn-lg btn-primary btn-block" type="button" onclick="editPage()" disabled>Edit</button>
@@ -87,6 +97,7 @@
     function editPage() {
         document.getElementById('inputUsername').removeAttribute('readonly');
         document.getElementById('inputDisplayName').removeAttribute('readonly');
+        document.getElementById('inputOrg').removeAttribute('readonly');
         document.getElementById('updateButton').removeAttribute('disabled');
         document.getElementById('editButton').setAttribute('disabled', "");
 

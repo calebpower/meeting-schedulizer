@@ -8,6 +8,7 @@ class Profile(models.Model):
     objects = models.Manager()
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     display_name = models.CharField(max_length=30, blank=False)
+    org = models.CharField(max_length=30, blank=True)
 
 ''' Denotes a single project. '''
 class Project(models.Model):
