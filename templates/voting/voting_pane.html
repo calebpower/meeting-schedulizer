@@ -3,14 +3,20 @@
     {% if meeting_list %}
     <div id="dropdown-title">
             {%if meeting%}
-            <p id="p">Project: {{project.project_name}}</p>
-            <p id="m">Meeting: {{meeting.title}}</p>
+            <div id="title-info">
+                <p id="p1">Project:</p>
+                <p id="m1">Meeting:</p>
+            </div>
+            <div id="title-info">
+               <p id="p2">{{project.project_name}}</p>
+               <p id="m2">{{meeting.title}}</p>
+            </div>
             {%else%}
-            Select a meeting
+            Select a meeting!
             {%endif%}
     </div>
     <div id="myDropdown" class="dropdown mt-3 mb-5 list-group text-center">
-        <div id="s"><p>Select</p>
+        <div id="s"><p><i class="fa fa-angle-double-down fa-2x" aria-hidden="true"></i></p>
         </div>
         <ul id="mddm" class="dropdown-menu text-center " >
             <h6 class="dropdown-header">Projects</h6>
@@ -28,7 +34,7 @@
                     {% if meeting.project == project%}
                     <li id="dropdown-lst" class=" list-group-item-action">
                         <a  class="test dropdown-item" tabindex="-1"href="/meeting/voting/{{ meeting.id }}">
-                            <p>{{ meeting.id }}: {{ meeting.title }}</p>
+                            <p>{{ meeting.title }}</p>
                         </a>
                     </li>
                     {%endif%}
