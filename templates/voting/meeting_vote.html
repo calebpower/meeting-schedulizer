@@ -33,7 +33,7 @@
                                     Meeting Date
                                 </h3>
                                 <div>
-                                    <p class="lead">{{ active_meeting.start_date }} - {{ active_meeting.end_date }}</p>
+                                    <p class="lead">{{ meeting.start_date }} - {{ meeting.end_date }}</p>
                                 </div>
                             </div>
                         </div>
@@ -51,7 +51,7 @@
                             <!-- end existing time-slots -->
                             {% else %}
 
-                            <p class="lead">Submit your availability</p>
+                            <p class="lead" id="alert-message">Submit your availability</p>
 
                             {% endif %}
                         </div>
@@ -65,7 +65,7 @@
                             <!-- existing time-slots -->
                             {% for member in team %}
 
-                            <p class="lead"> {% if member.name %}
+                            <p class="lead mr-3"> {% if member.name %}
                                 {% if not member.isUser %}
                                 <i class="fa fa-user fa-lg"></i> {{ member.name }}
                                 {% endif %}
@@ -86,7 +86,7 @@
                             <!-- For debugging -->
                             <!-- &nbsp; <font color="green">Submitted</font> -->
                             {% else %}
-                            &nbsp; <font color="red">No available slot</font>
+                            <p id="alert-message">No available slot</p>
                             {% endif %}
                             {% endif %}
                             {% endfor %}
