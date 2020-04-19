@@ -81,3 +81,9 @@
     border-radius: 3px;
     margin-bottom: 30px;
 }
+
+.create-slot-label {
+    font-size: 16px;
+    margin-left: 30px;
+    margin-bottom: 10px;
+}

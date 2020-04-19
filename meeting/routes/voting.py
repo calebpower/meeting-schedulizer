@@ -12,7 +12,6 @@ from django.dispatch import receiver
 
 from .. import models
 
-
 from meeting.models import Meeting
 from meeting.models import MeetingTime
 from meeting.models import Vote

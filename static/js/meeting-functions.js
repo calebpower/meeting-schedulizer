@@ -1,3 +1,4 @@
+//Check Date
 function checkDate(){
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -18,15 +19,23 @@ function checkDate(){
     }  
 }
 
-//TODO
-function onDelete(meeting) {
+//Delete Meeting
+$(document).ready(function() {
+   if($('#meeting-view-form').length){
+       $('#delete-meeting-btn').on('click', function() {
+       $("#confirm-remove-meeting-modal").modal();
+     });
+ 
+     $('#confirm-meeting-deletion').on('click', function() {
+       $("#passback-action").val("delete");
+       $("#passback-form").submit();
+     });
+ 
+     $('#back-meeting-btn').on('click', function() {
+        window.history.back()
+      });
+ 
+    }
+});
 
-    title = meeting.title
-    location = meeting.location
-    start_date = meeting.start_date
-    end_date = meeting.end_date
-    project = meeting.project 
 
-    var toDelete = Meeting.objects.filter(title=title, location=location, start_date=start_date, end_date=end_date, project=project).delete();
-    $('#delete-meeting').meeting;
-}

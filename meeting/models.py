@@ -8,6 +8,7 @@ class Profile(models.Model):
     objects = models.Manager()
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     display_name = models.CharField(max_length=30, blank=False)
+    org = models.CharField(max_length=30, blank=True)
 
 ''' Denotes a single project. '''
 class Project(models.Model):
@@ -36,11 +37,12 @@ def save_user_profile(sender, instance, **kwargs):
 
 class Meeting(models.Model):
     title = models.CharField(max_length=200, default='None')
-    location = models.CharField(max_length=200, default=0)
-    optional_members = models.CharField(max_length=200, default='None')
+    location = models.CharField(max_length=200, default='TBA')
+    optional_members = models.CharField(max_length=200, default='Required')
     description = models.CharField(max_length=200, default='No description available')
     start_date = models.DateField(default = '1970-01-01')
     end_date = models.DateField(default = '1970-01-01')
+    final_date = models.CharField(max_length=100, default='TBA')
 
     project = models.ForeignKey(Project, on_delete=models.CASCADE, default=0)
 
