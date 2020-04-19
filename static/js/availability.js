@@ -56,11 +56,14 @@ function onSubmit() {
 
     const tslots_str = $('#time_slots_json').text();
     const tslots = JSON.parse(tslots_str);
-    for (const slot of tslots) {
-        const slot_start = moment(slot.start_time);
-        const slot_end = moment(slot.end_time);
+    const user_id = $('#user_id').text().trim();
 
-        if (et.isAfter(slot_start) && st.isBefore(slot_end)) {
+    console.log('tslots: ', tslots);
+    for (const slot of tslots) {
+        const slot_start = moment(slot.start_time).add(5, 'hours');
+        const slot_end = moment(slot.end_time).add(5, 'hours');
+        
+        if (user_id == slot.user_id.trim() && et.isAfter(slot_start) && st.isBefore(slot_end)) {
             const msg = "This time overlaps with a time slot for meeting " +
                 slot.meeting.id + " (" + slot.meeting.description + ") from " +
                 slot_start.format('MMMM Do hh:mm a') + " to " + slot_end.format('MMMM Do hh:mm a') +

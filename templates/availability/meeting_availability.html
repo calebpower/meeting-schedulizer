@@ -134,15 +134,14 @@
     </div>
 
     {% autoescape on %}
-    <!-- <script> -->
-        
         <div id="time_slots_json" class="invisible">
             {{ time_slots_json|safe }}
         </div>
-        
-    <!-- </script> -->
     {% endautoescape %}
     
+    <div id="user_id" class="invisible">
+        {{ user.id }}
+    </div>
 </div>
 <!-- /.container -->
 
