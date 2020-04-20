@@ -62,7 +62,7 @@ class MeetingView(View):
            try:
               meeting.delete()
               profile = pull_profile(request.user)
-              redirect_link = "/meeting/projects/" + str(project_key) + "/meetings/" 
+              redirect_link = "/meeting/projects/" + str(project_key)
               models.Notification.objects.create(user=profile, message= " Your meeting is deleted!" , link=redirect_link)
            except Exception as e:
               print(e)
