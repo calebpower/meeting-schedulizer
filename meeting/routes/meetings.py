@@ -41,6 +41,21 @@ class MeetingCreation(View):
             profile = pull_profile(request.user)
             redirect_link = "/meeting/projects/" + str(project_key)
 
+        form = MeetingForm(request.POST)
+        if form.is_valid():
+            meeting = form.save(commit=False)
+            meeting.project = models.Project.objects.get(pk=project_key)
+            meeting.state = models.Meeting.VoteState.OPEN
+            meeting.save()
+
+            # title = form.cleaned_data['title']
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
+            location = form.cleaned_data['location']
+            optional_members = form.cleaned_data['optional_members']
+            description = form.cleaned_data['description']
+            form = MeetingForm()
+
         models.Meeting.objects.create(title=title, location=location, optional_members=optional_members, 
                                                 description=description, start_date=start_date, end_date=end_date,
                                                 project=models.Project.objects.get(pk=project_key))
