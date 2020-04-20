@@ -2,218 +2,240 @@
 {% block content %}
 
 <!-- Page Content -->
+
+
 <div class="container">
-    <div class="row">
+    <div class="row ">
 
         {% include "voting/voting_pane.html" %}
 
-        <div class="col-lg-9">
-            <div class="card mt-4">
-                <div class="card-header">
-                    <h5>Meeting {{ active_meeting.id }}: {{ active_meeting.description }}</h5>
-                </div>
+        {% if state_closed%}
+        {% include "voting/vote_closed.html" %}
+        {% elif fifty_fifty_votes%}
+        {% include "voting/fifty_fifty_votes.html" %}
+        {% elif state_no_vote%}
+        {% include "voting/no_vote.html" %}
+        {%else%}
+        {% include "voting/alert.html" %}
+        {%endif%}
+        <div class="col text-center ">
+            <button class="btn btn-detail " onclick="showDetail()"><span>See Detail!</span> </button>
+            <div id="showDetail" style="display: none">
 
-                <div id="avlb-meeting-selected" class="card-body">
-                    <input type="hidden" id="meeting-start-date" value="{{ active_meeting.start_date }}">
-                    <input type="hidden" id="meeting-end-date" value="{{ active_meeting.end_date }}">
-
-                    <h5 class="card-title">
-                        Meeting Date:  
-                    </h5>
-                    <div>
-                            {{ active_meeting.start_date }} - {{ active_meeting.end_date }}
-                    </div>
-                    <br>
-                    <h5>My Available Time:</h5>
-                    {% if time_slots %}
-                        <!-- existing time-slots -->
-                        {% for slot in time_slots %}
-                        <div>
-                            From {{ slot.start_time }} To {{ slot.end_time }}
-                        </div>
-                        {% endfor %}
-                        <!-- end existing time-slots -->
-                    {% else %}
-                        <font color="red">Submit your availability</font>
-                        <br>
-                    {% endif %}
-
-                    <br>
-                    <h5>Members:</h5>
-
-                    <!-- existing time-slots -->
-                    {% for member in team %}
-                    <div class="row card-body ">
-                        <div class="col-sm-4">
-                        {% if member.name %} 
-                            {% if not member.isUser %}
-                                {{ member.name }}
-                            {% endif %}
-                        {% else %}
-                            {% if not member.isUser %}
-                               No Name
-                            {% endif %}
-                        {% endif %}
-                        </div>
-                        <div class="col-sm-8">
-                        {% if not member.isUser %}
-                            {% if member.isSubmitted%}
-                                <!-- For debugging -->
-                                {% for slots in member.timeSlots %}
-                                    <div>
-                                    From {{ slots.start_time }} To {{ slots.end_time }}
-                                    </div>
-                                {% endfor %}
-                                <!-- For debugging -->
-                                <!-- &nbsp; <font color="green">Submitted</font> -->
-                            {% else %}
-                                &nbsp; <font color="red">No available slot</font>
-                            {% endif %}
-                        {% endif %}
-                        </div>
-
-                    </div>
-                    {% endfor %}
-                    <!-- end existing time-slots -->
-                </div>
-                <!-- end meeting selected div -->
-            </div>
-            {% if isReady %}
-                <div class="card mt-4">      
-                    <div class="card-header">
-                        <h5>Debug</h5>
-                    </div>
-                    <br>
-
-                    {% for timeslot in meeting_time_slots %}
-                        From {{timeslot.start_time}} to {{timeslot.end_time}}: 
-                        {% for user in timeslot.members %}
-                        [
-                        {{user}}
-                        ]
-                        {% endfor %}
-                        is availabile
-                        <br>
-                    {% endfor %}
-                </div>
-                <br>
-
-                    <div class="card">      
-                            <div class="card-header">
-                                <h5>Let's Vote!</h5>
+                <div class="jumbotron mt-5">
+                    <div id="avlb-meeting-selected">
+                        <input type="hidden" id="meeting-start-date" value="{{ active_meeting.start_date }}">
+                        <input type="hidden" id="meeting-end-date" value="{{ active_meeting.end_date }}">
+                        <div id="meeting-info">
+                            <div id="info" class="mt-5">
+                                <!-- <h3 id="title-meeting"><i class="fa fa-calendar fa-3x" aria-hidden="true"></i></h3> -->
+                                <h3 class="mt-3 mb-5" id="title-meeting">
+                                    Meeting Date
+                                </h3>
+                                <div>
+                                    <p class="lead">{{ meeting.start_date }} - {{ meeting.end_date }}</p>
+                                </div>
                             </div>
-                            {% if voting_options %}         
-                                <ul class="list-group">
-                                    {% for timeslot in voting_options %}
-                                    <form action="" method='post'>
-                                            {% csrf_token %}
-                                        <li class="list-group-item">
-                                            <div class="row">
-                                                <div class="col-sm-10">
-                                                    <b>From {{timeslot.start_time}} to {{timeslot.end_time}}</b>
-                                                    <input type="hidden" name="id" value="{{ timeslot.id }}" />
-                                                </div>
-                                                <div class="col-sm-2">
-                                                    {% if no_vote %}
-                                                    <font color="red">No voting needed!  </font>
-                
-                                                    {% else %}
-                                                    
-                                                        {% if has_voted  %}
-                                                            {% for slot in voted_slot %}
-                                                                {% if slot == timeslot %}
-                                                                <button class="btn btn-primary " type="submit" onclick="post" disabled>Voted</button>
-                                                                {% endif%}
-                                                            {%endfor%}
-                                                            
-                                                        {% else %}
-                                                            <button class="btn btn-primary" type="submit" onclick="post">Vote</button>
-                                                        {% endif%}
-                                                    {% endif %}
-                                                    
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </form>
-                                    {% endfor %}
-                                </ul> 
-                                {% else %}
-                                    <div class='card-body'>
-                                        <font color="red">Our schedules don't match up. Add your time slots to make our meeting happen.  </font>
-                                    </div>
-
-                                {% endif %}        
-                    </div>
-
-                {% if has_voted and voted_slot %}
-                <br>
-                <div class="card">      
-                    <div class="card-header">
-                        <h5>You voted</h5>
-                    </div>           
-                    <b class="card-body">
-
-                        {% for slot in voted_slot %}
-                             From {{slot.start_time}} to {{slot.end_time}} 
-                              <br>      
-                        {% endfor %}
-                      
-                    </b>
-                    
-                </div>
-                {% else %}
-                    
-                {% endif%}
-                
-            {% else %}
-                <div class="card mt-4">
-                    Voting starts after all members submit thier availability
-                </div>
-            {% endif %}
-            {% if no_vote %}
-                <div class="card mt-4 ">      
-                    <div class="card-header">
-                        <h5>Meeting Time</h5>
-                    </div>       
-                        <b class="card-body">
-                            {% for timeslot in voting_options %}
-                                    
-                            <font color="green">From {{timeslot.start_time}} to {{timeslot.end_time}}</font>
-                                <br>
-                            {% endfor %}
-                        </b>
                         </div>
+                        <div id="info">
+                            <!-- <h3 id="title-availability"><i class="fa fa-calendar-check-o fa-3x" aria-hidden="true"></i> -->
+                            </h3>
+                            <h3 id="title-availability" class="mt-3 mb-5"> My Available Time</h3>
+                            {% if time_slots %}
+                            <!-- existing time-slots -->
+                            {% for slot in time_slots %}
+                            <div>
+                                <p class="lead"> From {{ slot.start_time }} To {{ slot.end_time }}</p>
+                            </div>
+                            {% endfor %}
+                            <!-- end existing time-slots -->
+                            {% else %}
+
+                            <p class="lead" id="alert-message">Submit your availability</p>
+
+                            {% endif %}
+                        </div>
+                        <div id="info">
+
+                            <!-- <h3><i class="fa fa-users fa-3x" aria-hidden="true"></i></h3> -->
+                            <h3 class="mt-4 mb-5"> Members</h3>
+
+                            <!-- <h3 id="title-members" class="mt-4 mb-4"> Members</h3> -->
+
+                            <!-- existing time-slots -->
+                            {% for member in team %}
+
+                            <p class="lead mr-3"> {% if member.name %}
+                                {% if not member.isUser %}
+                                <i class="fa fa-user fa-lg"></i> {{ member.name }}
+                                {% endif %}
+                                {% else %}
+                                {% if not member.isUser %}
+                                <i class="fa fa-user fa-lg"></i> No Name:
+                                {% endif %}
+                                {% endif %}</p>
+
+                            {% if not member.isUser %}
+                            {% if member.slots_submitted%}
+                            <!-- For debugging -->
+                            {% for slots in member.timeSlots %}
+                            <div>
+                                <p class="lead">From {{ slots.start_time }} To {{ slots.end_time }}</p>
+                            </div>
+                            {% endfor %}
+                            <!-- For debugging -->
+                            <!-- &nbsp; <font color="green">Submitted</font> -->
+                            {% else %}
+                            <p id="alert-message">No available slot</p>
+                            {% endif %}
+                            {% endif %}
+                            {% endfor %}
+                            <!-- end existing time-slots -->
+                        </div>
+                        <!-- end meeting selected div -->
                     </div>
-                
-            {% else %}
-                <div class="card mt-4">
-                    Meeting time is available after all team member's voting is done
                 </div>
-            {% endif %}
+
+                {% if state_ready %}
+
+                <div class="jumbotron">
+                    <div id="lets_vote" class="text-center">
+                        <!-- <h1 id="title-vote"class="display-4" ><i class="fa fa-check-circle-o fa-lg" aria-hidden="true"></i></h1> -->
+                        <h1 id="title-vote" class="display-4">Let's Vote! </h1>
+                        <!-- <h1><i class="fa fa-check fa-lg"></i></h1> -->
+                    </div>
+                    {% if meeting_time_options %}
+                    <ul class="list-group list-group-flush">
+                        {% for timeslot in meeting_time_options %}
+                        <form action="" method='post'>
+                            {% csrf_token %}
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-sm-10 text-center">
+                                        <div class="row ">
+
+                                            <p class="lead">
+                                                <i class="fa fa-clock-o fa-lg ml-5 mr-2" aria-hidden="true"></i>
+                                                From
+                                                {{timeslot.start_time}} to {{timeslot.end_time}}</p>
+                                        </div>
+                                        <div class="row" id="voter">
+                                            {%for vote in votes%}
+                                            {% if vote.meeting_time_option.start_time == timeslot.start_time%}
+                                            {% if vote.user.user.username%}
+                                            <p class=""><i class="fa fa-user fa-lg"></i> {{vote.user.user.username}}</p>
+                                            {% else %}
+                                            <p class=""><i class="fa fa-user fa-lg"></i> No Name</p>
+                                            {%endif%}
+                                            {%endif%}
+                                            {%endfor%}
+                                        </div>
+                                        <input type="hidden" name="id" value="{{ timeslot.id }}" />
+                                    </div>
+                                    <div class="col-sm-2 text-left">
+                                        {% if state_no_vote %}
+                                        <div id="hide-comment">
+                                            <i class="fa fa-check fa-2x"></i>
+                                            <span class="text-center" id="hide-element">
+                                                <p class="mt-2 mr-4"> Meeting Time!!</p>
+                                            </span>
+                                        </div>
+                                        {% else %}
+
+                                        {% if voted_slot%}
+                                        {% for slot in voted_slot %}
+                                        {% if slot == timeslot %}
+                                        <form action="" method='post'>
+                                            <input type="hidden" name="delete" value="delete" />
+                                            {% if fifty_fifty_votes or state_closed%}
+                                            <button class="btn btn-link mt-2" type="submit" onclick="post" disabled><i
+                                                    class="fa fa-thumbs-down fa-2x"></i>Unvote</button>
+                                            {% else %}
+                                            <button id ="unvote"class="btn btn-link mt-2" type="submit" onclick="post"><i
+                                                    class="fa fa-thumbs-down fa-2x"></i>Unvote</button>
+                                            {% endif%}
+                                        </form>
+                                        {%else%}
+                                        <button class="btn btn-link mt-2" type="submit" onclick="post" disabled><i
+                                                class="fa fa-thumbs-up fa-2x" aria-hidden="true"></i>
+                                            <p>Vote</p>
+                                        </button>
+                                        {% endif%}
+                                        {%endfor%}
+
+                                        {% else %}
+
+                                        {% if fifty_fifty_votes or state_closed%}
+                                        {%if state_closed%}
+                                        {%if timeslot.start_time == meeting_time.start_time%}
+                                        <i class="fa fa-check fa-2x"></i>
+                                        {%endif%}
+                                        {%else%}
+                                        <div id="btn1">
+                                            <button class="btn btn-link mt-2" type="submit" onclick="post" disabled><i
+                                                    class="fa fa-thumbs-up fa-2x" aria-hidden="true"></i>
+                                                <p>Vote</p>
+                                            </button>
+                                        </div>
+                                        {%endif%}
+                                        {% else %}
+                                        <div id="btn1">
+                                            <button id="vote"class="btn btn-link mt-2" type="submit" onclick="post"><i
+                                                    class="fa fa-thumbs-up fa-2x" aria-hidden="true"></i> Vote</button>
+                                        </div>
+                                        {% endif%}
+
+                                        {% endif%}
+                                        {% endif %}
+
+
+                                    </div>
+                                </div>
+                            </li>
+                        </form>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <!-- <h5 class='card-body'>
+                        <font color="red">No Option
+                        </font>
+                    </h5> -->
+
+                    {% endif %}
+                </div>
 
 
 
+                {% else %}
+                <!-- <div class="jumbotron mt-4">
+                    Voting starts after all members submit thier availability
+                </div> -->
+                {% endif %}
 
-            <!-- /.card -->
+            </div>
 
         </div>
-        <!-- /.col-lg-9 -->
+
+
+        <!-- /.card -->
 
     </div>
-    <!-- /.row -->
+    <!-- /.col-lg-9 -->
 
-    {% autoescape on %}
-    <!-- <script> -->
-        
-        <div id="time_slots_json" class="invisible">
-            {{ time_slots_json|safe }}
-        </div>
-        
-    <!-- </script> -->
-    {% endautoescape %}
-    
+</div>
+<!-- /.row -->
+
+{% autoescape on %}
+<!-- <script> -->
+
+<div id="time_slots_json" class="invisible">
+    {{ time_slots_json|safe }}
+</div>
+
+<!-- </script> -->
+{% endautoescape %}
+
 </div>
 <!-- /.container -->
-
 {% include "voting/js.html" %}
 {% endblock %}

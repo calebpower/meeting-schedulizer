@@ -4,31 +4,28 @@
 <!-- Page Content -->
 <div class="container">
     <div class="row">
-
         {% include "voting/voting_pane.html" %}
-        <div class="col-lg-9">
-                <br>
-                {% if meeting_list %}
-                <div class="card mt-4">
-                    
-                    <div id="meeting-not-selected">
-                        <div>
-                            Select a meeting
-                        </div>
-                    </div>
-                    <!-- end meeting not selected div -->
-
-                </div>
-                {% else %}
-                    ...
-                {% endif %}
-                <!-- /.card -->
-
-        </div>
-        <!-- /.col-lg-9 -->
-
     </div>
     <!-- /.row -->
+        <br>
+        {% if meeting_list %}
+        <div class="jumbotron mt-4 text-center">
+
+            <div id="meeting-not-selected">
+                <div class="text-center">
+                    <h1>Select a meeting</h1>
+                </div>
+            </div>
+            <!-- end meeting not selected div -->
+        </div>
+        {% else %}
+        ...
+        {% endif %}
+        <!-- /.card -->
+
+
+
+
 
 </div>
 <!-- /.container -->
