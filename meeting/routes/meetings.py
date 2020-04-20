@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
+from meeting.views import pull_profile
 
 
 from .. import models
@@ -24,7 +25,7 @@ class MeetingCreation(View):
    
 
     def post(self, request, project_key):
-
+  
         if not request.user.is_authenticated:
             return redirect('LoginProcess')
         
@@ -34,6 +35,11 @@ class MeetingCreation(View):
         description = request.POST.get('description') if request.POST.get('description') else None
         start_date = request.POST.get('start_date') if request.POST.get('start_date') else None
         end_date = request.POST.get('end_date') if request.POST.get('end_date') else None
+ 
+        if 'required_meeting' in optional_members:
+            optional_members = 'required_meeting'
+            profile = pull_profile(request.user)
+            redirect_link = "/meeting/projects/" + str(project_key)
 
         form = MeetingForm(request.POST)
         if form.is_valid():
@@ -53,9 +59,8 @@ class MeetingCreation(View):
         models.Meeting.objects.create(title=title, location=location, optional_members=optional_members, 
                                                 description=description, start_date=start_date, end_date=end_date,
                                                 project=models.Project.objects.get(pk=project_key))
-    
-        return redirect("/meeting/projects/" + str(project_key))   
-
+        models.Notification.objects.create(user=profile, message="A new meeting has been created.", link=redirect_link)
+        return redirect("/meeting/projects/" + str(project_key))  
             
               
 
@@ -63,10 +68,17 @@ class MeetingView(View):
     def post(self, request, project_key, meeting_key):
         
         meeting = models.Meeting.objects.get(id=meeting_key)
-        
+        invitees = request.POST.get('invitees') if request.POST.get('invitees') else None
+        user = request.user if request.user.is_authenticated else None
+        profile = models.Profile.objects.get(user=user)
+        invitee_profiles = set()
+
         if request.POST.get('action') == 'delete':
            try:
               meeting.delete()
+              profile = pull_profile(request.user)
+              redirect_link = "/meeting/projects/" + str(project_key)
+              models.Notification.objects.create(user=profile, message= " Your meeting is deleted!" , link=redirect_link)
            except Exception as e:
               print(e)
 

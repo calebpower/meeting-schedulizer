@@ -32,7 +32,7 @@ urlpatterns = [
     path('projects/<int:project_key>/edit', projects.ProjectModificationProcess.as_view(), name="ProjectModificationProcess"),
     
     # Meeting
-    path('projects/<int:project_key>/meetings/create', meetings.MeetingCreation.as_view(), name="MeetingCreation"),
+    path('projects/<int:project_key>/meetings/create/', meetings.MeetingCreation.as_view(), name="MeetingCreation"),
     path('projects/<int:project_key>/meetings/<int:meeting_key>', meetings.MeetingView.as_view(), name="MeetingView"),
 
     # Voting
