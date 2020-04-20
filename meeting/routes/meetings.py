@@ -38,14 +38,14 @@ class MeetingCreation(View):
 
         if 'required_meeting' in optional_members:
             optional_members = 'required_meeting'
-            profile = pull_profile(request.user)
-            redirect_link = "/meeting/projects/" + str(project_key)
+ 
+        profile = pull_profile(request.user)
+        redirect_link = "/meeting/projects/" + str(project_key)
+        models.Notification.objects.create(user=profile, message="A new meeting has been created.", link=redirect_link)
 
         models.Meeting.objects.create(title=title, location=location, optional_members=optional_members, 
                                                 description=description, start_date=start_date, end_date=end_date,
                                                 project=models.Project.objects.get(pk=project_key))
-
-        models.Notification.objects.create(user=profile, message="A new meeting has been created.", link=redirect_link)
         
         return redirect("/meeting/projects/" + str(project_key))  
             
