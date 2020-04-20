@@ -57,58 +57,58 @@ class MeetingView(View):
         meeting = models.Meeting.objects.get(id=meeting_key)
         
         if request.POST.get('action') == 'delete':
-           try:
-              meeting.delete()
+            try:
+                meeting.delete()
 
-              profile = pull_profile(request.user)
-              redirect_link = "/meeting/projects/" + str(project_key)
-              models.Notification.objects.create(user=profile, message= " Your meeting is deleted!" , link=redirect_link)
+                profile = pull_profile(request.user)
+                redirect_link = "/meeting/projects/" + str(project_key)
+                models.Notification.objects.create(user=profile, message= " Your meeting is deleted!" , link=redirect_link)
            
-           except Exception as e:
-              print(e)
+            except Exception as e:
+                print(e)
 
-           return redirect("/meeting/projects/" + str(project_key))
+            return redirect("/meeting/projects/" + str(project_key))
 
         else:
-           title = request.POST.get('title') if request.POST.get('title') else None
-           start_date = request.POST.get('start_date') if request.POST.get('start_date') else None
-           end_date = request.POST.get('end_date') if request.POST.get('end_date') else None
-           location = request.POST.get('location') if request.POST.get('location') else None
-           description = request.POST.get('description') if request.POST.get('description') else None
+            title = request.POST.get('title') if request.POST.get('title') else None
+            start_date = request.POST.get('start_date') if request.POST.get('start_date') else None
+            end_date = request.POST.get('end_date') if request.POST.get('end_date') else None
+            location = request.POST.get('location') if request.POST.get('location') else None
+            description = request.POST.get('description') if request.POST.get('description') else None
 
-           errors = dict()
-           if title is None or not title.strip():
-               errors['title'] = 'Cannot be empty'
-           if location is None or not location.strip():
-               errors['location'] = 'Cannot be empty'        
-           if description is None or not description.strip():
-               errors['description'] = 'Cannot be empty'    
+            errors = dict()
+            if title is None or not title.strip():
+                errors['title'] = 'Cannot be empty'
+            if location is None or not location.strip():
+                errors['location'] = 'Cannot be empty'        
+            if description is None or not description.strip():
+                errors['description'] = 'Cannot be empty'    
             
-           is_no_errors = not bool(errors)
-           app_url = request.path
-           meeting = None
+            is_no_errors = not bool(errors)
+            app_url = request.path
+            meeting = None
         
-           try:
-               meeting = models.Meeting.objects.get(id=meeting_key)
-           except:
-               pass
+            try:
+                meeting = models.Meeting.objects.get(id=meeting_key)
+            except:
+                pass
         
-           if is_no_errors and meeting is not None:
-               try:
-                   meeting.title = title
-                   meeting.location = location
-                   meeting.description = description
-                   meeting.start_date = start_date
-                   meeting.end_date = end_date
+            if is_no_errors and meeting is not None:
+                try:
+                    meeting.title = title
+                    meeting.location = location
+                    meeting.description = description
+                    meeting.start_date = start_date
+                    meeting.end_date = end_date
 
-                   meeting.save()
+                    meeting.save()
 
-               except:
-                   pass
+                except:
+                    pass
 
-               return redirect("/meeting/projects/" + str(project_key))
-           else:
-               return render(request, {'app_url': app_url, 'errors': errors})
+                return redirect("/meeting/projects/" + str(project_key))
+            else:
+                return render(request, {'app_url': app_url, 'errors': errors})
 
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -130,6 +130,6 @@ class MeetingView(View):
             pass
         
         if user is not None and user.role == 2:
-           return render(request, 'project_meetings/edit_meeting.html', { 'meeting': meeting, 'user': user})
+            return render(request, 'project_meetings/edit_meeting.html', { 'meeting': meeting, 'user': user})
         else:
             return render(request, 'project_meetings/view_meeting.html', {'meeting': meeting})
