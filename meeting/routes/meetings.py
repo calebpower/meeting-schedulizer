@@ -122,14 +122,13 @@ class MeetingView(View):
 
 
             project = models.Project.objects.get(pk=kwargs.get('project_key'))
-            members = models.Member.objects.filter(project=project)
-            for member in members:
-                if (str(member.user.display_name) == str(request.user)):
-                    user = member
+            profile = pull_profile(request.user)
+            member = models.Member.objects.get(project=project, user=profile)
+            
         except:
             pass
         
-        if user is not None and user.role == 2:
+        if member.role == 2:
             return render(request, 'project_meetings/edit_meeting.html', { 'meeting': meeting, 'user': user})
         else:
             return render(request, 'project_meetings/view_meeting.html', {'meeting': meeting})
