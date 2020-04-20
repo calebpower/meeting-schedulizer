@@ -73,9 +73,11 @@ class ProjectCreationProcess(View):
         if is_no_errors:
             project = models.Project.objects.create(project_name=title, description=description)
             models.Member.objects.create(project=project, user=profile, role=models.Member.UserProjectRole.OWNER)
+            redirect_link = "/meeting/projects/" + str(project.pk)
             for invitee in invitee_profiles:
-                models.Member.objects.create(project=project, user=invitee, role=models.Member.UserProjectRole.INVITED)
-            return redirect("/meeting/projects/" + str(project.pk))
+                models.Member.objects.create(project=project, user=invitee, role=models.Member.UserProjectRole.INVITED)                
+                models.Notification.objects.create(user=invitee, message="You've been invited to a project!", link=redirect_link)
+            return redirect(redirect_link)
             # return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'success': 'Successfully created project!', 'projects': projects})
         else:
             return render(request, 'projects/active_pane/create_project.html', {'app_url': app_url, 'errors': errors, 'projects': projects})
@@ -156,6 +158,7 @@ class ProjectViewProcess(View):
             print("project -> yeet")
             try:
                 project.delete()
+                
             except Exception as e:
                 print(e)
             
@@ -165,6 +168,12 @@ class ProjectViewProcess(View):
             try:
                 profile = pull_profile(request.user)
                 models.Member.objects.get(user=profile, project=project).delete()
+                
+                members = models.Member.objects.filter(project=project, role=models.Member.UserProjectRole.OWNER)
+                link = "/meeting/projects/" + str(project_key)
+                for member in members:
+                    models.Notification.objects.create(user=member.user, message="Someone has left your project.", link=link)
+                
             except Exception as e:
                 print(e)
             
@@ -181,10 +190,12 @@ class ProjectViewProcess(View):
             return redirect("./" + str(project_key))
         elif request.POST.get('action') == 'invite':
             print("member -> yoink")
+            redirect_link = "/meeting/projects/" + str(project_key)
             try:
                 user = models.User.objects.get(username=request.POST.get('user'))
                 profile = pull_profile(user)
                 models.Member.objects.create(project=project, user=profile, role=models.Member.UserProjectRole.INVITED)
+                models.Notification.objects.create(user=profile, message="You've been invited to a project!", link=redirect_link)
             except Exception as e:
                 print(e)
                 
@@ -195,6 +206,12 @@ class ProjectViewProcess(View):
                 user = request.user if request.user.is_authenticated else None
                 profile = pull_profile(user)
                 models.Member.objects.filter(user=profile, project=project).update(role=models.Member.UserProjectRole.ACTIVE)
+                
+                members = models.Member.objects.filter(project=project, role=models.Member.UserProjectRole.OWNER)
+                link = "/meeting/projects/" + str(project_key)
+                for member in members:
+                    models.Notification.objects.create(user=member.user, message="Someone accepted your project invite!", link=link)
+                
             except Exception as e:
                 print(e)
                 

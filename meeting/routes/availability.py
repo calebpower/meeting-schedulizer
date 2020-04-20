@@ -26,6 +26,7 @@ def availability(request):
 
     context = {
         'meeting_list': avlb_meeting_list,
+        'user': user
     }
 
     return render(request, 'availability/index.html', context)
@@ -73,7 +74,8 @@ class Availability(View):
             'app_url': app_url,
             'time_slots': time_slots,
             'time_slots_json': time_slots_json,
-            'other_timeslots': other_timeslots
+            'other_timeslots': other_timeslots,
+            'user': user
         }
         
         return render(request, 'availability/meeting_availability.html', context)
@@ -159,7 +161,8 @@ def get_json_timeslots():
     time_slots_json = "["
     for datum in json_data:
         meeting = '"meeting":{"id":"' + str(datum.meeting.id) + '","description":"' + datum.meeting.description + '"}';
-        time_slots_json += '{"id":"' + str(datum.id) + '","start_time":"' + str(datum.start_time) + '","end_time":"' + str(datum.end_time) + '",' + meeting + '},';
+        time_slots_json += '{"id":"' + str(datum.id) + '","start_time":"' + str(datum.start_time) + '","end_time":"';
+        time_slots_json += str(datum.end_time) + '",' + '"user_id":"' + str(datum.user.id) + '",' + meeting + '},';
     if len(time_slots_json) > 1:
         time_slots_json = time_slots_json[:-1]
     time_slots_json += ']';
