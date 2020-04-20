@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
+from meeting.views import pull_profile
 
 
 from .. import models
@@ -24,7 +25,7 @@ class MeetingCreation(View):
    
 
     def post(self, request, project_key):
-
+  
         if not request.user.is_authenticated:
             return redirect('LoginProcess')
         
@@ -37,13 +38,16 @@ class MeetingCreation(View):
 
         if 'required_meeting' in optional_members:
             optional_members = 'required_meeting'
+            profile = pull_profile(request.user)
+            redirect_link = "/meeting/projects/" + str(project_key)
 
         models.Meeting.objects.create(title=title, location=location, optional_members=optional_members, 
                                                 description=description, start_date=start_date, end_date=end_date,
                                                 project=models.Project.objects.get(pk=project_key))
-    
-        return redirect("/meeting/projects/" + str(project_key))   
 
+        models.Notification.objects.create(user=profile, message="A new meeting has been created.", link=redirect_link)
+        
+        return redirect("/meeting/projects/" + str(project_key))  
             
               
 
@@ -55,6 +59,11 @@ class MeetingView(View):
         if request.POST.get('action') == 'delete':
            try:
               meeting.delete()
+
+              profile = pull_profile(request.user)
+              redirect_link = "/meeting/projects/" + str(project_key)
+              models.Notification.objects.create(user=profile, message= " Your meeting is deleted!" , link=redirect_link)
+           
            except Exception as e:
               print(e)
 
@@ -104,6 +113,8 @@ class MeetingView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect('LoginProcess')
+        
+        user = None
        
         try:
             meeting_id = kwargs.get('meeting_key') if kwargs.get('meeting_key') else None
@@ -116,8 +127,9 @@ class MeetingView(View):
                 if (str(member.user.display_name) == str(request.user)):
                     user = member
         except:
-            pass    
-        if user.role == 2:
+            pass
+        
+        if user is not None and user.role == 2:
            return render(request, 'project_meetings/edit_meeting.html', { 'meeting': meeting, 'user': user})
         else:
             return render(request, 'project_meetings/view_meeting.html', {'meeting': meeting})
