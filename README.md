@@ -1,9 +1,10 @@
 # Meeting Schedulizer
 
-_Meeting your goals, when meetings are your goal._ 
-An application designed for the UCO Fall 2020 Computer Science capstone course.
+_Meeting your goals, when meetings are your goal._
+ 
+This application was originally designed as a submission for the UCO Fall 2020 Computer Science capstone course.
 
-## Contributors
+## Original Contributors
 
 | Name            | Responsibilities                                  |
 |:----------------|:--------------------------------------------------|
@@ -17,10 +18,17 @@ An application designed for the UCO Fall 2020 Computer Science capstone course.
 
 ## Installation
 
-Here are some good resources for building and running the project.
+To build and install the project from source, we recommend doing the following:
 
-- [For macOS](https://medium.com/@diwassharma/starting-a-python-django-project-on-mac-os-x-c089165cf010)
-- [For Windows](https://docs.djangoproject.com/en/3.0/howto/windows/)
-- [For Linux](http://hampton.website/linux/django/)
+1. Install [Python 3](https://www.python.org/)
+2. Install [pip](https://pypi.org/project/pip/)
+3. Install [virtualenv](https://virtualenv.pypa.io/en/stable/installation.html)
+4. Create a new virtual environment by executing `mkvirtualenv meeting-schedulizer`
+5. If the virtual environment isn't already active, do `workon meeting-schedulizer` (you can leave at any time with `deactivate`)
+6. Run `python manage.py runserver`
+7. If you have any messages that indicate that you should perform a migration, leave by hitting `CTRL + C` and then do `python manage.py migrate`, and then do step 6 again.
+8. Visit your browser at `http://127.0.0.1:8000`
 
-If at any point during this process you have trouble with `pip` or `python` not being recgonized commands, you must add them to your `$PATH` variable. (Or, if you're on Windows, the `%PATH%` variable.)
+You can learn more by reading about [Pipenv & Virtual Environments](https://docs.python-guide.org/dev/virtualenvs/).
+
+If at any point during this process you have trouble with `pip` or `python` not being recognized commands, ensure that you've added them to your `$PATH` variable. (Or, if you're on Windows, the `%PATH%` variable.)
